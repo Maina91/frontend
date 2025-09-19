@@ -10,15 +10,10 @@ export const loginAction = createServerFn({ method: 'POST' })
 
       return {
         success: true,
-        message: response.message ?? 'Login successful',
-        user: {
-          id: response.user.id,
-          email: response.user.email,
-          username: response.user.username,
-          role: response.user.role,
-        },
-        access_token: response.access_token,
-        refresh_token: response.refresh_token,
+        message: response.message,
+        otp_generated: response.otp_generated,
+        token: response.token,
+        member_status: response.member_status,
       }
     } catch (err: any) {
       throw {
