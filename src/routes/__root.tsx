@@ -14,6 +14,9 @@ import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
 
+import { Toaster } from '@/components/ui/sonner'
+
+
 interface MyRouterContext {
   queryClient: QueryClient
 }
@@ -52,6 +55,8 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <body>
         {/* <Header /> */}
         {children}
+        <Toaster position={'top-center'} richColors={true} />
+
         <TanstackDevtools
           config={{
             position: 'bottom-left',

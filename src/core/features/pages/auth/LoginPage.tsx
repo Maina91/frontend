@@ -2,18 +2,20 @@ import { useState } from 'react'
 import { useRouter } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
 
+import { toast } from 'sonner'
+
+
 import type { LoginFormData } from '@/core/validators/login.schema'
 import { loginSchema } from '@/core/validators/login.schema'
-
-
-import { loginUser } from '@/core/services/auth/auth.service'
-
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+
+
+import { loginAction } from '@/core/actions/auth/login'
 
 
 export function LoginPage() {
@@ -26,28 +28,17 @@ export function LoginPage() {
     })
 
     const mutation = useMutation({
-      mutationFn: loginUser,
+      mutationFn: loginAction,
       onSuccess: () => {
+        toast.success('Login successful')
         router.navigate({ to: '/' })
+      },
+      onError: (err: any) => {
+        toast.error(err.message || 'Login failed')
       },
     })
 
-  //   const mutation = useMutation({
-  //     mutationFn: async (data: LoginFormData) => {
-  //       // Call your login API service
-  //       const res = await fetch("/api/auth/login", {
-  //         method: "POST",
-  //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify(data),
-  //       });
 
-  //       if (!res.ok) throw new Error("Login failed");
-  //       return res.json();
-  //     },
-  //     // onSuccess: () => {
-  //     //   router.navigate({ to: "/dashboard" });
-  //     // },
-  //   });
 
   const handleChange = (field: keyof LoginFormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
@@ -57,10 +48,13 @@ export function LoginPage() {
     e.preventDefault()
     const parsed = loginSchema.safeParse(formData)
     if (!parsed.success) {
-      console.error(parsed.error.flatten().fieldErrors)
+      const errs = parsed.error.flatten().fieldErrors
+      Object.entries(errs).forEach(([field, msgs]) => {
+        if (msgs) toast.error(`${field}: ${msgs.join(', ')}`)
+      })
       return
     }
-    mutation.mutate(parsed.data);
+    mutation.mutate(parsed.data)
   }
 
   return (
