@@ -1,12 +1,12 @@
 import { createServerFn } from '@tanstack/react-start'
-import { loginUserService } from '@/core/services/auth/auth.service'
-import { loginSchema } from '@/core/validators/login.schema'
+import { verifyOtp } from '@/core/services/auth/otp.service'
+import { otpSchema } from '@/core/validators/otp.schema'
 
-export const loginAction = createServerFn({ method: 'POST' })
-  .validator(loginSchema)
+export const resendOtpAction = createServerFn({ method: 'POST' })
+  .validator(otpSchema)
   .handler(async ({ data }) => {
     try {
-      const response = await loginUserService(data)
+      const response = await verifyOtp(data)
 
       return {
         success: true,

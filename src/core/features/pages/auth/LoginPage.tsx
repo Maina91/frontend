@@ -26,7 +26,7 @@ export function LoginPage() {
     mutationFn: loginAction,
     onSuccess: (res) => {
       toast.success('Successful login', {
-        description: res.message,
+        description: res.message || 'Logged in successfully. Proceed to verify the code sent to your email/ Mobile no'
       })
       router.navigate({ to: '/' })
     },
@@ -41,7 +41,7 @@ export function LoginPage() {
       }
 
       toast.error('Login Error', {
-        description: err?.message ?? 'An unexpected error occurred',
+        description: err?.message || 'An unexpected error occurred',
         richColors: true,
       })
     },

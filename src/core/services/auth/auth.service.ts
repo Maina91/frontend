@@ -10,7 +10,7 @@ export interface LoginResponse {
   member_status: number
 }
 
-export async function loginUser(data: LoginFormData): Promise<LoginResponse> {
+export async function loginUserService(data: LoginFormData): Promise<LoginResponse> {
   try {
     const res = await apiClient.post<LoginResponse>('/login', data)
     return res
