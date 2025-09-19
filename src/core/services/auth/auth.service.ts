@@ -1,6 +1,6 @@
 // src/api/login.api.ts
-import type { LoginFormData } from '@/validations/login.schema'
-import { apiClient } from '@/lib/api/api.client'
+import type { LoginFormData } from '@/core/validators/login.schema'
+import { apiClient } from '@/core/lib/api.client'
 
 interface LoginResponse {
   token: string

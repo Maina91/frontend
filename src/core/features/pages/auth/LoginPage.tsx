@@ -2,11 +2,11 @@ import { useState } from 'react'
 import { useRouter } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
 
-import type { LoginFormData } from '@/validations/login.schema'
-import { loginSchema } from '@/validations/login.schema'
+import type { LoginFormData } from '@/core/validators/login.schema'
+import { loginSchema } from '@/core/validators/login.schema'
 
 
-import { loginUser } from '@/services/auth/auth.service'
+import { loginUser } from '@/core/services/auth/auth.service'
 
 
 import { Input } from '@/components/ui/input'
