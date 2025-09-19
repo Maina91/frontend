@@ -5,6 +5,26 @@ import { loginSchema } from '@/core/validators/login.schema'
 export const loginAction = createServerFn({ method: 'POST' })
   .validator(loginSchema)
   .handler(async ({ data }) => {
-    const user = await loginUser(data)
-    return { success: true, user }
+    try {
+      const response = await loginUser(data)
+
+      return {
+        success: true,
+        message: response.message ?? 'Login successful',
+        user: {
+          id: response.user.id,
+          email: response.user.email,
+          username: response.user.username,
+          role: response.user.role,
+        },
+        access_token: response.access_token,
+        refresh_token: response.refresh_token,
+      }
+    } catch (err: any) {
+      return {
+        success: false,
+        message: err?.message ?? 'Login failed',
+        fieldErrors: err?.fieldErrors ?? null,
+      }
+    }
   })

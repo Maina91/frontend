@@ -1,12 +1,11 @@
-import { useState } from 'react'
 import { useRouter } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
-
+import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
-
 
 import type { LoginFormData } from '@/core/validators/login.schema'
 import { loginSchema } from '@/core/validators/login.schema'
+import { loginAction } from '@/core/actions/auth/login'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -14,48 +13,49 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
-
-import { loginAction } from '@/core/actions/auth/login'
-
-
 export function LoginPage() {
-    const router = useRouter()
+  const router = useRouter()
 
-    const [formData, setFormData] = useState<LoginFormData>({
+  // 🔹 Mutation for login action
+  const mutation = useMutation({
+    mutationFn: loginAction,
+    onSuccess: (res) => {
+      toast.success('Successful login', {
+        description: res.message ?? 'Welcome back',
+      })
+      router.navigate({ to: '/' })
+    },
+    onError: (err: any) => {
+      if (err?.fieldErrors) {
+        Object.entries(err.fieldErrors).forEach(([field, message]) => {
+          form.setFieldMeta(field as keyof LoginFormData, (meta) => ({
+            ...meta,
+            errors: [String(message)],
+          }))
+        })
+      }
+
+      toast.error('User Login Error', {
+        description: err?.message ?? 'An unexpected error occurred',
+        richColors: true,
+      })
+    },
+  })
+
+  // 🔹 TanStack Form setup with full Zod schema
+  const form = useForm({
+    defaultValues: {
       email_address: '',
       password: '',
-      user_type: 'customer',
-    })
-
-    const mutation = useMutation({
-      mutationFn: loginAction,
-      onSuccess: () => {
-        toast.success('Login successful')
-        router.navigate({ to: '/' })
-      },
-      onError: (err: any) => {
-        toast.error(err.message || 'Login failed')
-      },
-    })
-
-
-
-  const handleChange = (field: keyof LoginFormData, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }))
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    const parsed = loginSchema.safeParse(formData)
-    if (!parsed.success) {
-      const errs = parsed.error.flatten().fieldErrors
-      Object.entries(errs).forEach(([field, msgs]) => {
-        if (msgs) toast.error(`${field}: ${msgs.join(', ')}`)
-      })
-      return
-    }
-    mutation.mutate(parsed.data)
-  }
+      user_type: 'customer' as 'customer' | 'agent',
+    },
+    validators: {
+      onSubmit: loginSchema,
+    },
+    onSubmit: async ({ value }) => {
+      await mutation.mutateAsync({ data: value })
+    },
+  })
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -71,76 +71,95 @@ export function LoginPage() {
         </CardHeader>
 
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* user_type Selection */}
-            <div>
-              <Label>Login as</Label>
-              <RadioGroup
-                value={formData.user_type}
-                onValueChange={(val) => handleChange('user_type', val)}
-                className="flex gap-4 mt-2"
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="customer" id="customer" />
-                  <Label htmlFor="customer">Customer</Label>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              form.handleSubmit()
+            }}
+            className="space-y-6"
+          >
+            {/* User type */}
+            <form.Field name="user_type">
+              {(field) => (
+                <div>
+                  <Label>Login as</Label>
+                  <RadioGroup
+                    value={field.state.value}
+                    onValueChange={(val: typeof field.state.value) =>
+                      field.handleChange(val)
+                    }
+                    className="flex gap-4 mt-2"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="customer" id="customer" />
+                      <Label htmlFor="customer">Customer</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="agent" id="agent" />
+                      <Label htmlFor="agent">Agent</Label>
+                    </div>
+                  </RadioGroup>
+                  {field.state.meta.errors[0] && (
+                    <p className="text-red-500 text-sm">
+                      {form.state.fieldMeta.email_address.errors.join(', ')}
+                    </p>
+                  )}
                 </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="agent" id="agent" />
-                  <Label htmlFor="agent">Agent</Label>
-                </div>
-              </RadioGroup>
-            </div>
+              )}
+            </form.Field>
 
-            {/* email_address */}
-            <div>
-              <Label>Email address or username</Label>
-              <Input
-                type="text"
-                placeholder="Enter email address or username"
-                value={formData.email_address}
-                onChange={(e) => handleChange('email_address', e.target.value)}
-              />
-            </div>
+            {/* Email */}
+            <form.Field name="email_address">
+              {(field) => (
+                <div>
+                  <Label>Email address or username</Label>
+                  <Input
+                    type="text"
+                    placeholder="Enter email address or username"
+                    value={field.state.value}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                  {field.state.meta.errors[0] && (
+                    <p className="text-red-500 text-sm">
+                      {form.state.fieldMeta.email_address.errors.join(', ')}
+                    </p>
+                  )}
+                </div>
+              )}
+            </form.Field>
 
             {/* Password */}
-            <div>
-              <Label>Password</Label>
-              <Input
-                type="password"
-                placeholder="Enter password"
-                value={formData.password}
-                onChange={(e) => handleChange('password', e.target.value)}
-              />
-            </div>
-
-            {/* Delivery Method */}
-            {/* <div>
-              <Label>Send Login Token Via</Label>
-              <RadioGroup
-                value={formData.deliveryMethod}
-                onValueChange={(val) => handleChange('deliveryMethod', val)}
-                className="flex gap-4 mt-2"
-              >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="sms" id="sms" />
-                  <Label htmlFor="sms">SMS</Label>
+            <form.Field name="password">
+              {(field) => (
+                <div>
+                  <Label>Password</Label>
+                  <Input
+                    type="password"
+                    placeholder="Enter password"
+                    value={field.state.value}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                  {field.state.meta.errors[0] && (
+                    <p className="text-red-500 text-sm">
+                      {form.state.fieldMeta.email_address.errors.join(', ')}
+                    </p>
+                  )}
                 </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="email" id="email" />
-                  <Label htmlFor="email">Email</Label>
-                </div>
-              </RadioGroup>
-            </div> */}
+              )}
+            </form.Field>
 
-            {/* Actions */}
-            <Button
-              type="submit"
-              className="w-full"
-              //   disabled={mutation.isPending}
-            >
-              {/* {mutation.isPending ? "Signing in..." : "Send Token"} */}
-              Sign In
-            </Button>
+            {/* Submit button */}
+            <form.Subscribe selector={(s) => [s.canSubmit]}>
+              {([canSubmit]) => (
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={!canSubmit || mutation.isPending}
+                >
+                  {mutation.isPending ? 'Signing in...' : 'Sign In'}
+                </Button>
+              )}
+            </form.Subscribe>
 
             <div className="flex justify-between text-sm">
               <a
