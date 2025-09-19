@@ -13,6 +13,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
+
+function getErrorMessages(errors: Array<any>): Array<string> {
+  return errors.map((err) => (typeof err === 'string' ? err : err.message))
+}
+
 export function LoginPage() {
   const router = useRouter()
 
@@ -99,9 +104,9 @@ export function LoginPage() {
                       <Label htmlFor="agent">Agent</Label>
                     </div>
                   </RadioGroup>
-                  {field.state.meta.errors[0] && (
+                  {field.state.meta.errors.length > 0 && (
                     <p className="text-red-500 text-sm">
-                      {form.state.fieldMeta.email_address.errors.join(', ')}
+                      {getErrorMessages(field.state.meta.errors).join(', ')}
                     </p>
                   )}
                 </div>
@@ -109,7 +114,17 @@ export function LoginPage() {
             </form.Field>
 
             {/* Email */}
-            <form.Field name="email_address">
+            <form.Field
+              name="email_address"
+              validators={{
+                onChange: ({ value }) => {
+                  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+                  return !emailRegex.test(value)
+                    ? 'Please enter a valid email address.'
+                    : undefined
+                },
+              }}
+            >
               {(field) => (
                 <div>
                   <Label>Email address or username</Label>
@@ -118,10 +133,11 @@ export function LoginPage() {
                     placeholder="Enter email address or username"
                     value={field.state.value}
                     onChange={(e) => field.handleChange(e.target.value)}
+                    autoComplete="email"
                   />
-                  {field.state.meta.errors[0] && (
+                  {field.state.meta.errors.length > 0 && (
                     <p className="text-red-500 text-sm">
-                      {form.state.fieldMeta.email_address.errors.join(', ')}
+                      {getErrorMessages(field.state.meta.errors).join(', ')}
                     </p>
                   )}
                 </div>
@@ -129,19 +145,30 @@ export function LoginPage() {
             </form.Field>
 
             {/* Password */}
-            <form.Field name="password">
+            <form.Field
+              name="password"
+              validators={{
+                onChange: ({ value }) => {
+                  return value.trim() === ''
+                    ? 'Password is required'
+                    : undefined
+                },
+              }}
+            >
               {(field) => (
                 <div>
                   <Label>Password</Label>
                   <Input
+                    id="password"
                     type="password"
                     placeholder="Enter password"
                     value={field.state.value}
                     onChange={(e) => field.handleChange(e.target.value)}
+                    autoComplete="new-password"
                   />
-                  {field.state.meta.errors[0] && (
+                  {field.state.meta.errors.length > 0 && (
                     <p className="text-red-500 text-sm">
-                      {form.state.fieldMeta.email_address.errors.join(', ')}
+                      {getErrorMessages(field.state.meta.errors).join(', ')}
                     </p>
                   )}
                 </div>
