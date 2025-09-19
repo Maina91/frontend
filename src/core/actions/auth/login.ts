@@ -21,8 +21,7 @@ export const loginAction = createServerFn({ method: 'POST' })
         refresh_token: response.refresh_token,
       }
     } catch (err: any) {
-      return {
-        success: false,
+      throw {
         message: err?.message ?? 'Login failed',
         fieldErrors: err?.fieldErrors ?? null,
       }

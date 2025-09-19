@@ -26,7 +26,7 @@ export function LoginPage() {
     mutationFn: loginAction,
     onSuccess: (res) => {
       toast.success('Successful login', {
-        description: res.message ?? 'Welcome back',
+        description: res.message,
       })
       router.navigate({ to: '/' })
     },
@@ -40,7 +40,7 @@ export function LoginPage() {
         })
       }
 
-      toast.error('User Login Error', {
+      toast.error('Login Error', {
         description: err?.message ?? 'An unexpected error occurred',
         richColors: true,
       })
@@ -129,8 +129,9 @@ export function LoginPage() {
                 <div>
                   <Label>Email address or username</Label>
                   <Input
-                    type="text"
-                    placeholder="Enter email address or username"
+                    id="email"
+                    type="email"
+                    placeholder="Enter email address"
                     value={field.state.value}
                     onChange={(e) => field.handleChange(e.target.value)}
                     autoComplete="email"
