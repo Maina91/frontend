@@ -7,16 +7,28 @@ export const verifyOtpAction = createServerFn({ method: 'POST' })
   .validator(otpSchema)
   .handler(async ({ data }) => {
     try {
-      const response = await verifyOtpService(data)
+      const res = await verifyOtpService(data)
+
+      if (res.status !== 200) {
+        return {
+          success: false,
+          message: res.message,
+          token: res.token ?? null,
+          member_status: res.member_status ?? null,
+          accounts_count: res.accounts_count ?? 0,
+        }
+      }
 
       return {
-        success: response.status === 200,
-        message: response.message,
-        token: response.token,
-        member_status: response.member_status,
-        accounts_count: response.accounts_count,
+        success: true,
+        message: res.message,
+        token: res.token,
+        member_status: res.member_status,
+        accounts_count: res.accounts_count,
       }
     } catch (err: any) {
+      console.error('OTP verification error:', err)
+
       throw {
         message: err?.message ?? 'OTP verification failed',
         fieldErrors: err?.fieldErrors ?? null,

@@ -25,6 +25,8 @@ export async function verifyOtpService(data: OtpData): Promise<OtpResponse> {
         },
       },
     )
+    
+    console.log('otp res', res)
 
     return res
   } catch (err: any) {
