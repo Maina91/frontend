@@ -18,6 +18,7 @@ export async function verifyOtpService(data: OtpData): Promise<OtpResponse> {
       {
         otp: Number(data.otp),
         user_agent: data.user_agent,
+        token: data.token,
       },
       {
         headers: {
@@ -25,7 +26,7 @@ export async function verifyOtpService(data: OtpData): Promise<OtpResponse> {
         },
       },
     )
-    
+
     console.log('otp res', res)
 
     return res
