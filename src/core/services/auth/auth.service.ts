@@ -10,9 +10,12 @@ export interface LoginResponse {
   member_status: number
 }
 
-export async function loginUserService(data: LoginFormData): Promise<LoginResponse> {
+export async function loginUserService(
+  data: LoginFormData,
+): Promise<LoginResponse> {
   try {
     const res = await apiClient.post<LoginResponse>('/login', data)
+    console.log('login res', res)
     return res
     console.log(res)
   } catch (err: any) {

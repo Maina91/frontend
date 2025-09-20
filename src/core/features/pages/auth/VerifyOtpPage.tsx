@@ -9,11 +9,21 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 
 import { verifyOtpAction } from '@/core/actions/auth/verify-otp'
-import { clearTempLoginToken } from '@/core/lib/token.store'
 import { otpSchema } from '@/core/validators/otp.schema'
 
 export function OtpPage() {
   const router = useRouter()
+
+  const userAgent =
+    typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown'
+
+  const token =
+    typeof window !== 'undefined' ? sessionStorage.getItem('OtpToken') : null
+
+  if (!token && typeof window !== 'undefined') {
+    // Redirect user back to login if token is missing
+    router.navigate({ to: '/login' })
+  }
 
   const mutation = useMutation({
     mutationFn: verifyOtpAction,
@@ -22,10 +32,11 @@ export function OtpPage() {
         description: res.message || 'You are now logged in.',
       })
 
-      // Clear temp token after successful OTP verification
-      clearTempLoginToken()
+      // Remove OTP token after successful verification
+      if (typeof window !== 'undefined') {
+        sessionStorage.removeItem('OtpToken')
+      }
 
-      // Navigate to dashboard or next step
       router.navigate({ to: '/profile' })
     },
     onError: (err: any) => {
@@ -40,7 +51,8 @@ export function OtpPage() {
   const form = useForm({
     defaultValues: {
       otp: '',
-      user_agent: navigator.userAgent,
+      user_agent: userAgent,
+      token: token || '',
     },
     validators: {
       onSubmit: otpSchema,

@@ -12,8 +12,6 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { setTempLoginToken } from '@/core/lib/token.store'
-
 
 function getErrorMessages(errors: Array<any>): Array<string> {
   return errors.map((err) => (typeof err === 'string' ? err : err.message))
@@ -25,17 +23,20 @@ export function LoginPage() {
   const mutation = useMutation({
     mutationFn: loginAction,
     onSuccess: (res) => {
-      console.log(res)
-
-      // Store the temporary login token
-      if (res.token) setTempLoginToken(res.token)
+      // Set OTP Token
+      console.log('login res', res)
+      if (typeof window !== 'undefined' && res.token) {
+        sessionStorage.setItem('OtpToken', res.token)
+      }
 
       toast.success('Successful login', {
         description:
           res.message ||
           'Logged in successfully. Proceed to verify the code sent to your email/ Mobile no',
       })
-      router.navigate({ to: '/verify-otp' })
+      router.navigate({
+        to: '/verify-otp',
+      })
     },
     onError: (err: any) => {
       if (err?.fieldErrors) {
@@ -54,7 +55,6 @@ export function LoginPage() {
     },
   })
 
-  // 🔹 TanStack Form setup with full Zod schema
   const form = useForm({
     defaultValues: {
       email_address: '',
