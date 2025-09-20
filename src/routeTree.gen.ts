@@ -13,9 +13,9 @@ import { createServerRootRoute } from '@tanstack/react-start/server'
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo.tanstack-query'
-import { Route as DemoTableRouteImport } from './routes/demo.table'
 import { Route as DemoMcpTodosRouteImport } from './routes/demo.mcp-todos'
 import { Route as DashboardProfileRouteImport } from './routes/_dashboard/profile'
+import { Route as Dashboard_layoutRouteImport } from './routes/_dashboard/__layout'
 import { Route as AuthVerifyOtpRouteImport } from './routes/_auth/verify-otp'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo.start.server-funcs'
@@ -39,11 +39,6 @@ const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
   path: '/demo/tanstack-query',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoTableRoute = DemoTableRouteImport.update({
-  id: '/demo/table',
-  path: '/demo/table',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DemoMcpTodosRoute = DemoMcpTodosRouteImport.update({
   id: '/demo/mcp-todos',
   path: '/demo/mcp-todos',
@@ -52,6 +47,10 @@ const DemoMcpTodosRoute = DemoMcpTodosRouteImport.update({
 const DashboardProfileRoute = DashboardProfileRouteImport.update({
   id: '/_dashboard/profile',
   path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Dashboard_layoutRoute = Dashboard_layoutRouteImport.update({
+  id: '/_dashboard/__layout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthVerifyOtpRoute = AuthVerifyOtpRouteImport.update({
@@ -110,7 +109,6 @@ export interface FileRoutesByFullPath {
   '/verify-otp': typeof AuthVerifyOtpRoute
   '/profile': typeof DashboardProfileRoute
   '/demo/mcp-todos': typeof DemoMcpTodosRoute
-  '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/': typeof PublicIndexRoute
   '/demo/form/address': typeof DemoFormAddressRoute
@@ -123,7 +121,6 @@ export interface FileRoutesByTo {
   '/verify-otp': typeof AuthVerifyOtpRoute
   '/profile': typeof DashboardProfileRoute
   '/demo/mcp-todos': typeof DemoMcpTodosRoute
-  '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/': typeof PublicIndexRoute
   '/demo/form/address': typeof DemoFormAddressRoute
@@ -135,9 +132,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/verify-otp': typeof AuthVerifyOtpRoute
+  '/_dashboard/__layout': typeof Dashboard_layoutRoute
   '/_dashboard/profile': typeof DashboardProfileRoute
   '/demo/mcp-todos': typeof DemoMcpTodosRoute
-  '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/_public/': typeof PublicIndexRoute
   '/demo/form/address': typeof DemoFormAddressRoute
@@ -152,7 +149,6 @@ export interface FileRouteTypes {
     | '/verify-otp'
     | '/profile'
     | '/demo/mcp-todos'
-    | '/demo/table'
     | '/demo/tanstack-query'
     | '/'
     | '/demo/form/address'
@@ -165,7 +161,6 @@ export interface FileRouteTypes {
     | '/verify-otp'
     | '/profile'
     | '/demo/mcp-todos'
-    | '/demo/table'
     | '/demo/tanstack-query'
     | '/'
     | '/demo/form/address'
@@ -176,9 +171,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_auth/login'
     | '/_auth/verify-otp'
+    | '/_dashboard/__layout'
     | '/_dashboard/profile'
     | '/demo/mcp-todos'
-    | '/demo/table'
     | '/demo/tanstack-query'
     | '/_public/'
     | '/demo/form/address'
@@ -190,9 +185,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AuthLoginRoute: typeof AuthLoginRoute
   AuthVerifyOtpRoute: typeof AuthVerifyOtpRoute
+  Dashboard_layoutRoute: typeof Dashboard_layoutRoute
   DashboardProfileRoute: typeof DashboardProfileRoute
   DemoMcpTodosRoute: typeof DemoMcpTodosRoute
-  DemoTableRoute: typeof DemoTableRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
   PublicIndexRoute: typeof PublicIndexRoute
   DemoFormAddressRoute: typeof DemoFormAddressRoute
@@ -259,13 +254,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoTanstackQueryRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/table': {
-      id: '/demo/table'
-      path: '/demo/table'
-      fullPath: '/demo/table'
-      preLoaderRoute: typeof DemoTableRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/demo/mcp-todos': {
       id: '/demo/mcp-todos'
       path: '/demo/mcp-todos'
@@ -278,6 +266,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof DashboardProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_dashboard/__layout': {
+      id: '/_dashboard/__layout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof Dashboard_layoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth/verify-otp': {
@@ -360,9 +355,9 @@ declare module '@tanstack/react-start/server' {
 const rootRouteChildren: RootRouteChildren = {
   AuthLoginRoute: AuthLoginRoute,
   AuthVerifyOtpRoute: AuthVerifyOtpRoute,
+  Dashboard_layoutRoute: Dashboard_layoutRoute,
   DashboardProfileRoute: DashboardProfileRoute,
   DemoMcpTodosRoute: DemoMcpTodosRoute,
-  DemoTableRoute: DemoTableRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
   PublicIndexRoute: PublicIndexRoute,
   DemoFormAddressRoute: DemoFormAddressRoute,
