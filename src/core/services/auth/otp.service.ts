@@ -16,12 +16,12 @@ export async function verifyOtpService(data: OtpData): Promise<OtpResponse> {
     const res = await apiClient.post<OtpResponse>(
       '/otp-verification',
       {
-        otp: data.otp,
+        otp: Number(data.otp),
         user_agent: data.user_agent,
       },
       {
         headers: {
-          Authorization: `Bearer ${data.token}`,
+          'auth-token': data.token,
         },
       },
     )
