@@ -2,7 +2,6 @@ import { env } from '@/env'
 
 const BASE_URL = env.VITE_API_URL
 
-
 interface ApiError {
   message?: string
   status?: number
@@ -16,13 +15,15 @@ export class ApiClient {
   }
 
   async request<T>(path: string, options: RequestInit = {}): Promise<T> {
+    const headers = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      ...(options.headers ?? {}),
+    }
+
     const res = await fetch(`${this.baseUrl}${path}`, {
-      headers: {
-        Accept: 'application/json',
-        ...(options.headers ?? {}),
-        'Content-Type': 'application/json',
-      },
       ...options,
+      headers,
     })
 
     if (!res.ok) {
@@ -59,4 +60,3 @@ export class ApiClient {
 
 // ✅ singleton client (baseUrl from env)
 export const apiClient = new ApiClient(BASE_URL)
-
