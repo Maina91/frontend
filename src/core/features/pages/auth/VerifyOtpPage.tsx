@@ -10,6 +10,8 @@ import { Label } from '@/components/ui/label'
 
 import { verifyOtpAction } from '@/core/actions/auth/verify-otp'
 import { otpSchema } from '@/core/validators/otp.schema'
+import { SessionClient } from '@/core/lib/session.client'
+
 
 export function OtpPage() {
   const router = useRouter()
@@ -18,10 +20,9 @@ export function OtpPage() {
     typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown'
 
   const token =
-    typeof window !== 'undefined' ? sessionStorage.getItem('OtpToken') : null
+    typeof window !== 'undefined' ? SessionClient.getOtpToken() : null
 
   if (!token && typeof window !== 'undefined') {
-    // Redirect user back to login if token is missing
     router.navigate({ to: '/login' })
   }
 
@@ -36,7 +37,7 @@ export function OtpPage() {
 
       // Remove OTP token after successful verification
       if (typeof window !== 'undefined') {
-        sessionStorage.removeItem('OtpToken')
+        SessionClient.clearOtpToken()
       }
 
       router.navigate({ to: '/profile' })

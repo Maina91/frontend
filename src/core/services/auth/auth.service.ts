@@ -1,9 +1,7 @@
 import type { LoginData, LogoutData } from '@/core/validators/auth.schema'
-import type {
-  LoginResponse,
-  LogoutResponse,
-} from '@/core/types/auth'
+import type { LoginResponse, LogoutResponse } from '@/core/types/auth'
 import { apiClient } from '@/core/lib/api.client'
+import { SessionClient } from '@/core/lib/session.client'
 
 export async function loginUserService(
   data: LoginData,
@@ -35,9 +33,14 @@ export async function logoutUserService(
       },
     })
 
+    SessionClient.clear()
+
     console.log('logout res', res)
     return res
   } catch (err: any) {
+
+    SessionClient.clear()
+    
     if (err.response?.data?.message) {
       throw new Error(err.response.data.message)
     }
