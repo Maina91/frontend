@@ -1,4 +1,3 @@
-// src/core/actions/auth/verify-otp.action.ts
 import { createServerFn } from '@tanstack/react-start'
 import { otpSchema } from '@/core/validators/otp.schema'
 import { verifyOtpService } from '@/core/services/auth/otp.service'

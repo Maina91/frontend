@@ -9,6 +9,9 @@ export const loginSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters long'),
   user_type: z.enum(USER_TYPES),
 })
+export type LoginData = z.infer<typeof loginSchema>
 
-// ✅ Export the type separately
-export type LoginFormData = z.infer<typeof loginSchema>
+export const logoutSchema = z.object({
+  token: z.string().min(1, 'Token is required'),
+})
+export type LogoutData = z.infer<typeof logoutSchema>

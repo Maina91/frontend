@@ -13,7 +13,9 @@ export async function verifyOtpService(data: OtpData): Promise<OtpResponse> {
   try {
     if (!data.token) throw new Error('Login token is missing.')
 
-    const res = await apiClient.post<OtpResponse>('/otp-verification', data, {
+    const verifyOtpEndpoint = '/lofty/otp-verification'
+
+    const res = await apiClient.post<OtpResponse>(verifyOtpEndpoint, data, {
       headers: {
         'auth-token': data.token,
       },

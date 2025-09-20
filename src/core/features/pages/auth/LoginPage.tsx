@@ -3,8 +3,8 @@ import { useMutation } from '@tanstack/react-query'
 import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
 
-import type { LoginFormData } from '@/core/validators/login.schema'
-import { loginSchema } from '@/core/validators/login.schema'
+import type { LoginData } from '@/core/validators/auth.schema'
+import { loginSchema } from '@/core/validators/auth.schema'
 import { loginAction } from '@/core/actions/auth/login'
 
 import { Input } from '@/components/ui/input'
@@ -41,7 +41,7 @@ export function LoginPage() {
     onError: (err: any) => {
       if (err?.fieldErrors) {
         Object.entries(err.fieldErrors).forEach(([field, message]) => {
-          form.setFieldMeta(field as keyof LoginFormData, (meta) => ({
+          form.setFieldMeta(field as keyof LoginData, (meta) => ({
             ...meta,
             errors: [String(message)],
           }))

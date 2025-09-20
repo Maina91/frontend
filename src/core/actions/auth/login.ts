@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
 import { loginUserService } from '@/core/services/auth/auth.service'
-import { loginSchema } from '@/core/validators/login.schema'
+import { loginSchema } from '@/core/validators/auth.schema'
 
 export const loginAction = createServerFn({ method: 'POST' })
   .validator(loginSchema)
