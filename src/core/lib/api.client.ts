@@ -18,8 +18,9 @@ export class ApiClient {
   async request<T>(path: string, options: RequestInit = {}): Promise<T> {
     const res = await fetch(`${this.baseUrl}${path}`, {
       headers: {
-        'Content-Type': 'application/json',
+        Accept: 'application/json',
         ...(options.headers ?? {}),
+        'Content-Type': 'application/json',
       },
       ...options,
     })
