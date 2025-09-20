@@ -17,7 +17,6 @@ export async function loginUserService(
     const res = await apiClient.post<LoginResponse>('/login', data)
     console.log('login res', res)
     return res
-    console.log(res)
   } catch (err: any) {
     if (err.response?.data?.message) {
       throw new Error(err.response.data.message)

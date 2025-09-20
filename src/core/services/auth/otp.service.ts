@@ -13,22 +13,11 @@ export async function verifyOtpService(data: OtpData): Promise<OtpResponse> {
   try {
     if (!data.token) throw new Error('Login token is missing.')
 
-    const res = await apiClient.post<OtpResponse>(
-      '/otp-verification',
-      {
-        otp: Number(data.otp),
-        user_agent: data.user_agent,
-        token: data.token,
+    const res = await apiClient.post<OtpResponse>('/otp-verification', data, {
+      headers: {
+        'auth-token': data.token,
       },
-      {
-        headers: {
-          'auth-token': data.token,
-        },
-      },
-    )
-
-    console.log('otp res', res)
-
+    })
     return res
   } catch (err: any) {
     if (err.response?.data?.message) {

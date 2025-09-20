@@ -28,7 +28,9 @@ export function OtpPage() {
   const mutation = useMutation({
     mutationFn: verifyOtpAction,
     onSuccess: (res) => {
-      toast.success('OTP Verified!', {
+      console.log("otp res", res)
+
+      toast.success('OTP Verified Successfully', {
         description: res.message || 'You are now logged in.',
       })
 
