@@ -8,17 +8,16 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
 import { createServerRootRoute } from '@tanstack/react-start/server'
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo.tanstack-query'
 import { Route as DemoMcpTodosRouteImport } from './routes/demo.mcp-todos'
 import { Route as DashboardProfileRouteImport } from './routes/dashboard/profile'
 import { Route as DashboardInvestmentsRouteImport } from './routes/dashboard/investments'
-import { Route as Dashboard_layoutRouteImport } from './routes/dashboard/__layout'
 import { Route as OnboardingRegisterRouteImport } from './routes/_onboarding/register'
 import { Route as OnboardingForgotPasswordRouteImport } from './routes/_onboarding/forgot-password'
 import { Route as AuthVerifyOtpRouteImport } from './routes/_auth/verify-otp'
@@ -32,10 +31,9 @@ import { ServerRoute as ApiMcpTodosServerRouteImport } from './routes/api.mcp-to
 import { ServerRoute as ApiDemoTqTodosServerRouteImport } from './routes/api.demo-tq-todos'
 import { ServerRoute as ApiDemoNamesServerRouteImport } from './routes/api.demo-names'
 
-const DashboardRouteImport = createFileRoute('/dashboard')()
 const rootServerRouteImport = createServerRootRoute()
 
-const DashboardRoute = DashboardRouteImport.update({
+const DashboardRouteRoute = DashboardRouteRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
@@ -43,7 +41,7 @@ const DashboardRoute = DashboardRouteImport.update({
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => DashboardRoute,
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const PublicIndexRoute = PublicIndexRouteImport.update({
   id: '/_public/',
@@ -63,16 +61,12 @@ const DemoMcpTodosRoute = DemoMcpTodosRouteImport.update({
 const DashboardProfileRoute = DashboardProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
-  getParentRoute: () => DashboardRoute,
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardInvestmentsRoute = DashboardInvestmentsRouteImport.update({
   id: '/investments',
   path: '/investments',
-  getParentRoute: () => DashboardRoute,
-} as any)
-const Dashboard_layoutRoute = Dashboard_layoutRouteImport.update({
-  id: '/__layout',
-  getParentRoute: () => DashboardRoute,
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const OnboardingRegisterRoute = OnboardingRegisterRouteImport.update({
   id: '/_onboarding/register',
@@ -137,11 +131,11 @@ const ApiDemoNamesServerRoute = ApiDemoNamesServerRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/login': typeof AuthLoginRoute
   '/verify-otp': typeof AuthVerifyOtpRoute
   '/forgot-password': typeof OnboardingForgotPasswordRoute
   '/register': typeof OnboardingRegisterRoute
-  '/dashboard': typeof Dashboard_layoutRoute
   '/dashboard/investments': typeof DashboardInvestmentsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/demo/mcp-todos': typeof DemoMcpTodosRoute
@@ -158,12 +152,12 @@ export interface FileRoutesByTo {
   '/verify-otp': typeof AuthVerifyOtpRoute
   '/forgot-password': typeof OnboardingForgotPasswordRoute
   '/register': typeof OnboardingRegisterRoute
-  '/dashboard': typeof DashboardIndexRoute
   '/dashboard/investments': typeof DashboardInvestmentsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/demo/mcp-todos': typeof DemoMcpTodosRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/': typeof PublicIndexRoute
+  '/dashboard': typeof DashboardIndexRoute
   '/demo/form/address': typeof DemoFormAddressRoute
   '/demo/form/simple': typeof DemoFormSimpleRoute
   '/demo/start/api-request': typeof DemoStartApiRequestRoute
@@ -171,12 +165,11 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/verify-otp': typeof AuthVerifyOtpRoute
   '/_onboarding/forgot-password': typeof OnboardingForgotPasswordRoute
   '/_onboarding/register': typeof OnboardingRegisterRoute
-  '/dashboard': typeof DashboardRouteWithChildren
-  '/dashboard/__layout': typeof Dashboard_layoutRoute
   '/dashboard/investments': typeof DashboardInvestmentsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/demo/mcp-todos': typeof DemoMcpTodosRoute
@@ -191,11 +184,11 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/dashboard'
     | '/login'
     | '/verify-otp'
     | '/forgot-password'
     | '/register'
-    | '/dashboard'
     | '/dashboard/investments'
     | '/dashboard/profile'
     | '/demo/mcp-todos'
@@ -212,24 +205,23 @@ export interface FileRouteTypes {
     | '/verify-otp'
     | '/forgot-password'
     | '/register'
-    | '/dashboard'
     | '/dashboard/investments'
     | '/dashboard/profile'
     | '/demo/mcp-todos'
     | '/demo/tanstack-query'
     | '/'
+    | '/dashboard'
     | '/demo/form/address'
     | '/demo/form/simple'
     | '/demo/start/api-request'
     | '/demo/start/server-funcs'
   id:
     | '__root__'
+    | '/dashboard'
     | '/_auth/login'
     | '/_auth/verify-otp'
     | '/_onboarding/forgot-password'
     | '/_onboarding/register'
-    | '/dashboard'
-    | '/dashboard/__layout'
     | '/dashboard/investments'
     | '/dashboard/profile'
     | '/demo/mcp-todos'
@@ -243,11 +235,11 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
   AuthLoginRoute: typeof AuthLoginRoute
   AuthVerifyOtpRoute: typeof AuthVerifyOtpRoute
   OnboardingForgotPasswordRoute: typeof OnboardingForgotPasswordRoute
   OnboardingRegisterRoute: typeof OnboardingRegisterRoute
-  DashboardRoute: typeof DashboardRouteWithChildren
   DemoMcpTodosRoute: typeof DemoMcpTodosRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
   PublicIndexRoute: typeof PublicIndexRoute
@@ -305,7 +297,7 @@ declare module '@tanstack/react-router' {
       id: '/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
+      preLoaderRoute: typeof DashboardRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/': {
@@ -313,7 +305,7 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/dashboard/'
       preLoaderRoute: typeof DashboardIndexRouteImport
-      parentRoute: typeof DashboardRoute
+      parentRoute: typeof DashboardRouteRoute
     }
     '/_public/': {
       id: '/_public/'
@@ -341,21 +333,14 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/dashboard/profile'
       preLoaderRoute: typeof DashboardProfileRouteImport
-      parentRoute: typeof DashboardRoute
+      parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/investments': {
       id: '/dashboard/investments'
       path: '/investments'
       fullPath: '/dashboard/investments'
       preLoaderRoute: typeof DashboardInvestmentsRouteImport
-      parentRoute: typeof DashboardRoute
-    }
-    '/dashboard/__layout': {
-      id: '/dashboard/__layout'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof Dashboard_layoutRouteImport
-      parentRoute: typeof DashboardRoute
+      parentRoute: typeof DashboardRouteRoute
     }
     '/_onboarding/register': {
       id: '/_onboarding/register'
@@ -448,30 +433,28 @@ declare module '@tanstack/react-start/server' {
   }
 }
 
-interface DashboardRouteChildren {
-  Dashboard_layoutRoute: typeof Dashboard_layoutRoute
+interface DashboardRouteRouteChildren {
   DashboardInvestmentsRoute: typeof DashboardInvestmentsRoute
   DashboardProfileRoute: typeof DashboardProfileRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
-const DashboardRouteChildren: DashboardRouteChildren = {
-  Dashboard_layoutRoute: Dashboard_layoutRoute,
+const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardInvestmentsRoute: DashboardInvestmentsRoute,
   DashboardProfileRoute: DashboardProfileRoute,
   DashboardIndexRoute: DashboardIndexRoute,
 }
 
-const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
-  DashboardRouteChildren,
+const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
+  DashboardRouteRouteChildren,
 )
 
 const rootRouteChildren: RootRouteChildren = {
+  DashboardRouteRoute: DashboardRouteRouteWithChildren,
   AuthLoginRoute: AuthLoginRoute,
   AuthVerifyOtpRoute: AuthVerifyOtpRoute,
   OnboardingForgotPasswordRoute: OnboardingForgotPasswordRoute,
   OnboardingRegisterRoute: OnboardingRegisterRoute,
-  DashboardRoute: DashboardRouteWithChildren,
   DemoMcpTodosRoute: DemoMcpTodosRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
   PublicIndexRoute: PublicIndexRoute,
