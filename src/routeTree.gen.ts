@@ -14,6 +14,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo.tanstack-query'
 import { Route as DemoMcpTodosRouteImport } from './routes/demo.mcp-todos'
+import { Route as OnboardingRegisterRouteImport } from './routes/_onboarding/register'
 import { Route as DashboardProfileRouteImport } from './routes/_dashboard/profile'
 import { Route as Dashboard_layoutRouteImport } from './routes/_dashboard/__layout'
 import { Route as AuthVerifyOtpRouteImport } from './routes/_auth/verify-otp'
@@ -42,6 +43,11 @@ const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
 const DemoMcpTodosRoute = DemoMcpTodosRouteImport.update({
   id: '/demo/mcp-todos',
   path: '/demo/mcp-todos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRegisterRoute = OnboardingRegisterRouteImport.update({
+  id: '/_onboarding/register',
+  path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardProfileRoute = DashboardProfileRouteImport.update({
@@ -108,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof AuthLoginRoute
   '/verify-otp': typeof AuthVerifyOtpRoute
   '/profile': typeof DashboardProfileRoute
+  '/register': typeof OnboardingRegisterRoute
   '/demo/mcp-todos': typeof DemoMcpTodosRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/': typeof PublicIndexRoute
@@ -120,6 +127,7 @@ export interface FileRoutesByTo {
   '/login': typeof AuthLoginRoute
   '/verify-otp': typeof AuthVerifyOtpRoute
   '/profile': typeof DashboardProfileRoute
+  '/register': typeof OnboardingRegisterRoute
   '/demo/mcp-todos': typeof DemoMcpTodosRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/': typeof PublicIndexRoute
@@ -134,6 +142,7 @@ export interface FileRoutesById {
   '/_auth/verify-otp': typeof AuthVerifyOtpRoute
   '/_dashboard/__layout': typeof Dashboard_layoutRoute
   '/_dashboard/profile': typeof DashboardProfileRoute
+  '/_onboarding/register': typeof OnboardingRegisterRoute
   '/demo/mcp-todos': typeof DemoMcpTodosRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/_public/': typeof PublicIndexRoute
@@ -148,6 +157,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/verify-otp'
     | '/profile'
+    | '/register'
     | '/demo/mcp-todos'
     | '/demo/tanstack-query'
     | '/'
@@ -160,6 +170,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/verify-otp'
     | '/profile'
+    | '/register'
     | '/demo/mcp-todos'
     | '/demo/tanstack-query'
     | '/'
@@ -173,6 +184,7 @@ export interface FileRouteTypes {
     | '/_auth/verify-otp'
     | '/_dashboard/__layout'
     | '/_dashboard/profile'
+    | '/_onboarding/register'
     | '/demo/mcp-todos'
     | '/demo/tanstack-query'
     | '/_public/'
@@ -187,6 +199,7 @@ export interface RootRouteChildren {
   AuthVerifyOtpRoute: typeof AuthVerifyOtpRoute
   Dashboard_layoutRoute: typeof Dashboard_layoutRoute
   DashboardProfileRoute: typeof DashboardProfileRoute
+  OnboardingRegisterRoute: typeof OnboardingRegisterRoute
   DemoMcpTodosRoute: typeof DemoMcpTodosRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
   PublicIndexRoute: typeof PublicIndexRoute
@@ -259,6 +272,13 @@ declare module '@tanstack/react-router' {
       path: '/demo/mcp-todos'
       fullPath: '/demo/mcp-todos'
       preLoaderRoute: typeof DemoMcpTodosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_onboarding/register': {
+      id: '/_onboarding/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof OnboardingRegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_dashboard/profile': {
@@ -357,6 +377,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthVerifyOtpRoute: AuthVerifyOtpRoute,
   Dashboard_layoutRoute: Dashboard_layoutRoute,
   DashboardProfileRoute: DashboardProfileRoute,
+  OnboardingRegisterRoute: OnboardingRegisterRoute,
   DemoMcpTodosRoute: DemoMcpTodosRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
   PublicIndexRoute: PublicIndexRoute,
