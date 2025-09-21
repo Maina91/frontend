@@ -9,6 +9,8 @@ export const env = createEnv({
   client: {
     VITE_API_URL: z.string().url(),
     VITE_APP_TITLE: z.string().min(1).optional(),
+    VITE_OTP_MAX_RETRIES: z.string().optional(),
+    VITE_OTP_RESEND_INTERVAL: z.string().optional(),
   },
   runtimeEnv: import.meta.env,
   emptyStringAsUndefined: true,

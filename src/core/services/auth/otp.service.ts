@@ -1,4 +1,4 @@
-import type { OtpData } from '@/core/validators/otp.schema'
+import type { OtpData, ResendOtpData } from '@/core/validators/otp.schema'
 import { apiClient } from '@/core/lib/api.client'
 
 export interface OtpResponse {
@@ -7,6 +7,11 @@ export interface OtpResponse {
   token?: string
   member_status?: number
   accounts_count?: number
+}
+
+export interface ResendOtpResponse {
+  status: number
+  message: string
 }
 
 export async function verifyOtpService(data: OtpData): Promise<OtpResponse> {
@@ -26,5 +31,25 @@ export async function verifyOtpService(data: OtpData): Promise<OtpResponse> {
       throw new Error(err.response.data.message)
     }
     throw new Error('Unable to verify OTP. Please try again later.')
+  }
+}
+
+export async function resendOtpService(data: ResendOtpData): Promise<ResendOtpResponse> {
+  try {
+    if (!data.token) throw new Error('Login token is missing.')
+
+    const resendOtpEndpoint = '/lofty/send_otp'
+
+    const res = await apiClient.post<OtpResponse>(resendOtpEndpoint, data, {
+      headers: {
+        'auth-token': data.token,
+      },
+    })
+    return res
+  } catch (err: any) {
+    if (err.response?.data?.message) {
+      throw new Error(err.response.data.message)
+    }
+    throw new Error('Unable to resend OTP. Please try again later.')
   }
 }

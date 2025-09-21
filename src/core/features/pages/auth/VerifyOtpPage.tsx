@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import { useRouter } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
 import { useForm } from '@tanstack/react-form'
@@ -6,15 +7,23 @@ import { toast } from 'sonner'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
 
-import { verifyOtpAction } from '@/core/actions/auth/verify-otp'
-import { otpSchema } from '@/core/validators/otp.schema'
+import { resendOtpAction, verifyOtpAction } from '@/core/actions/auth/otp'
+import {
+  otpSchema,
+  ResendOtpData,
+} from '@/core/validators/otp.schema'
 import { SessionClient } from '@/core/lib/session.client'
+import { env } from '@/env'
 
 
 export function OtpPage() {
   const router = useRouter()
+  const [destination, setDestination] = useState<'EMAIL' | 'MOBILE'>('EMAIL')
+  const [resendCooldown, setResendCooldown] = useState(0)
+  const [resendCount, setResendCount] = useState(0)
 
   const userAgent =
     typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown'
@@ -26,7 +35,25 @@ export function OtpPage() {
     router.navigate({ to: '/login' })
   }
 
-  const mutation = useMutation({
+  const MAX_RESENDS = Number(env.VITE_OTP_MAX_RETRIES ?? 3)
+  const RESEND_INTERVAL = Number(env.VITE_OTP_RESEND_INTERVAL ?? 30) // in seconds
+
+  const form = useForm({
+    defaultValues: {
+      otp: '',
+      user_agent: userAgent,
+      token: token || '',
+    },
+    validators: {
+      onSubmit: otpSchema,
+    },
+    onSubmit: async ({ value }) => {
+      await verifyMutation.mutateAsync({ data: value })
+    },
+  })
+
+  // Verify OTP
+  const verifyMutation = useMutation({
     mutationFn: verifyOtpAction,
     onSuccess: (res) => {
       console.log("otp res", res)
@@ -35,10 +62,7 @@ export function OtpPage() {
         description: res.message || 'You are now logged in.',
       })
 
-      // Remove OTP token after successful verification
-      if (typeof window !== 'undefined') {
-        SessionClient.clearOtpToken()
-      }
+      SessionClient.clearOtpToken()
 
       router.navigate({ to: '/profile' })
     },
@@ -50,20 +74,36 @@ export function OtpPage() {
     },
   })
 
-  // 🔹 TanStack Form setup
-  const form = useForm({
-    defaultValues: {
-      otp: '',
-      user_agent: userAgent,
-      token: token || '',
+  // Resend OTP
+  const resendMutation = useMutation({
+    mutationFn: () =>
+      resendOtpAction({ data: { token: token!, description: destination } }),
+    onSuccess: (res) => {
+      console.log("resend otp res", res)
+      toast.success('OTP Resent', {
+        description: 'A new OTP has been sent to your email/phone.',
+      })
+      setResendCooldown(RESEND_INTERVAL)
+      setResendCount((prev) => prev + 1)
     },
-    validators: {
-      onSubmit: otpSchema,
-    },
-    onSubmit: async ({ value }) => {
-      await mutation.mutateAsync({ data: value })
-    },
+    onError: (err: any) => {
+      toast.error('Failed to Resend OTP', {
+        description: err?.message || 'Please try again later.',
+        richColors: true,
+      })
+    }
   })
+
+  // Handle resend cooldown timer
+  useEffect(() => {
+    if (resendCooldown <= 0) return
+    const interval = setInterval(() => {
+      setResendCooldown((prev) => Math.max(0, prev - 1))
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [resendCooldown])
+
+
 
   return (
     <div className="flex items-center justify-center min-h-screen">
@@ -85,6 +125,8 @@ export function OtpPage() {
             }}
             className="space-y-6"
           >
+
+            {/* OTP Input */}
             <form.Field
               name="otp"
               validators={{
@@ -114,18 +156,69 @@ export function OtpPage() {
               )}
             </form.Field>
 
-            {/* Submit button */}
+            {/* Verify button */}
             <form.Subscribe selector={(s) => [s.canSubmit]}>
               {([canSubmit]) => (
                 <Button
                   type="submit"
                   className="w-full"
-                  disabled={!canSubmit || mutation.isPending}
+                  disabled={!canSubmit || verifyMutation.isPending}
                 >
-                  {mutation.isPending ? 'Verifying...' : 'Verify OTP'}
+                  {verifyMutation.isPending ? 'Verifying...' : 'Verify OTP'}
                 </Button>
               )}
             </form.Subscribe>
+
+            {/* Divider */}
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t border-border" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Didn’t receive a code?
+                </span>
+              </div>
+            </div>
+
+            {/* Resend OTP */}
+            <div className="space-y-2 mt-4 text-center ">
+              <RadioGroup
+                value={destination}
+                onValueChange={(value: string) => setDestination(value as 'EMAIL' | 'MOBILE')}
+                className="flex justify-center gap-6 mb-2"
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="MOBILE" id="sms" />
+                  <Label htmlFor="sms">SMS</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="EMAIL" id="email" />
+                  <Label htmlFor="email">Email</Label>
+                </div>
+              </RadioGroup>
+
+
+              <Button
+                type="button"
+                variant="link"
+                disabled={resendCooldown > 0 || resendCount >= MAX_RESENDS || resendMutation.isPending}
+                onClick={() => resendMutation.mutate()}
+              >
+                {resendCooldown > 0
+                  ? `Resend OTP in ${resendCooldown}s`
+                  : resendCount >= MAX_RESENDS
+                    ? 'Maximum attempts reached'
+                    : 'Resend OTP'}
+              </Button>
+
+              {resendCount > 0 && resendCount < MAX_RESENDS && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  {MAX_RESENDS - resendCount} resend(s) left
+                </p>
+              )}
+            </div>
+
           </form>
         </CardContent>
       </Card>

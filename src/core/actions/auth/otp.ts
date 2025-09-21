@@ -1,6 +1,9 @@
 import { createServerFn } from '@tanstack/react-start'
-import { otpSchema } from '@/core/validators/otp.schema'
-import { verifyOtpService } from '@/core/services/auth/otp.service'
+import { otpSchema, resendOtpSchema } from '@/core/validators/otp.schema'
+import {
+  resendOtpService,
+  verifyOtpService,
+} from '@/core/services/auth/otp.service'
 
 export const verifyOtpAction = createServerFn({ method: 'POST' })
   .validator(otpSchema)
@@ -22,3 +25,22 @@ export const verifyOtpAction = createServerFn({ method: 'POST' })
       }
     }
   })
+
+export const resendOtpAction = createServerFn({ method: 'POST' })
+.validator(resendOtpSchema)
+.handler(async ({ data }) => {
+  try {
+    const res = await resendOtpService(data)
+
+    return {
+      success: true,
+      message: res.message,
+    }
+  } catch (err: any) {
+    throw {
+      message: err?.message ?? 'Resending OTP failed',
+      fieldErrors: err?.fieldErrors ?? null,
+    }
+  }
+})
+
