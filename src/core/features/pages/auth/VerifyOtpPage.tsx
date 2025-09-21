@@ -188,15 +188,14 @@ export function OtpPage() {
                 className="flex justify-center gap-6 mb-2"
               >
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="MOBILE" id="sms" />
-                  <Label htmlFor="sms">SMS</Label>
-                </div>
-                <div className="flex items-center space-x-2">
                   <RadioGroupItem value="EMAIL" id="email" />
                   <Label htmlFor="email">Email</Label>
                 </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="MOBILE" id="sms" />
+                  <Label htmlFor="sms">SMS</Label>
+                </div>
               </RadioGroup>
-
 
               <Button
                 type="button"
