@@ -27,11 +27,8 @@ export function LoginPage() {
   const mutation = useMutation({
     mutationFn: loginAction,
     onSuccess: (res) => {
-      // Set OTP Token
       console.log('login res', res)
-      if (typeof window !== 'undefined' && res.token) {
-        SessionClient.setOtpToken(res.token)
-      }
+      SessionClient.setOtpToken(res.token)
 
       toast.success('Successful login', {
         description:
