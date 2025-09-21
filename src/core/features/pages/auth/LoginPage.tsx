@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { useRouter } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
 import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
+import { Eye, EyeOff } from 'lucide-react'
 
 import type { LoginData } from '@/core/validators/auth.schema'
 import { loginSchema } from '@/core/validators/auth.schema'
@@ -20,6 +22,7 @@ function getErrorMessages(errors: Array<any>): Array<string> {
 
 export function LoginPage() {
   const router = useRouter()
+  const [showPassword, setShowPassword] = useState(false)
 
   const mutation = useMutation({
     mutationFn: loginAction,
@@ -157,26 +160,37 @@ export function LoginPage() {
             <form.Field
               name="password"
               validators={{
-                onChange: ({ value }) => {
-                  return value.trim() === ''
-                    ? 'Password is required'
-                    : undefined
-                },
+                onChange: ({ value }) =>
+                  value.trim() === '' ? 'Password is required' : undefined,
               }}
             >
               {(field) => (
-                <div>
+                <div className="flex flex-col">
                   <Label>Password</Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="Enter password"
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                    autoComplete="new-password"
-                  />
+                  <div className="relative flex items-center">
+                    <Input
+                      id="password"
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="Enter password"
+                      value={field.state.value}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      autoComplete="new-password"
+                      className="pr-10" 
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      className="absolute right-3 text-muted-foreground hover:text-foreground"
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-5 w-5" />
+                      ) : (
+                        <Eye className="h-5 w-5" />
+                      )}
+                    </button>
+                  </div>
                   {field.state.meta.errors.length > 0 && (
-                    <p className="text-red-500 text-sm">
+                    <p className="text-red-500 text-sm mt-1">
                       {getErrorMessages(field.state.meta.errors).join(', ')}
                     </p>
                   )}
