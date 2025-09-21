@@ -28,8 +28,9 @@ export function LoginPage() {
     mutationFn: loginAction,
     onSuccess: (res) => {
       console.log('login res', res)
-      SessionClient.setOtpToken(res.token)
 
+      const OTP_EXPIRY_SECONDS = 3 * 60 // 3 minutes
+      SessionClient.setOtpToken(res.token, OTP_EXPIRY_SECONDS)
       toast.success('Successful login', {
         description:
           res.message ||
