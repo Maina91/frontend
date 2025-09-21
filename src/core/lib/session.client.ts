@@ -3,17 +3,30 @@ import { queryClient } from '@/core/lib/query.client'
 export class SessionClient {
   private static TOKEN_KEY = 'token'
   private static OTP_TOKEN_KEY = 'OtpToken'
+  private static EXP_KEY = 'auth_expiry'
+
 
   static getToken() {
-    return localStorage.getItem(this.TOKEN_KEY)
+    return sessionStorage.getItem(this.TOKEN_KEY)
   }
 
-  static setToken(token: string) {
-    localStorage.setItem(this.TOKEN_KEY, token)
+  static setToken(token: string, expiresInSeconds?: number) {
+    sessionStorage.setItem(this.TOKEN_KEY, token)
+    if (expiresInSeconds) {
+      const expiry = Date.now() + expiresInSeconds * 1000
+      sessionStorage.setItem(this.EXP_KEY, expiry.toString())
+    }
+  }
+
+  static isTokenExpired() {
+    const exp = sessionStorage.getItem(this.EXP_KEY)
+    if (!exp) return false
+    return Date.now() > parseInt(exp, 10)
   }
 
   static clearToken() {
-    localStorage.removeItem(this.TOKEN_KEY)
+    sessionStorage.removeItem(this.TOKEN_KEY)
+    sessionStorage.removeItem(this.EXP_KEY)
   }
 
   static getOtpToken() {
