@@ -2,9 +2,15 @@ import { useState } from 'react'
 import { Bell, ChevronDown } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
+import { useRouter } from '@tanstack/react-router'
+import { useMutation } from '@tanstack/react-query'
+import { logoutAction } from '@/core/actions/auth/auth'
+import { SessionClient } from '@/core/lib/session.client'
+import { toast } from 'sonner'
 
 export const Topbar = () => {
     const [isOpen, setIsOpen] = useState(false)
+    const router = useRouter()
 
     // Fake user data (later load from session or API)
     const user = {
@@ -12,6 +18,27 @@ export const Topbar = () => {
         email: 'john.doe@example.com',
         avatar: '/avatars/user-1.png',
     }
+
+    const logoutMutation = useMutation({
+        mutationFn: async () => {
+            const token = SessionClient.getToken()
+            if (!token) throw new Error('No active session')
+            return logoutAction({ data: { token } })
+        },
+        onSuccess: (res) => {
+            SessionClient.clear()
+            toast.success(res.message || 'Logged out successfully')
+            router.navigate({ to: '/login' })
+        },
+        onError: (err: any) => {
+            SessionClient.clear()
+            // toast.error(err?.message || 'Logout failed, please log in again')
+            toast.success('Success', {
+                description: 'Logged out successfully',
+            })
+            router.navigate({ to: '/login' })
+        },
+    })
 
     return (
         <header className="flex h-16 items-center justify-between border-b bg-white px-6 shadow-sm">
@@ -45,7 +72,7 @@ export const Topbar = () => {
                     </button>
 
                     {isOpen && (
-                        <div className="absolute right-0 mt-2 w-48 rounded-md border bg-white shadow-lg">
+                        <div className="absolute right-0 mt-2 w-48 rounded-md border bg-white shadow-lg z-50">
                             <div className="px-4 py-2 text-sm text-gray-600">
                                 Signed in as <br />
                                 <span className="font-medium">{user.email}</span>
@@ -57,8 +84,12 @@ export const Topbar = () => {
                             <button className="block w-full px-4 py-2 text-left text-sm hover:bg-gray-100">
                                 Settings
                             </button>
-                            <button className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50">
-                                Logout
+                            <button
+                                onClick={() => logoutMutation.mutate()}
+                                disabled={logoutMutation.isPending}
+                                className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 disabled:opacity-50"
+                            >
+                                {logoutMutation.isPending ? 'Logging out...' : 'Logout'}
                             </button>
                         </div>
                     )}
