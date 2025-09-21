@@ -7,7 +7,7 @@ import { Eye, EyeOff } from 'lucide-react'
 
 import type { LoginData } from '@/core/validators/auth.schema'
 import { loginSchema } from '@/core/validators/auth.schema'
-import { loginAction } from '@/core/actions/auth/login'
+import { loginAction } from '@/core/actions/auth/auth'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
