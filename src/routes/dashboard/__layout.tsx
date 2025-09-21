@@ -2,7 +2,7 @@ import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { SessionClient } from '@/core/lib/session.client'
 import { Sidebar } from '@/components/ui/sidebar'
 
-export const Route = createFileRoute('/_dashboard/__layout')({
+export const Route = createFileRoute('/dashboard/__layout')({
   beforeLoad: ({ location }) => {
     const token = SessionClient.getToken()
     if (!token) {

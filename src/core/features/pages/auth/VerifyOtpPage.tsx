@@ -63,7 +63,7 @@ export function OtpPage() {
 
       SessionClient.clearOtpToken()
 
-      router.navigate({ to: '/profile' })
+      router.navigate({ to: '/dashboard' })
     },
     onError: (err: any) => {
       toast.error('OTP Verification Failed', {
