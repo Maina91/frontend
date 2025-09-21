@@ -38,7 +38,7 @@ export async function resendOtpService(data: ResendOtpData): Promise<ResendOtpRe
   try {
     if (!data.token) throw new Error('Login token is missing.')
 
-    const resendOtpEndpoint = '/lofty/send_otp'
+    const resendOtpEndpoint = '/lofty/auth/send_otp'
 
     const res = await apiClient.post<OtpResponse>(resendOtpEndpoint, data, {
       headers: {

@@ -12,8 +12,7 @@ import { Label } from '@/components/ui/label'
 
 import { resendOtpAction, verifyOtpAction } from '@/core/actions/auth/otp'
 import {
-  otpSchema,
-  ResendOtpData,
+  otpSchema
 } from '@/core/validators/otp.schema'
 import { SessionClient } from '@/core/lib/session.client'
 import { env } from '@/env'
@@ -211,12 +210,6 @@ export function OtpPage() {
                     ? 'Maximum attempts reached'
                     : 'Resend OTP'}
               </Button>
-
-              {resendCount > 0 && resendCount < MAX_RESENDS && (
-                <p className="text-xs text-muted-foreground mt-1">
-                  {MAX_RESENDS - resendCount} resend(s) left
-                </p>
-              )}
             </div>
 
           </form>
