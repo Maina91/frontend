@@ -4,9 +4,9 @@ import { apiClient } from '@/core/lib/api.client'
 export interface OtpResponse {
   status: number
   message: string
-  token?: string
-  member_status?: number
-  accounts_count?: number
+  token: string
+  member_status: number
+  accounts_count: number
 }
 
 export interface ResendOtpResponse {

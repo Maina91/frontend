@@ -27,12 +27,7 @@ export function OtpPage() {
   const userAgent =
     typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown'
 
-  const token =
-    typeof window !== 'undefined' ? SessionClient.getOtpToken() : null
-
-  if (!token && typeof window !== 'undefined') {
-    router.navigate({ to: '/login' })
-  }
+  const token = SessionClient.getOtpToken()
 
   const MAX_RESENDS = Number(env.VITE_OTP_MAX_RETRIES ?? 3)
   const RESEND_INTERVAL = Number(env.VITE_OTP_RESEND_INTERVAL ?? 30) // in seconds
@@ -61,7 +56,9 @@ export function OtpPage() {
         description: res.message || 'You are now logged in.',
       })
 
+      const OTP_EXPIRY_SECONDS = 5 * 60 // 5 minutes
       SessionClient.clearOtpToken()
+      SessionClient.setToken(res.token, OTP_EXPIRY_SECONDS)
 
       router.navigate({ to: '/dashboard' })
     },

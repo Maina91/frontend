@@ -13,7 +13,8 @@ export class SessionClient {
     return sessionStorage.getItem(this.TOKEN_KEY)
   }
 
-  static setToken(token: string, expiresInSeconds?: number) {
+  static setToken(token: string, expiresInSeconds = 300) {
+    // default 5 minutes
     if (typeof window === 'undefined') return
     sessionStorage.setItem(this.TOKEN_KEY, token)
     if (expiresInSeconds) {
