@@ -14,7 +14,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
-import { Route as DemoTanstackQueryRouteImport } from './routes/demo.tanstack-query'
 import { Route as DemoMcpTodosRouteImport } from './routes/demo.mcp-todos'
 import { Route as DashboardProfileRouteImport } from './routes/dashboard/profile'
 import { Route as DashboardInvestmentsRouteImport } from './routes/dashboard/investments'
@@ -22,14 +21,7 @@ import { Route as OnboardingRegisterRouteImport } from './routes/_onboarding/reg
 import { Route as OnboardingForgotPasswordRouteImport } from './routes/_onboarding/forgot-password'
 import { Route as AuthVerifyOtpRouteImport } from './routes/_auth/verify-otp'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
-import { Route as DemoStartServerFuncsRouteImport } from './routes/demo.start.server-funcs'
-import { Route as DemoStartApiRequestRouteImport } from './routes/demo.start.api-request'
-import { Route as DemoFormSimpleRouteImport } from './routes/demo.form.simple'
-import { Route as DemoFormAddressRouteImport } from './routes/demo.form.address'
 import { ServerRoute as McpServerRouteImport } from './routes/mcp'
-import { ServerRoute as ApiMcpTodosServerRouteImport } from './routes/api.mcp-todos'
-import { ServerRoute as ApiDemoTqTodosServerRouteImport } from './routes/api.demo-tq-todos'
-import { ServerRoute as ApiDemoNamesServerRouteImport } from './routes/api.demo-names'
 
 const rootServerRouteImport = createServerRootRoute()
 
@@ -46,11 +38,6 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
 const PublicIndexRoute = PublicIndexRouteImport.update({
   id: '/_public/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
-  id: '/demo/tanstack-query',
-  path: '/demo/tanstack-query',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoMcpTodosRoute = DemoMcpTodosRouteImport.update({
@@ -89,44 +76,9 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoStartServerFuncsRoute = DemoStartServerFuncsRouteImport.update({
-  id: '/demo/start/server-funcs',
-  path: '/demo/start/server-funcs',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoStartApiRequestRoute = DemoStartApiRequestRouteImport.update({
-  id: '/demo/start/api-request',
-  path: '/demo/start/api-request',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoFormSimpleRoute = DemoFormSimpleRouteImport.update({
-  id: '/demo/form/simple',
-  path: '/demo/form/simple',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoFormAddressRoute = DemoFormAddressRouteImport.update({
-  id: '/demo/form/address',
-  path: '/demo/form/address',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const McpServerRoute = McpServerRouteImport.update({
   id: '/mcp',
   path: '/mcp',
-  getParentRoute: () => rootServerRouteImport,
-} as any)
-const ApiMcpTodosServerRoute = ApiMcpTodosServerRouteImport.update({
-  id: '/api/mcp-todos',
-  path: '/api/mcp-todos',
-  getParentRoute: () => rootServerRouteImport,
-} as any)
-const ApiDemoTqTodosServerRoute = ApiDemoTqTodosServerRouteImport.update({
-  id: '/api/demo-tq-todos',
-  path: '/api/demo-tq-todos',
-  getParentRoute: () => rootServerRouteImport,
-} as any)
-const ApiDemoNamesServerRoute = ApiDemoNamesServerRouteImport.update({
-  id: '/api/demo-names',
-  path: '/api/demo-names',
   getParentRoute: () => rootServerRouteImport,
 } as any)
 
@@ -139,13 +91,8 @@ export interface FileRoutesByFullPath {
   '/dashboard/investments': typeof DashboardInvestmentsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/demo/mcp-todos': typeof DemoMcpTodosRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/': typeof PublicIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
-  '/demo/form/address': typeof DemoFormAddressRoute
-  '/demo/form/simple': typeof DemoFormSimpleRoute
-  '/demo/start/api-request': typeof DemoStartApiRequestRoute
-  '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof AuthLoginRoute
@@ -155,13 +102,8 @@ export interface FileRoutesByTo {
   '/dashboard/investments': typeof DashboardInvestmentsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/demo/mcp-todos': typeof DemoMcpTodosRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/': typeof PublicIndexRoute
   '/dashboard': typeof DashboardIndexRoute
-  '/demo/form/address': typeof DemoFormAddressRoute
-  '/demo/form/simple': typeof DemoFormSimpleRoute
-  '/demo/start/api-request': typeof DemoStartApiRequestRoute
-  '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -173,13 +115,8 @@ export interface FileRoutesById {
   '/dashboard/investments': typeof DashboardInvestmentsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
   '/demo/mcp-todos': typeof DemoMcpTodosRoute
-  '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/_public/': typeof PublicIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
-  '/demo/form/address': typeof DemoFormAddressRoute
-  '/demo/form/simple': typeof DemoFormSimpleRoute
-  '/demo/start/api-request': typeof DemoStartApiRequestRoute
-  '/demo/start/server-funcs': typeof DemoStartServerFuncsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -192,13 +129,8 @@ export interface FileRouteTypes {
     | '/dashboard/investments'
     | '/dashboard/profile'
     | '/demo/mcp-todos'
-    | '/demo/tanstack-query'
     | '/'
     | '/dashboard/'
-    | '/demo/form/address'
-    | '/demo/form/simple'
-    | '/demo/start/api-request'
-    | '/demo/start/server-funcs'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
@@ -208,13 +140,8 @@ export interface FileRouteTypes {
     | '/dashboard/investments'
     | '/dashboard/profile'
     | '/demo/mcp-todos'
-    | '/demo/tanstack-query'
     | '/'
     | '/dashboard'
-    | '/demo/form/address'
-    | '/demo/form/simple'
-    | '/demo/start/api-request'
-    | '/demo/start/server-funcs'
   id:
     | '__root__'
     | '/dashboard'
@@ -225,13 +152,8 @@ export interface FileRouteTypes {
     | '/dashboard/investments'
     | '/dashboard/profile'
     | '/demo/mcp-todos'
-    | '/demo/tanstack-query'
     | '/_public/'
     | '/dashboard/'
-    | '/demo/form/address'
-    | '/demo/form/simple'
-    | '/demo/start/api-request'
-    | '/demo/start/server-funcs'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -241,54 +163,28 @@ export interface RootRouteChildren {
   OnboardingForgotPasswordRoute: typeof OnboardingForgotPasswordRoute
   OnboardingRegisterRoute: typeof OnboardingRegisterRoute
   DemoMcpTodosRoute: typeof DemoMcpTodosRoute
-  DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
   PublicIndexRoute: typeof PublicIndexRoute
-  DemoFormAddressRoute: typeof DemoFormAddressRoute
-  DemoFormSimpleRoute: typeof DemoFormSimpleRoute
-  DemoStartApiRequestRoute: typeof DemoStartApiRequestRoute
-  DemoStartServerFuncsRoute: typeof DemoStartServerFuncsRoute
 }
 export interface FileServerRoutesByFullPath {
   '/mcp': typeof McpServerRoute
-  '/api/demo-names': typeof ApiDemoNamesServerRoute
-  '/api/demo-tq-todos': typeof ApiDemoTqTodosServerRoute
-  '/api/mcp-todos': typeof ApiMcpTodosServerRoute
 }
 export interface FileServerRoutesByTo {
   '/mcp': typeof McpServerRoute
-  '/api/demo-names': typeof ApiDemoNamesServerRoute
-  '/api/demo-tq-todos': typeof ApiDemoTqTodosServerRoute
-  '/api/mcp-todos': typeof ApiMcpTodosServerRoute
 }
 export interface FileServerRoutesById {
   __root__: typeof rootServerRouteImport
   '/mcp': typeof McpServerRoute
-  '/api/demo-names': typeof ApiDemoNamesServerRoute
-  '/api/demo-tq-todos': typeof ApiDemoTqTodosServerRoute
-  '/api/mcp-todos': typeof ApiMcpTodosServerRoute
 }
 export interface FileServerRouteTypes {
   fileServerRoutesByFullPath: FileServerRoutesByFullPath
-  fullPaths:
-    | '/mcp'
-    | '/api/demo-names'
-    | '/api/demo-tq-todos'
-    | '/api/mcp-todos'
+  fullPaths: '/mcp'
   fileServerRoutesByTo: FileServerRoutesByTo
-  to: '/mcp' | '/api/demo-names' | '/api/demo-tq-todos' | '/api/mcp-todos'
-  id:
-    | '__root__'
-    | '/mcp'
-    | '/api/demo-names'
-    | '/api/demo-tq-todos'
-    | '/api/mcp-todos'
+  to: '/mcp'
+  id: '__root__' | '/mcp'
   fileServerRoutesById: FileServerRoutesById
 }
 export interface RootServerRouteChildren {
   McpServerRoute: typeof McpServerRoute
-  ApiDemoNamesServerRoute: typeof ApiDemoNamesServerRoute
-  ApiDemoTqTodosServerRoute: typeof ApiDemoTqTodosServerRoute
-  ApiMcpTodosServerRoute: typeof ApiMcpTodosServerRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -312,13 +208,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof PublicIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/tanstack-query': {
-      id: '/demo/tanstack-query'
-      path: '/demo/tanstack-query'
-      fullPath: '/demo/tanstack-query'
-      preLoaderRoute: typeof DemoTanstackQueryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/mcp-todos': {
@@ -370,34 +259,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/start/server-funcs': {
-      id: '/demo/start/server-funcs'
-      path: '/demo/start/server-funcs'
-      fullPath: '/demo/start/server-funcs'
-      preLoaderRoute: typeof DemoStartServerFuncsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/start/api-request': {
-      id: '/demo/start/api-request'
-      path: '/demo/start/api-request'
-      fullPath: '/demo/start/api-request'
-      preLoaderRoute: typeof DemoStartApiRequestRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/form/simple': {
-      id: '/demo/form/simple'
-      path: '/demo/form/simple'
-      fullPath: '/demo/form/simple'
-      preLoaderRoute: typeof DemoFormSimpleRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/form/address': {
-      id: '/demo/form/address'
-      path: '/demo/form/address'
-      fullPath: '/demo/form/address'
-      preLoaderRoute: typeof DemoFormAddressRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 declare module '@tanstack/react-start/server' {
@@ -407,27 +268,6 @@ declare module '@tanstack/react-start/server' {
       path: '/mcp'
       fullPath: '/mcp'
       preLoaderRoute: typeof McpServerRouteImport
-      parentRoute: typeof rootServerRouteImport
-    }
-    '/api/mcp-todos': {
-      id: '/api/mcp-todos'
-      path: '/api/mcp-todos'
-      fullPath: '/api/mcp-todos'
-      preLoaderRoute: typeof ApiMcpTodosServerRouteImport
-      parentRoute: typeof rootServerRouteImport
-    }
-    '/api/demo-tq-todos': {
-      id: '/api/demo-tq-todos'
-      path: '/api/demo-tq-todos'
-      fullPath: '/api/demo-tq-todos'
-      preLoaderRoute: typeof ApiDemoTqTodosServerRouteImport
-      parentRoute: typeof rootServerRouteImport
-    }
-    '/api/demo-names': {
-      id: '/api/demo-names'
-      path: '/api/demo-names'
-      fullPath: '/api/demo-names'
-      preLoaderRoute: typeof ApiDemoNamesServerRouteImport
       parentRoute: typeof rootServerRouteImport
     }
   }
@@ -456,21 +296,13 @@ const rootRouteChildren: RootRouteChildren = {
   OnboardingForgotPasswordRoute: OnboardingForgotPasswordRoute,
   OnboardingRegisterRoute: OnboardingRegisterRoute,
   DemoMcpTodosRoute: DemoMcpTodosRoute,
-  DemoTanstackQueryRoute: DemoTanstackQueryRoute,
   PublicIndexRoute: PublicIndexRoute,
-  DemoFormAddressRoute: DemoFormAddressRoute,
-  DemoFormSimpleRoute: DemoFormSimpleRoute,
-  DemoStartApiRequestRoute: DemoStartApiRequestRoute,
-  DemoStartServerFuncsRoute: DemoStartServerFuncsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 const rootServerRouteChildren: RootServerRouteChildren = {
   McpServerRoute: McpServerRoute,
-  ApiDemoNamesServerRoute: ApiDemoNamesServerRoute,
-  ApiDemoTqTodosServerRoute: ApiDemoTqTodosServerRoute,
-  ApiMcpTodosServerRoute: ApiMcpTodosServerRoute,
 }
 export const serverRouteTree = rootServerRouteImport
   ._addFileChildren(rootServerRouteChildren)
