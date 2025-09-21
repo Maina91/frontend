@@ -15,6 +15,7 @@ import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo.tanstack-query'
 import { Route as DemoMcpTodosRouteImport } from './routes/demo.mcp-todos'
 import { Route as OnboardingRegisterRouteImport } from './routes/_onboarding/register'
+import { Route as OnboardingForgotPasswordRouteImport } from './routes/_onboarding/forgot-password'
 import { Route as DashboardProfileRouteImport } from './routes/_dashboard/profile'
 import { Route as Dashboard_layoutRouteImport } from './routes/_dashboard/__layout'
 import { Route as AuthVerifyOtpRouteImport } from './routes/_auth/verify-otp'
@@ -50,6 +51,12 @@ const OnboardingRegisterRoute = OnboardingRegisterRouteImport.update({
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OnboardingForgotPasswordRoute =
+  OnboardingForgotPasswordRouteImport.update({
+    id: '/_onboarding/forgot-password',
+    path: '/forgot-password',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const DashboardProfileRoute = DashboardProfileRouteImport.update({
   id: '/_dashboard/profile',
   path: '/profile',
@@ -114,6 +121,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof AuthLoginRoute
   '/verify-otp': typeof AuthVerifyOtpRoute
   '/profile': typeof DashboardProfileRoute
+  '/forgot-password': typeof OnboardingForgotPasswordRoute
   '/register': typeof OnboardingRegisterRoute
   '/demo/mcp-todos': typeof DemoMcpTodosRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
@@ -127,6 +135,7 @@ export interface FileRoutesByTo {
   '/login': typeof AuthLoginRoute
   '/verify-otp': typeof AuthVerifyOtpRoute
   '/profile': typeof DashboardProfileRoute
+  '/forgot-password': typeof OnboardingForgotPasswordRoute
   '/register': typeof OnboardingRegisterRoute
   '/demo/mcp-todos': typeof DemoMcpTodosRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
@@ -142,6 +151,7 @@ export interface FileRoutesById {
   '/_auth/verify-otp': typeof AuthVerifyOtpRoute
   '/_dashboard/__layout': typeof Dashboard_layoutRoute
   '/_dashboard/profile': typeof DashboardProfileRoute
+  '/_onboarding/forgot-password': typeof OnboardingForgotPasswordRoute
   '/_onboarding/register': typeof OnboardingRegisterRoute
   '/demo/mcp-todos': typeof DemoMcpTodosRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
@@ -157,6 +167,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/verify-otp'
     | '/profile'
+    | '/forgot-password'
     | '/register'
     | '/demo/mcp-todos'
     | '/demo/tanstack-query'
@@ -170,6 +181,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/verify-otp'
     | '/profile'
+    | '/forgot-password'
     | '/register'
     | '/demo/mcp-todos'
     | '/demo/tanstack-query'
@@ -184,6 +196,7 @@ export interface FileRouteTypes {
     | '/_auth/verify-otp'
     | '/_dashboard/__layout'
     | '/_dashboard/profile'
+    | '/_onboarding/forgot-password'
     | '/_onboarding/register'
     | '/demo/mcp-todos'
     | '/demo/tanstack-query'
@@ -199,6 +212,7 @@ export interface RootRouteChildren {
   AuthVerifyOtpRoute: typeof AuthVerifyOtpRoute
   Dashboard_layoutRoute: typeof Dashboard_layoutRoute
   DashboardProfileRoute: typeof DashboardProfileRoute
+  OnboardingForgotPasswordRoute: typeof OnboardingForgotPasswordRoute
   OnboardingRegisterRoute: typeof OnboardingRegisterRoute
   DemoMcpTodosRoute: typeof DemoMcpTodosRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
@@ -279,6 +293,13 @@ declare module '@tanstack/react-router' {
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof OnboardingRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_onboarding/forgot-password': {
+      id: '/_onboarding/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof OnboardingForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_dashboard/profile': {
@@ -377,6 +398,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthVerifyOtpRoute: AuthVerifyOtpRoute,
   Dashboard_layoutRoute: Dashboard_layoutRoute,
   DashboardProfileRoute: DashboardProfileRoute,
+  OnboardingForgotPasswordRoute: OnboardingForgotPasswordRoute,
   OnboardingRegisterRoute: OnboardingRegisterRoute,
   DemoMcpTodosRoute: DemoMcpTodosRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,

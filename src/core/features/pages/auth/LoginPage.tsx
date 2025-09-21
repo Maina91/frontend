@@ -97,7 +97,7 @@ export function LoginPage() {
             {/* User type */}
             <form.Field name="user_type">
               {(field) => (
-                <div>
+                <div className="space-y-1.5">
                   <Label>Login as</Label>
                   <RadioGroup
                     value={field.state.value}
@@ -137,8 +137,8 @@ export function LoginPage() {
               }}
             >
               {(field) => (
-                <div>
-                  <Label>Email address or username</Label>
+                <div className="space-y-1.5">
+                  <Label>Email address</Label>
                   <Input
                     id="email"
                     type="email"
@@ -165,7 +165,7 @@ export function LoginPage() {
               }}
             >
               {(field) => (
-                <div className="flex flex-col">
+                <div className="space-y-1.5">
                   <Label>Password</Label>
                   <div className="relative flex items-center">
                     <Input
@@ -175,7 +175,7 @@ export function LoginPage() {
                       value={field.state.value}
                       onChange={(e) => field.handleChange(e.target.value)}
                       autoComplete="new-password"
-                      className="pr-10" 
+                      className="pr-10"
                     />
                     <button
                       type="button"
@@ -213,13 +213,13 @@ export function LoginPage() {
 
             <div className="flex justify-between text-sm">
               <a
-                href="/onboarding/signup"
-                className="text-primary hover:underline"
+                href="/register"
+                className="text-muted-foreground hover:underline"
               >
                 Create Account
               </a>
               <a
-                href="/onboarding/forgot-password"
+                href="/forgot-password"
                 className="text-muted-foreground hover:underline"
               >
                 Forgot password?
