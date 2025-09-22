@@ -1,4 +1,4 @@
-import { useQuery, UseQueryResult } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { SessionClient } from '@/core/lib/session.client'
 import { queryClient } from '@/core/lib/query.client'
 import { clientProfileAction } from '@/core/actions/customer/profile'
@@ -10,6 +10,8 @@ export const useCustomerProfile = () => {
         queryFn: async () => {
             const token = SessionClient.getToken()
             const expired = SessionClient.isTokenExpired()
+
+            console.log('useCustomerProfile token', token)
             if (!token || expired) {
                 SessionClient.clear()
                 window.location.href = '/login'
@@ -17,7 +19,7 @@ export const useCustomerProfile = () => {
             }
 
             try {
-                const res = await clientProfileAction()
+                const res = await clientProfileAction({ data: { token }  })
                 return res.profile as CustomerProfile
             } catch (err: any) {
                 if (err?.message?.includes('401')) {

@@ -15,3 +15,9 @@ export const logoutSchema = z.object({
   token: z.string().min(1, 'Token is required'),
 })
 export type LogoutData = z.infer<typeof logoutSchema>
+
+
+export const authTokenSchema = z.object({
+  token: z.string().min(1, 'Login token is required'),
+})
+export type AuthTokenData = z.infer<typeof authTokenSchema>
