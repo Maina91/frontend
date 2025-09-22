@@ -35,9 +35,8 @@ export const Topbar = () => {
 
     return (
         <header className="flex h-16 items-center justify-between border-b bg-white px-6 shadow-md">
-            {/* Left section */}
+            {/* Left section: Avatar + Welcome */}
             <div className="flex items-center gap-3">
-                {/* Profile avatar */}
                 <Avatar className="h-10 w-10">
                     {isLoading || !profile?.full_name ? (
                         <div className="h-10 w-10 rounded-full bg-gray-200 animate-pulse" />
@@ -46,25 +45,29 @@ export const Topbar = () => {
                     )}
                 </Avatar>
 
-                {/* Welcome text */}
                 <div className="flex flex-col">
                     <span className="text-sm text-gray-500">Welcome</span>
-                    <span className={clsx(
-                        'font-semibold text-lg text-gray-800 transition-colors duration-150',
-                        isLoading && 'bg-gray-200 rounded w-24 h-5 animate-pulse'
-                    )}>
+                    <span
+                        className={clsx(
+                            'font-semibold text-lg text-gray-800 transition-colors duration-150',
+                            isLoading && 'bg-gray-200 rounded w-24 h-5 animate-pulse'
+                        )}
+                    >
                         {!isLoading ? profile?.first_name ?? 'To your dashboard' : ''}
                     </span>
                 </div>
             </div>
 
-
-            {/* Right section */}
+            {/* Right section: Notifications + Dropdown */}
             <div className="flex items-center gap-4">
                 {/* Notification bell */}
-                <Button variant="ghost" size="icon" className="relative group">
-                    <Bell className="h-5 w-5 transition-transform duration-150 group-hover:scale-110" />
-                    <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-red-500 animate-pulse"></span>
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="relative group hover:bg-gray-100 rounded-full transition-colors duration-150"
+                >
+                    <Bell className="h-5 w-5 text-gray-600 transition-transform duration-150 group-hover:scale-110" />
+                    <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-red-500 animate-pulse" />
                 </Button>
 
                 {/* User dropdown */}
@@ -84,6 +87,7 @@ export const Topbar = () => {
                                 <AvatarFallback>U</AvatarFallback>
                             )}
                         </Avatar>
+
                         <span
                             className={clsx(
                                 'hidden md:inline text-sm font-medium text-gray-700',
@@ -97,12 +101,12 @@ export const Topbar = () => {
 
                     {/* Dropdown menu */}
                     {isOpen && profile && (
-                        <div className="absolute right-0 mt-2 w-56 rounded-md border bg-white shadow-lg z-50 animate-fadeIn">
+                        <div className="absolute right-0 mt-2 w-56 rounded-md border bg-white shadow-lg z-50 animate-fadeIn overflow-hidden">
                             <div className="px-4 py-2 text-sm text-gray-600">
                                 Signed in as <br />
                                 <span className="font-medium">{profile.email_address}</span>
                             </div>
-                            <hr />
+                            <hr className="border-gray-200" />
                             <button className="block w-full px-4 py-2 text-left text-sm hover:bg-gray-100 transition">
                                 Profile
                             </button>
