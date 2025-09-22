@@ -37,7 +37,7 @@ export const ProfilePage = () => {
           </div>
         ) : !profile ? (
           <div className="text-gray-500 text-sm">
-            No profile data available. Please update your details.
+            No profile data available.
           </div>
         ) : (
           <>

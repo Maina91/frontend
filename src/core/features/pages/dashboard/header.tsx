@@ -67,7 +67,7 @@ export const Topbar = ({ onSidebarToggle }: TopbarProps) => {
                             isLoading && 'bg-gray-200 rounded w-24 h-5 animate-pulse'
                         )}
                     >
-                        {!isLoading ? profile?.first_name ?? 'User' : ''}
+                        {!isLoading ? profile?.first_name ?? 'To your dashboard' : ''}
                     </span>
                 </div>
             </div>
