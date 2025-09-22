@@ -1,10 +1,10 @@
 import { createServerFn } from '@tanstack/react-start'
-import { clientProfileService } from '@/core/services/customer/profile'
+import { customerProfileService } from '@/core/services/customer/profile'
 
 export const clientProfileAction = createServerFn({ method: 'GET' })
-    .handler(async ({ data }) => {
+    .handler(async () => {
         try {
-            const profile = await clientProfileService(data)
+            const profile = await customerProfileService()
             return { success: true, profile }
         } catch (err: any) {
             throw {

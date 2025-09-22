@@ -1,20 +1,38 @@
 import { apiClient } from '@/core/lib/api.client'
 import { SessionClient } from '@/core/lib/session.client'
 
-export async function clientProfileService() {
-    try {
-        const token = SessionClient.getToken()
-        if (!token) throw new Error('No session token found')
+export interface CustomerProfile {
+    member_no: string
+    full_name: string
+    first_name: string
+    last_name: string
+    email_address: string
+    mobile_no: string
+    user_type: 'prospective' | 'customer'
+    profileProgress?: any
+    customer_ref?: string
+    [key: string]: any
+}
 
-        const clientProfileEndpoint = '/lofty/client_profile'    
+export interface CustomerProfileResponse {
+    status_code: number
+    success: boolean
+    profile: CustomerProfile
+}
 
-        const res = await apiClient.get(clientProfileEndpoint, {
-            headers: { 'auth-token': token },
-        })
+export async function customerProfileService(): Promise<CustomerProfile> {
+    const token = SessionClient.getToken()
+    if (!token) throw new Error('Login token is missing.')
 
-        return res
-    } catch (err: any) {
-        if (err.response?.data?.message) throw new Error(err.response.data.message)
-        throw new Error('Unable to fetch client profile. Please try again later.')
+    const clientProfileEndpoint = '/lofty/client_profile'
+
+    const res = await apiClient.get<CustomerProfileResponse>(clientProfileEndpoint, {
+        headers: { 'auth-token': token },
+    })
+
+    if (!res.success || !res.profile) {
+        throw new Error('Unable to fetch client profile')
     }
+
+    return res.profile
 }
