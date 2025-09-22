@@ -53,6 +53,25 @@ export class ApiClient {
     return this.handleResponse<T>(res)
   }
 
+  get<T>(
+    path: string,
+    options: RequestOptions = {},
+    params?: Record<string, string | number>
+  ) {
+    // Construct query string if params provided
+    const query = params
+      ? '?' +
+      Object.entries(params)
+        .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
+        .join('&')
+      : ''
+
+    return this.request<T>(`${path}${query}`, {
+      method: 'GET',
+      ...options,
+    })
+  }
+
   post<T>(path: string, body: unknown, options?: RequestInit) {
     return this.request<T>(path, {
       method: 'POST',
