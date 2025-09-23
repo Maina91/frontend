@@ -1,17 +1,17 @@
 import { useQuery } from '@tanstack/react-query'
 import { SessionClient } from '@/core/lib/session.client'
 import { queryClient } from '@/core/lib/query.client'
-import { clientProfileAction } from '@/core/actions/customer/profile'
-import type { CustomerProfile } from '@/core/services/customer/profile'
+import { getClientBankDetailsAction } from '@/core/actions/customer/bank'
 
-export const useCustomerProfile = () => {
-    return useQuery<CustomerProfile, Error>({
-        queryKey: ['clientProfile'],
+
+export const useCustomerBankDetails = () => {
+    return useQuery({
+        queryKey: ['customerBankDetails'],
         queryFn: async () => {
             const token = SessionClient.getToken()
             const expired = SessionClient.isTokenExpired()
 
-            console.log('useCustomerProfile token', token)
+            console.log('useCustomerBankDetails token', token)
             if (!token || expired) {
                 SessionClient.clear()
                 window.location.href = '/login'
@@ -19,8 +19,8 @@ export const useCustomerProfile = () => {
             }
 
             try {
-                const res = await clientProfileAction({ data: { token }  })
-                return res.profile as CustomerProfile
+                const res = await getClientBankDetailsAction({ data: { token } })
+                return res
             } catch (err: any) {
                 if (err?.message?.includes('401')) {
                     SessionClient.clear()
@@ -39,4 +39,3 @@ export const useCustomerProfile = () => {
         refetchOnWindowFocus: false,
     })
 }
-

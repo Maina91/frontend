@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input'
 // import { Upload } from '@/components/ui/upload'
 import { Plus } from 'lucide-react'
 import { useCustomerProfile } from '@/core/hooks/customer/useCustomerProfile'
-import { useCustomerBankDetails } from '@/core/hooks/customer/useCustomerProfile'
+import { useCustomerBankDetails } from '@/core/hooks/customer/usebank'
 
 
 export const ProfilePage = () => {
