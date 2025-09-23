@@ -7,16 +7,19 @@ import { Plus } from 'lucide-react'
 import { useCustomerProfile } from '@/core/hooks/customer/use-profile'
 import { useCustomerBankDetails } from '@/core/hooks/customer/use-bank'
 import { useKin } from '@/core/hooks/customer/use-kin'
+import { useBeneficiary } from '@/core/hooks/customer/use-beneficiaries'
 
 
 export const ProfilePage = () => {
   const { data: profile, isLoading, error } = useCustomerProfile()
   const { data: bankDetails, isLoading: bankLoading, error: bankError } = useCustomerBankDetails()
   const { data: kinDetails, isLoading: kinLoading, error: kinError } = useKin()
+  const { data: beneficiaries, isLoading: beneficiariesLoading, error: beneficiariesError } = useBeneficiary()
 
   console.log('ProfilePage profile', profile)
   console.log('ProfilePage bankDetails', bankDetails)
   console.log('ProfilePage kinDetails', kinDetails)
+  console.log('ProfilePage beneficiaries', beneficiaries)
 
   const [kycDocuments, setKycDocuments] = useState([
     { name: 'ID or Passport', description: 'ID or Passport', number: '', actions: '' },
@@ -100,7 +103,6 @@ export const ProfilePage = () => {
         )}
       </section>
 
-
       {/* NEXT OF KIN */}
       <section className="bg-white shadow rounded-md p-6">
         <div className="flex justify-between items-center mb-4">
@@ -151,6 +153,57 @@ export const ProfilePage = () => {
         )}
       </section>
 
+      {/* BENEFICIARIES */}
+      <section className="bg-white shadow rounded-md p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-lg font-semibold">Beneficiaries</h2>
+          <Button variant="outline" size="sm">
+            <Plus className="w-4 h-4 mr-1" /> Add Beneficiary
+          </Button>
+        </div>
+
+        {beneficiariesLoading && (
+          <div className="space-y-2 animate-pulse">
+            <div className="h-4 w-40 bg-gray-200 rounded" />
+            <div className="h-4 w-56 bg-gray-200 rounded" />
+          </div>
+        )}
+
+        {beneficiariesError && (
+          <p className="text-red-500 text-sm">
+            {(beneficiariesError as Error)?.message || 'Failed to load beneficiaries.'}
+          </p>
+        )}
+
+        {!beneficiariesLoading && !beneficiariesError && beneficiaries && beneficiaries.beneficiaries.length === 0 && (
+          <p className="text-gray-500 text-sm">No beneficiaries added yet.</p>
+        )}
+
+        {!beneficiariesLoading && !beneficiariesError && beneficiaries && beneficiaries.beneficiaries.length > 0 && (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Relationship</TableHead>
+                <TableHead>ID/Passport Number</TableHead>
+                <TableHead>Percentage</TableHead>
+                <TableHead>Mobile</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {beneficiaries.beneficiaries.map((ben) => (
+                <TableRow key={ben.id}>
+                  <TableCell>{ben.full_name}</TableCell>
+                  <TableCell>{ben.relationship}</TableCell>
+                  <TableCell>{ben.id_passport_number ?? '-'}</TableCell>
+                  <TableCell>{ben.percentage_share ?? '-'}</TableCell>
+                  <TableCell>{ben.mobile ?? '-'}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+      </section>
 
       {/* KYC DOCUMENTS */}
       <section className="bg-white shadow rounded-md p-6">
