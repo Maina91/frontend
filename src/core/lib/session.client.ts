@@ -1,11 +1,11 @@
 import { queryClient } from '@/core/lib/query.client'
 
 export class SessionClient {
-  private static TOKEN_KEY = 'token'
+  private static TOKEN_KEY = 'authToken'
   private static TOKEN_EXP_KEY = 'auth_expiry'
 
-  private static OTP_TOKEN_KEY = 'OtpToken'
-  private static OTP_EXP_KEY = 'otp_expiry'
+  private static LOGIN_TOKEN_KEY = 'loginToken'
+  private static LOGIN_TOKEN_EXPIRY = 'otp_expiry'
 
   // === Auth Token ===
   static getToken() {
@@ -39,28 +39,28 @@ export class SessionClient {
   // === OTP Token ===
   static getOtpToken() {
     if (typeof window === 'undefined') return null
-    return localStorage.getItem(this.OTP_TOKEN_KEY)
+    return localStorage.getItem(this.LOGIN_TOKEN_KEY)
   }
 
   static setOtpToken(token: string, expiresInSeconds = 300) {
     // default 5 minutes
     if (typeof window === 'undefined') return
-    localStorage.setItem(this.OTP_TOKEN_KEY, token)
+    localStorage.setItem(this.LOGIN_TOKEN_KEY, token)
     const expiry = Date.now() + expiresInSeconds * 1000
-    localStorage.setItem(this.OTP_EXP_KEY, expiry.toString())
+    localStorage.setItem(this.LOGIN_TOKEN_EXPIRY, expiry.toString())
   }
 
   static isOtpExpired() {
     if (typeof window === 'undefined') return true
-    const exp = localStorage.getItem(this.OTP_EXP_KEY)
+    const exp = localStorage.getItem(this.LOGIN_TOKEN_EXPIRY)
     if (!exp) return false
     return Date.now() > parseInt(exp, 10)
   }
 
   static clearOtpToken() {
     if (typeof window === 'undefined') return
-    localStorage.removeItem(this.OTP_TOKEN_KEY)
-    localStorage.removeItem(this.OTP_EXP_KEY)
+    localStorage.removeItem(this.LOGIN_TOKEN_KEY)
+    localStorage.removeItem(this.LOGIN_TOKEN_EXPIRY)
   }
 
   // === General ===

@@ -15,6 +15,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { SessionClient } from '@/core/lib/session.client'
+import { env } from '@/env'
 
 function getErrorMessages(errors: Array<any>): Array<string> {
   return errors.map((err) => (typeof err === 'string' ? err : err.message))
@@ -29,8 +30,8 @@ export function LoginPage() {
     onSuccess: (res) => {
       console.log('login res', res)
 
-      const OTP_EXPIRY_SECONDS = 3 * 60 // 3 minutes
-      SessionClient.setOtpToken(res.token, OTP_EXPIRY_SECONDS)
+      const LOGIN_TOKEN_EXPIRY = env.VITE_LOGIN_TOKEN_EXPIRY
+      SessionClient.setOtpToken(res.token, LOGIN_TOKEN_EXPIRY)
       toast.success('Successful login', {
         description:
           res.message ||
