@@ -10,57 +10,57 @@ export class SessionClient {
   // === Auth Token ===
   static getToken() {
     if (typeof window === 'undefined') return null
-    return sessionStorage.getItem(this.TOKEN_KEY)
+    return localStorage.getItem(this.TOKEN_KEY)
   }
 
   static setToken(token: string, expiresInSeconds = 300) {
     // default 5 minutes
     if (typeof window === 'undefined') return
-    sessionStorage.setItem(this.TOKEN_KEY, token)
+    localStorage.setItem(this.TOKEN_KEY, token)
     if (expiresInSeconds) {
       const expiry = Date.now() + expiresInSeconds * 1000
-      sessionStorage.setItem(this.TOKEN_EXP_KEY, expiry.toString())
+      localStorage.setItem(this.TOKEN_EXP_KEY, expiry.toString())
     }
   }
 
   static isTokenExpired() {
     if (typeof window === 'undefined') return true
-    const exp = sessionStorage.getItem(this.TOKEN_EXP_KEY)
+    const exp = localStorage.getItem(this.TOKEN_EXP_KEY)
     if (!exp) return false
     return Date.now() > parseInt(exp, 10)
   }
 
   static clearToken() {
     if (typeof window === 'undefined') return
-    sessionStorage.removeItem(this.TOKEN_KEY)
-    sessionStorage.removeItem(this.TOKEN_EXP_KEY)
+    localStorage.removeItem(this.TOKEN_KEY)
+    localStorage.removeItem(this.TOKEN_EXP_KEY)
   }
 
   // === OTP Token ===
   static getOtpToken() {
     if (typeof window === 'undefined') return null
-    return sessionStorage.getItem(this.OTP_TOKEN_KEY)
+    return localStorage.getItem(this.OTP_TOKEN_KEY)
   }
 
   static setOtpToken(token: string, expiresInSeconds = 300) {
     // default 5 minutes
     if (typeof window === 'undefined') return
-    sessionStorage.setItem(this.OTP_TOKEN_KEY, token)
+    localStorage.setItem(this.OTP_TOKEN_KEY, token)
     const expiry = Date.now() + expiresInSeconds * 1000
-    sessionStorage.setItem(this.OTP_EXP_KEY, expiry.toString())
+    localStorage.setItem(this.OTP_EXP_KEY, expiry.toString())
   }
 
   static isOtpExpired() {
     if (typeof window === 'undefined') return true
-    const exp = sessionStorage.getItem(this.OTP_EXP_KEY)
+    const exp = localStorage.getItem(this.OTP_EXP_KEY)
     if (!exp) return false
     return Date.now() > parseInt(exp, 10)
   }
 
   static clearOtpToken() {
     if (typeof window === 'undefined') return
-    sessionStorage.removeItem(this.OTP_TOKEN_KEY)
-    sessionStorage.removeItem(this.OTP_EXP_KEY)
+    localStorage.removeItem(this.OTP_TOKEN_KEY)
+    localStorage.removeItem(this.OTP_EXP_KEY)
   }
 
   // === General ===

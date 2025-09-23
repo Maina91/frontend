@@ -14,7 +14,6 @@ export const useBeneficiary = () => {
 
             if (!token || expired) {
                 SessionClient.clear()
-                queryClient.clear()
                 window.location.href = '/login'
                 throw new Error('Session expired')
             }

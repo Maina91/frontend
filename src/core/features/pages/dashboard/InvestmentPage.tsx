@@ -1,3 +1,3 @@
 export const InvestmentPage = () => {
-  return <div>Hello "/_dashboard/investments"!</div>
+  return <div>My Investments</div>
 }

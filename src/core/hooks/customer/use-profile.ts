@@ -11,7 +11,6 @@ export const useCustomerProfile = () => {
             const token = SessionClient.getToken()
             const expired = SessionClient.isTokenExpired()
 
-            console.log('useCustomerProfile token', token)
             if (!token || expired) {
                 SessionClient.clear()
                 window.location.href = '/login'

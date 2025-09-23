@@ -54,7 +54,7 @@ export const ProfilePage = () => {
         )}
       </section>
 
-      {/* BANK / MOBILE MONEY ACCOUNTS */}
+      {/* BANK ACCOUNTS */}
       <section className="bg-white shadow rounded-md p-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold">Bank Accounts</h2>

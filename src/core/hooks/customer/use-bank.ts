@@ -11,7 +11,6 @@ export const useBank = () => {
             const token = SessionClient.getToken()
             const expired = SessionClient.isTokenExpired()
 
-            console.log('useCustomerBankDetails token', token)
             if (!token || expired) {
                 SessionClient.clear()
                 window.location.href = '/login'
