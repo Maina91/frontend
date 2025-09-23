@@ -1,4 +1,4 @@
-import { useCustomerProfile } from '@/core/hooks/customer/useCustomerProfile'
+import { useCustomerProfile } from '@/core/hooks/customer/use-profile'
 import { useState } from 'react'
 import { Bell, ChevronDown, Menu } from 'lucide-react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'

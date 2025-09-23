@@ -4,8 +4,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Input } from '@/components/ui/input'
 // import { Upload } from '@/components/ui/upload'
 import { Plus } from 'lucide-react'
-import { useCustomerProfile } from '@/core/hooks/customer/useCustomerProfile'
-import { useCustomerBankDetails } from '@/core/hooks/customer/usebank'
+import { useCustomerProfile } from '@/core/hooks/customer/use-profile'
+import { useCustomerBankDetails } from '@/core/hooks/customer/use-bank'
 
 
 export const ProfilePage = () => {
