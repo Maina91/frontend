@@ -4,9 +4,9 @@ import { queryClient } from '@/core/lib/query.client'
 import { getClientBankDetailsAction } from '@/core/actions/customer/bank'
 
 
-export const useCustomerBankDetails = () => {
+export const useBank = () => {
     return useQuery({
-        queryKey: ['customerBankDetails'],
+        queryKey: ['customer', 'BankDetails'],
         queryFn: async () => {
             const token = SessionClient.getToken()
             const expired = SessionClient.isTokenExpired()

@@ -5,21 +5,21 @@ import { Input } from '@/components/ui/input'
 // import { Upload } from '@/components/ui/upload'
 import { Plus } from 'lucide-react'
 import { useCustomerProfile } from '@/core/hooks/customer/use-profile'
-import { useCustomerBankDetails } from '@/core/hooks/customer/use-bank'
+import { useBank } from '@/core/hooks/customer/use-bank'
 import { useKin } from '@/core/hooks/customer/use-kin'
 import { useBeneficiary } from '@/core/hooks/customer/use-beneficiaries'
 
 
 export const ProfilePage = () => {
   const { data: profile, isLoading, error } = useCustomerProfile()
-  const { data: bankDetails, isLoading: bankLoading, error: bankError } = useCustomerBankDetails()
+  const { data: bankDetails, isLoading: bankLoading, error: bankError } = useBank()
   const { data: kinDetails, isLoading: kinLoading, error: kinError } = useKin()
-  const { data: beneficiaries, isLoading: beneficiariesLoading, error: beneficiariesError } = useBeneficiary()
+  const { data: beneficiaryDetails, isLoading: beneficiaryLoading, error: beneficiaryError } = useBeneficiary()
 
   console.log('ProfilePage profile', profile)
   console.log('ProfilePage bankDetails', bankDetails)
   console.log('ProfilePage kinDetails', kinDetails)
-  console.log('ProfilePage beneficiaries', beneficiaries)
+  console.log('ProfilePage beneficiaries', beneficiaryDetails)
 
   const [kycDocuments, setKycDocuments] = useState([
     { name: 'ID or Passport', description: 'ID or Passport', number: '', actions: '' },
@@ -162,24 +162,24 @@ export const ProfilePage = () => {
           </Button>
         </div>
 
-        {beneficiariesLoading && (
+        {beneficiaryLoading && (
           <div className="space-y-2 animate-pulse">
             <div className="h-4 w-40 bg-gray-200 rounded" />
             <div className="h-4 w-56 bg-gray-200 rounded" />
           </div>
         )}
 
-        {beneficiariesError && (
+        {beneficiaryError && (
           <p className="text-red-500 text-sm">
-            {(beneficiariesError as Error)?.message || 'Failed to load beneficiaries.'}
+            {(beneficiaryError as Error)?.message || 'Failed to load beneficiaries.'}
           </p>
         )}
 
-        {!beneficiariesLoading && !beneficiariesError && beneficiaries && beneficiaries.beneficiaries.length === 0 && (
+        {!beneficiaryLoading && !beneficiaryError && beneficiaryDetails && beneficiaryDetails.beneficiaries.length === 0 && (
           <p className="text-gray-500 text-sm">No beneficiaries added yet.</p>
         )}
 
-        {!beneficiariesLoading && !beneficiariesError && beneficiaries && beneficiaries.beneficiaries.length > 0 && (
+        {!beneficiaryLoading && !beneficiaryError && beneficiaryDetails && beneficiaryDetails.beneficiaries.length > 0 && (
           <Table>
             <TableHeader>
               <TableRow>
@@ -191,7 +191,7 @@ export const ProfilePage = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {beneficiaries.beneficiaries.map((ben) => (
+              {beneficiaryDetails.beneficiaries.map((ben) => (
                 <TableRow key={ben.id}>
                   <TableCell>{ben.full_name}</TableCell>
                   <TableCell>{ben.relationship}</TableCell>
