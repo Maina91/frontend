@@ -6,7 +6,7 @@ import type { CustomerProfile } from '@/core/services/customer/profile'
 
 export const useCustomerProfile = () => {
     return useQuery<CustomerProfile, Error>({
-        queryKey: ['clientProfile'],
+        queryKey: ['customer', 'clientProfile'],
         queryFn: async () => {
             const token = SessionClient.getToken()
             const expired = SessionClient.isTokenExpired()

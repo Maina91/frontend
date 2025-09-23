@@ -11,12 +11,12 @@ import { useBeneficiary } from '@/core/hooks/customer/use-beneficiaries'
 
 
 export const ProfilePage = () => {
-  const { data: profile, isLoading, error } = useCustomerProfile()
+  const { data: profileDetails, isLoading: profileLoading, error: profileError } = useCustomerProfile()
   const { data: bankDetails, isLoading: bankLoading, error: bankError } = useBank()
   const { data: kinDetails, isLoading: kinLoading, error: kinError } = useKin()
   const { data: beneficiaryDetails, isLoading: beneficiaryLoading, error: beneficiaryError } = useBeneficiary()
 
-  console.log('ProfilePage profile', profile)
+  console.log('ProfilePage profile', profileDetails)
   console.log('ProfilePage bankDetails', bankDetails)
   console.log('ProfilePage kinDetails', kinDetails)
   console.log('ProfilePage beneficiaries', beneficiaryDetails)
@@ -31,22 +31,24 @@ export const ProfilePage = () => {
     <div className="space-y-8">
       {/* PROFILE SUMMARY */}
       <section className="bg-white shadow rounded-md p-6">
-        {isLoading ? (
+        {profileLoading ? (
           <div className="space-y-2 animate-pulse">
             <div className="h-6 w-48 bg-gray-200 rounded" />
             <div className="h-4 w-32 bg-gray-200 rounded" />
           </div>
-        ) : !profile ? (
+        ) : profileError ? (
+          <p className="text-red-600 text-sm">Failed to load profile details.</p>
+        ): !profileDetails ? (
           <div className="text-gray-500 text-sm">
             No profile data available.
           </div>
         ) : (
           <>
             <h1 className="text-2xl font-semibold text-gray-900">
-              {profile.full_name || '—'}
+                  {profileDetails.full_name || '—'}
             </h1>
             <p className="text-gray-600">
-              Member No: {profile.member_no || '—'}
+                  Member No: {profileDetails.member_no || '—'}
             </p>
           </>
         )}
