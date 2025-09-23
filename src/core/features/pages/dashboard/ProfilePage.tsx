@@ -6,20 +6,17 @@ import { Input } from '@/components/ui/input'
 import { Plus } from 'lucide-react'
 import { useCustomerProfile } from '@/core/hooks/customer/use-profile'
 import { useCustomerBankDetails } from '@/core/hooks/customer/use-bank'
+import { useKin } from '@/core/hooks/customer/use-kin'
 
 
 export const ProfilePage = () => {
   const { data: profile, isLoading, error } = useCustomerProfile()
   const { data: bankDetails, isLoading: bankLoading, error: bankError } = useCustomerBankDetails()
+  const { data: kinDetails, isLoading: kinLoading, error: kinError } = useKin()
 
   console.log('ProfilePage profile', profile)
   console.log('ProfilePage bankDetails', bankDetails)
-
-
-  const [nextOfKin, setNextOfKin] = useState([
-    { name: 'Test Data', relationship: 'Mother', id: '34567', percentage: '50%' },
-    { name: 'Test Data', relationship: 'Sister', id: '5467889', percentage: '50%' },
-  ])
+  console.log('ProfilePage kinDetails', kinDetails)
 
   const [kycDocuments, setKycDocuments] = useState([
     { name: 'ID or Passport', description: 'ID or Passport', number: '', actions: '' },
@@ -113,27 +110,47 @@ export const ProfilePage = () => {
           </Button>
         </div>
 
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Relationship</TableHead>
-              <TableHead>ID/Passport Number</TableHead>
-              <TableHead>Percentage</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {nextOfKin.map((kin, idx) => (
-              <TableRow key={idx}>
-                <TableCell>{kin.name}</TableCell>
-                <TableCell>{kin.relationship}</TableCell>
-                <TableCell>{kin.id}</TableCell>
-                <TableCell>{kin.percentage}</TableCell>
+        {kinLoading && (
+          <div className="space-y-2 animate-pulse">
+            <div className="h-4 w-40 bg-gray-200 rounded" />
+            <div className="h-4 w-56 bg-gray-200 rounded" />
+          </div>
+        )}
+
+        {kinError && (
+          <p className="text-red-500 text-sm">
+            {(kinError as Error)?.message || 'Failed to load next of kin.'}
+          </p>
+        )}
+
+        {!kinLoading && !kinError && kinDetails && kinDetails.next_of_kin.length === 0 && (
+          <p className="text-gray-500 text-sm">No next of kin added yet.</p>
+        )}
+
+        {!kinLoading && !kinError && kinDetails && kinDetails.next_of_kin.length > 0 && (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Relationship</TableHead>
+                <TableHead>ID/Passport Number</TableHead>
+                <TableHead>Mobile</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {kinDetails.next_of_kin.map((kin) => (
+                <TableRow key={kin.id}>
+                  <TableCell>{kin.full_name}</TableCell>
+                  <TableCell>{kin.relationship}</TableCell>
+                  <TableCell>{kin.id_passport_number ?? '-'}</TableCell>
+                  <TableCell>{kin.mobile ?? '-'}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       </section>
+
 
       {/* KYC DOCUMENTS */}
       <section className="bg-white shadow rounded-md p-6">
