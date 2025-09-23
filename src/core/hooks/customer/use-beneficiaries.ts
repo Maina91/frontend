@@ -9,11 +9,11 @@ export const useBeneficiary = () => {
     return useQuery<BeneficiariesResponse, Error>({
         queryKey: ['customer', 'beneficiaries'],
         queryFn: async () => {
-            const token = SessionClient.getToken()
-            const expired = SessionClient.isTokenExpired()
+            const token = SessionClient.getAuthToken()
+            const expired = SessionClient.isAuthExpired()
 
             if (!token || expired) {
-                SessionClient.clear()
+                SessionClient.clearAll()
                 window.location.href = '/login'
                 throw new Error('Session expired')
             }
@@ -30,7 +30,7 @@ export const useBeneficiary = () => {
                 const error = 'Failed to load next of kin'
 
                 if (apiError.includes('401')) {
-                    SessionClient.clear()
+                    SessionClient.clearAll()
                     queryClient.clear()
                     window.location.href = '/login'
                 }

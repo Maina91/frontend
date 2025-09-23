@@ -8,11 +8,11 @@ export const useBank = () => {
     return useQuery({
         queryKey: ['customer', 'BankDetails'],
         queryFn: async () => {
-            const token = SessionClient.getToken()
-            const expired = SessionClient.isTokenExpired()
+            const token = SessionClient.getAuthToken()
+            const expired = SessionClient.isAuthExpired()
 
             if (!token || expired) {
-                SessionClient.clear()
+                SessionClient.clearAll()
                 window.location.href = '/login'
                 throw new Error('Session expired')
             }
@@ -22,7 +22,7 @@ export const useBank = () => {
                 return res
             } catch (err: any) {
                 if (err?.message?.includes('401')) {
-                    SessionClient.clear()
+                    SessionClient.clearAll()
                     queryClient.invalidateQueries()
                     window.location.href = '/login'
                 }

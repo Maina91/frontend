@@ -30,9 +30,7 @@ export function OtpPage() {
   const token = SessionClient.getOtpToken()
 
   const MAX_RESENDS = env.VITE_OTP_MAX_RETRIES
-  const RESEND_INTERVAL = env.VITE_OTP_RESEND_INTERVAL        // seconds
-  const AUTH_TOKEN_EXPIRY = env.VITE_AUTH_TOKEN_EXPIRY        // seconds
-  
+  const RESEND_INTERVAL = env.VITE_OTP_RESEND_INTERVAL        // seconds  
 
   const form = useForm({
     defaultValues: {
@@ -59,7 +57,7 @@ export function OtpPage() {
       })
 
       SessionClient.clearOtpToken()
-      SessionClient.setToken(res.token, AUTH_TOKEN_EXPIRY)
+      SessionClient.setAuthToken(res.token)
 
       router.navigate({ to: '/dashboard' })
     },

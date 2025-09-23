@@ -4,11 +4,11 @@ import { DashboardLayout } from '@/core/features/pages/dashboard/DashboardLayout
 
 export const Route = createFileRoute('/dashboard')({
   beforeLoad: ({ location }) => {
-    const token = SessionClient.getToken()
-    const expired = SessionClient.isTokenExpired()  
+    const token = SessionClient.getAuthToken()
+    const expired = SessionClient.isAuthExpired()  
 
     if (!token || expired) {
-      SessionClient.clear()
+      SessionClient.clearAll()
       throw redirect({
         to: '/login',
         search: { redirect: location.pathname },
