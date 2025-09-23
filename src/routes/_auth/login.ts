@@ -4,8 +4,8 @@ import { SessionClient } from '@/core/lib/session.client'
 
 export const Route = createFileRoute('/_auth/login')({
    beforeLoad: ({ location }) => {
-      const token = SessionClient.getToken()
-      const expired = SessionClient.isTokenExpired()  
+      const token = SessionClient.getAuthToken()
+      const expired = SessionClient.isAuthExpired()  
   
       if (token && !expired) {
         throw redirect({

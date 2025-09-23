@@ -17,17 +17,17 @@ export const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
 
     const logoutMutation = useMutation({
         mutationFn: async () => {
-            const token = SessionClient.getToken()
+            const token = SessionClient.getAuthToken()
             if (!token) throw new Error('No active session')
             return logoutAction({ data: { token } })
         },
         onSuccess: (res) => {
-            SessionClient.clear()
+            SessionClient.clearAll()
             toast.success(res.message || 'Logged out successfully')
             router.navigate({ to: '/login' })
         },
         onError: () => {
-            SessionClient.clear()
+            SessionClient.clearAll()
             toast.success('Logged out successfully')
             router.navigate({ to: '/login' })
         },
