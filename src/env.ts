@@ -10,6 +10,7 @@ export const env = createEnv({
     VITE_API_URL: z.string().url(),
     VITE_APP_TITLE: z.string().min(1).optional(),
     VITE_LOGIN_TOKEN_EXPIRY: z.string().transform((val) => parseInt(val, 10)).default("300"), // seconds
+    VITE_AUTH_TOKEN_EXPIRY: z.string().transform((val) => parseInt(val, 10)).default("300"), // seconds
     VITE_OTP_MAX_RETRIES: z.string().transform((val) => parseInt(val, 10)).default("3"),
     VITE_OTP_RESEND_INTERVAL: z.string().transform((val) => parseInt(val, 10)).default("30"),
   },
