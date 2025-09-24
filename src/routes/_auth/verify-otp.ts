@@ -10,7 +10,7 @@ export const Route = createFileRoute('/_auth/verify-otp')({
     const expired = SessionClient.isOtpExpired()
 
     if (!token || expired) {
-      SessionClient.clear()
+      SessionClient.clearAll()
       throw redirect({
         to: '/login',
         search: { redirect: location.pathname },
