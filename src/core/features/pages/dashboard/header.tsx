@@ -1,5 +1,5 @@
 import { useCustomerProfile } from '@/core/hooks/customer/use-profile'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Bell, ChevronDown, Menu } from 'lucide-react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -16,6 +16,7 @@ interface TopbarProps {
 
 export const Topbar = ({ onSidebarToggle }: TopbarProps) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+    const dropdownRef = useRef<HTMLDivElement>(null)
     const router = useRouter()
     const { data: profile, isLoading, isError } = useCustomerProfile()
 
@@ -37,9 +38,24 @@ export const Topbar = ({ onSidebarToggle }: TopbarProps) => {
         },
     })
 
+    // Close dropdown when clicking outside
+    useEffect(() => {
+        function handleClickOutside(e: MouseEvent) {
+            if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+                setIsDropdownOpen(false)
+            }
+        }
+        if (isDropdownOpen) {
+            document.addEventListener('mousedown', handleClickOutside)
+        }
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside)
+        }
+    }, [isDropdownOpen])
+
     return (
-        <header className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8 bg-white border-b shadow-md z-50 sticky top-0">
-            {/* Left: Mobile toggle + avatar */}
+        <header className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8 bg-white border-b shadow-sm z-50 sticky top-0">
+            {/* Left: Mobile toggle + greeting */}
             <div className="flex items-center gap-3">
                 {onSidebarToggle && (
                     <Button
@@ -52,13 +68,6 @@ export const Topbar = ({ onSidebarToggle }: TopbarProps) => {
                     </Button>
                 )}
 
-                <Avatar className="h-10 w-10">
-                    {isLoading || !profile?.full_name ? (
-                        <div className="h-10 w-10 rounded-full bg-gray-200 animate-pulse" />
-                    ) : (
-                        <AvatarFallback>{profile.full_name.charAt(0)}</AvatarFallback>
-                    )}
-                </Avatar>
                 <div className="hidden sm:flex flex-col">
                     <span className="text-xs text-gray-500">Welcome</span>
                     <span
@@ -67,12 +76,12 @@ export const Topbar = ({ onSidebarToggle }: TopbarProps) => {
                             isLoading && 'bg-gray-200 rounded w-24 h-5 animate-pulse'
                         )}
                     >
-                        {!isLoading ? profile?.first_name ?? 'To your dashboard' : ''}
+                        {!isLoading ? profile?.full_name ?? 'To your dashboard' : ''}
                     </span>
                 </div>
             </div>
 
-            {/* Right: Notifications + dropdown */}
+            {/* Right: Notifications + avatar dropdown */}
             <div className="flex items-center gap-4">
                 <Button
                     variant="ghost"
@@ -83,48 +92,53 @@ export const Topbar = ({ onSidebarToggle }: TopbarProps) => {
                     <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-red-500 animate-pulse" />
                 </Button>
 
-                <div className="relative">
+                <div className="relative" ref={dropdownRef}>
                     <button
                         className={clsx(
-                            'flex items-center gap-2 px-2 py-1 rounded-md hover:bg-gray-100 transition-shadow duration-150',
-                            isLoading ? 'animate-pulse shadow-inner' : 'shadow-sm'
+                            'flex items-center gap-2 px-2 py-1 rounded-md hover:bg-gray-50 transition',
+                            isLoading ? 'animate-pulse' : 'shadow-sm'
                         )}
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                         disabled={isLoading || isError}
                     >
-                        <Avatar className="h-8 w-8">
+                        <Avatar className="h-9 w-9">
                             {profile?.full_name ? (
                                 <AvatarFallback>{profile.full_name.charAt(0)}</AvatarFallback>
                             ) : (
                                 <AvatarFallback>U</AvatarFallback>
                             )}
                         </Avatar>
-                        <span className="hidden md:inline text-sm font-medium text-gray-700">
-                            {!isLoading && profile?.full_name}
-                        </span>
-                        <ChevronDown className="w-4 h-4 text-gray-500" />
+                        <ChevronDown
+                            className={clsx(
+                                'w-4 h-4 text-gray-500 transition-transform duration-200',
+                                isDropdownOpen && 'rotate-180'
+                            )}
+                        />
                     </button>
 
                     {isDropdownOpen && profile && (
-                        <div className="absolute right-0 mt-2 w-56 bg-white border rounded-md shadow-lg z-50 overflow-hidden animate-fadeIn">
-                            <div className="px-4 py-2 text-sm text-gray-600">
-                                Signed in as <br />
-                                <span className="font-medium">{profile.email_address}</span>
+                        <div className="absolute right-0 mt-2 w-56 bg-white border rounded-lg shadow-lg z-50 animate-fadeIn">
+                            <div className="px-4 py-3 border-b bg-gray-50">
+                                <p className="text-xs text-gray-500">Signed in as</p>
+                                <p className="text-sm font-medium text-gray-800 truncate">
+                                    {profile.email_address}
+                                </p>
                             </div>
-                            <hr className="border-gray-200" />
-                            <button className="block w-full px-4 py-2 text-left text-sm hover:bg-gray-100 transition">
-                                Profile
-                            </button>
-                            <button className="block w-full px-4 py-2 text-left text-sm hover:bg-gray-100 transition">
-                                Settings
-                            </button>
-                            <button
-                                onClick={() => logoutMutation.mutate()}
-                                disabled={logoutMutation.isPending}
-                                className="block w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 disabled:opacity-50 transition"
-                            >
-                                {logoutMutation.isPending ? 'Logging out...' : 'Logout'}
-                            </button>
+                            <div className="flex flex-col">
+                                <button className="px-4 py-2 text-left text-sm hover:bg-gray-100 transition">
+                                    Profile
+                                </button>
+                                <button className="px-4 py-2 text-left text-sm hover:bg-gray-100 transition">
+                                    Settings
+                                </button>
+                                <button
+                                    onClick={() => logoutMutation.mutate()}
+                                    disabled={logoutMutation.isPending}
+                                    className="px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 disabled:opacity-50 transition"
+                                >
+                                    {logoutMutation.isPending ? 'Logging out...' : 'Logout'}
+                                </button>
+                            </div>
                         </div>
                     )}
                 </div>
