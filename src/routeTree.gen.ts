@@ -8,8 +8,6 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createServerRootRoute } from '@tanstack/react-start/server'
-
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
@@ -21,9 +19,6 @@ import { Route as OnboardingRegisterRouteImport } from './routes/_onboarding/reg
 import { Route as OnboardingForgotPasswordRouteImport } from './routes/_onboarding/forgot-password'
 import { Route as AuthVerifyOtpRouteImport } from './routes/_auth/verify-otp'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
-import { ServerRoute as McpServerRouteImport } from './routes/mcp'
-
-const rootServerRouteImport = createServerRootRoute()
 
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
   id: '/dashboard',
@@ -75,11 +70,6 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   id: '/_auth/login',
   path: '/login',
   getParentRoute: () => rootRouteImport,
-} as any)
-const McpServerRoute = McpServerRouteImport.update({
-  id: '/mcp',
-  path: '/mcp',
-  getParentRoute: () => rootServerRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -165,27 +155,6 @@ export interface RootRouteChildren {
   DemoMcpTodosRoute: typeof DemoMcpTodosRoute
   PublicIndexRoute: typeof PublicIndexRoute
 }
-export interface FileServerRoutesByFullPath {
-  '/mcp': typeof McpServerRoute
-}
-export interface FileServerRoutesByTo {
-  '/mcp': typeof McpServerRoute
-}
-export interface FileServerRoutesById {
-  __root__: typeof rootServerRouteImport
-  '/mcp': typeof McpServerRoute
-}
-export interface FileServerRouteTypes {
-  fileServerRoutesByFullPath: FileServerRoutesByFullPath
-  fullPaths: '/mcp'
-  fileServerRoutesByTo: FileServerRoutesByTo
-  to: '/mcp'
-  id: '__root__' | '/mcp'
-  fileServerRoutesById: FileServerRoutesById
-}
-export interface RootServerRouteChildren {
-  McpServerRoute: typeof McpServerRoute
-}
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
@@ -261,17 +230,6 @@ declare module '@tanstack/react-router' {
     }
   }
 }
-declare module '@tanstack/react-start/server' {
-  interface ServerFileRoutesByPath {
-    '/mcp': {
-      id: '/mcp'
-      path: '/mcp'
-      fullPath: '/mcp'
-      preLoaderRoute: typeof McpServerRouteImport
-      parentRoute: typeof rootServerRouteImport
-    }
-  }
-}
 
 interface DashboardRouteRouteChildren {
   DashboardInvestmentsRoute: typeof DashboardInvestmentsRoute
@@ -301,9 +259,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-const rootServerRouteChildren: RootServerRouteChildren = {
-  McpServerRoute: McpServerRoute,
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
 }
-export const serverRouteTree = rootServerRouteImport
-  ._addFileChildren(rootServerRouteChildren)
-  ._addFileTypes<FileServerRouteTypes>()
