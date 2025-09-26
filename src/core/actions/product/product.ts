@@ -5,7 +5,7 @@ import { fetchProductsService } from '@/core/services/product/product'
 import type { ProductResponse } from '@/core/types/product'
 
 export const fetchProducts = createServerFn({ method: 'GET' })
-    .validator(authTokenSchema)
+    .inputValidator(authTokenSchema)
     .handler(async ({ data }): Promise<ProductResponse> => {
         try {
             const res = await fetchProductsService(data)

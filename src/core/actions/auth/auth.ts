@@ -5,7 +5,7 @@ import { logoutUserService } from '@/core/services/auth/auth.service'
 import { logoutSchema } from '@/core/validators/auth.schema'
 
 export const loginAction = createServerFn({ method: 'POST' })
-  .validator(loginSchema)
+  .inputValidator(loginSchema)
   .handler(async ({ data }) => {
     try {
       const response = await loginUserService(data)
@@ -26,7 +26,7 @@ export const loginAction = createServerFn({ method: 'POST' })
   })
 
 export const logoutAction = createServerFn({ method: 'POST' })
-  .validator(logoutSchema)
+  .inputValidator(logoutSchema)
   .handler(async ({ data }) => {
     try {
       const res = await logoutUserService(data)

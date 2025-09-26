@@ -6,7 +6,7 @@ import {
 } from '@/core/services/auth/otp.service'
 
 export const verifyOtpAction = createServerFn({ method: 'POST' })
-  .validator(otpSchema)
+  .inputValidator(otpSchema)
   .handler(async ({ data }) => {
     try {
       const res = await verifyOtpService(data)
@@ -27,7 +27,7 @@ export const verifyOtpAction = createServerFn({ method: 'POST' })
   })
 
 export const resendOtpAction = createServerFn({ method: 'POST' })
-.validator(resendOtpSchema)
+.inputValidator(resendOtpSchema)
 .handler(async ({ data }) => {
   try {
     const res = await resendOtpService(data)

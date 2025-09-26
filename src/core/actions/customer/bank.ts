@@ -3,7 +3,7 @@ import { authTokenSchema } from '@/core/validators/auth.schema'
 import { getCustomerBankDetailsService } from '@/core/services/customer/bank'
 
 export const getClientBankDetailsAction = createServerFn({ method: 'GET' })
-    .validator(authTokenSchema)
+    .inputValidator(authTokenSchema)
     .handler(async ({ data }) => {
         try {
             const res = await getCustomerBankDetailsService(data)

@@ -3,7 +3,7 @@ import { customerProfileService } from '@/core/services/customer/profile'
 import { authTokenSchema } from '@/core/validators/auth.schema'
 
 export const clientProfileAction = createServerFn({ method: 'GET' })
-    .validator(authTokenSchema)
+    .inputValidator(authTokenSchema)
     .handler(async ({ data }) => {
         try {
             const profile = await customerProfileService(data)

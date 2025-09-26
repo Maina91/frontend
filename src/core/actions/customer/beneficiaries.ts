@@ -5,7 +5,7 @@ import type { BeneficiariesResponse } from '@/core/services/customer/beneficiari
 
 
 export const fetchBeneficiaries = createServerFn({ method: 'GET' })
-    .validator(authTokenSchema)
+    .inputValidator(authTokenSchema)
     .handler(async ({ data }): Promise<BeneficiariesResponse> => {
         try {
             const res = await fetchBeneficiaryService(data)

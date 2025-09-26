@@ -5,7 +5,7 @@ import type { NextOfKinResponse } from '@/core/services/customer/kin'
 
 
 export const fetchNextOfKin = createServerFn({ method: 'GET' })
-    .validator(authTokenSchema)
+    .inputValidator(authTokenSchema)
     .handler(async ({ data }): Promise<NextOfKinResponse> => {
         try {
             const res = await fetchNextOfKinService(data)
