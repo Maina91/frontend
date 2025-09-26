@@ -1,13 +1,55 @@
-node_modules
+# ---------------------
+# OS / Editor Artifacts
+# ---------------------
 .DS_Store
-dist
-dist-ssr
-*.local
-count.txt
+Thumbs.db
+*.swp
+*.swo
+*.log
+*.tmp
+
+# ---------------------
+# Node / Package Managers
+# ---------------------
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# ---------------------
+# Build / Output
+# ---------------------
+dist/
+dist-ssr/
+build/
+public/build/
+.serverless/
+.vercel/
+.output/
+.nitro/
+.vinxi/
+.tanstack/
+.cache/
+
+# ---------------------
+# Testing / Reports
+# ---------------------
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# ---------------------
+# Env / Secrets
+# ---------------------
 .env
-.nitro
-.tanstack
-.output
-.vinxi
+
+# Optional: ignore framework-specific plugin configs
+.env.sentry-build-plugin
+
+# ---------------------
+# Misc Project Files
+# ---------------------
+count.txt
 todos.json
 mcp-todos.json
