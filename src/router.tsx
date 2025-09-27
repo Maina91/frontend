@@ -1,25 +1,25 @@
 import { createRouter as createTanstackRouter } from '@tanstack/react-router'
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query'
-import * as TanstackQuery from './integrations/tanstack-query/root-provider'
-
-// Import the generated route tree
+import * as TanstackQuery from '@/integrations/tanstack-query/root-provider'
+import { DefaultCatchBoundary } from '@/components/DefaultCatchBoundary'
+import { NotFound } from '@/components/NotFound'
 import { routeTree } from './routeTree.gen'
 
-// Create a new router instance
-export const createRouter = () => {
+// Define our app context type
+export type AppRouterContext = ReturnType<typeof TanstackQuery.getContext>
+
+export function getRouter() {
   const rqContext = TanstackQuery.getContext()
 
   const router = createTanstackRouter({
     routeTree,
-    context: { ...rqContext },
+    context: rqContext,
     defaultPreload: 'intent',
-    Wrap: (props: { children: React.ReactNode }) => {
-      return (
-        <TanstackQuery.Provider {...rqContext}>
-          {props.children}
-        </TanstackQuery.Provider>
-      )
-    },
+    defaultErrorComponent: DefaultCatchBoundary,
+    defaultNotFoundComponent: () => <NotFound />,
+    Wrap: ({ children }: { children: React.ReactNode }) => (
+      <TanstackQuery.Provider {...rqContext}>{children}</TanstackQuery.Provider>
+    ),
   })
 
   setupRouterSsrQueryIntegration({ router, queryClient: rqContext.queryClient })
@@ -30,6 +30,6 @@ export const createRouter = () => {
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
   interface Register {
-    router: ReturnType<typeof createRouter>
+    router: ReturnType<typeof getRouter>
   }
 }
