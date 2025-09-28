@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
-import { Route as DemoMcpTodosRouteImport } from './routes/demo.mcp-todos'
 import { Route as DashboardProfileRouteImport } from './routes/dashboard/profile'
 import { Route as DashboardInvestmentsRouteImport } from './routes/dashboard/investments'
 import { Route as OnboardingRegisterRouteImport } from './routes/_onboarding/register'
@@ -33,11 +32,6 @@ const DashboardIndexRoute = DashboardIndexRouteImport.update({
 const PublicIndexRoute = PublicIndexRouteImport.update({
   id: '/_public/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DemoMcpTodosRoute = DemoMcpTodosRouteImport.update({
-  id: '/demo/mcp-todos',
-  path: '/demo/mcp-todos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardProfileRoute = DashboardProfileRouteImport.update({
@@ -80,7 +74,6 @@ export interface FileRoutesByFullPath {
   '/register': typeof OnboardingRegisterRoute
   '/dashboard/investments': typeof DashboardInvestmentsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
-  '/demo/mcp-todos': typeof DemoMcpTodosRoute
   '/': typeof PublicIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
 }
@@ -91,7 +84,6 @@ export interface FileRoutesByTo {
   '/register': typeof OnboardingRegisterRoute
   '/dashboard/investments': typeof DashboardInvestmentsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
-  '/demo/mcp-todos': typeof DemoMcpTodosRoute
   '/': typeof PublicIndexRoute
   '/dashboard': typeof DashboardIndexRoute
 }
@@ -104,7 +96,6 @@ export interface FileRoutesById {
   '/_onboarding/register': typeof OnboardingRegisterRoute
   '/dashboard/investments': typeof DashboardInvestmentsRoute
   '/dashboard/profile': typeof DashboardProfileRoute
-  '/demo/mcp-todos': typeof DemoMcpTodosRoute
   '/_public/': typeof PublicIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
 }
@@ -118,7 +109,6 @@ export interface FileRouteTypes {
     | '/register'
     | '/dashboard/investments'
     | '/dashboard/profile'
-    | '/demo/mcp-todos'
     | '/'
     | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
@@ -129,7 +119,6 @@ export interface FileRouteTypes {
     | '/register'
     | '/dashboard/investments'
     | '/dashboard/profile'
-    | '/demo/mcp-todos'
     | '/'
     | '/dashboard'
   id:
@@ -141,7 +130,6 @@ export interface FileRouteTypes {
     | '/_onboarding/register'
     | '/dashboard/investments'
     | '/dashboard/profile'
-    | '/demo/mcp-todos'
     | '/_public/'
     | '/dashboard/'
   fileRoutesById: FileRoutesById
@@ -152,7 +140,6 @@ export interface RootRouteChildren {
   AuthVerifyOtpRoute: typeof AuthVerifyOtpRoute
   OnboardingForgotPasswordRoute: typeof OnboardingForgotPasswordRoute
   OnboardingRegisterRoute: typeof OnboardingRegisterRoute
-  DemoMcpTodosRoute: typeof DemoMcpTodosRoute
   PublicIndexRoute: typeof PublicIndexRoute
 }
 
@@ -177,13 +164,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof PublicIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/demo/mcp-todos': {
-      id: '/demo/mcp-todos'
-      path: '/demo/mcp-todos'
-      fullPath: '/demo/mcp-todos'
-      preLoaderRoute: typeof DemoMcpTodosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/profile': {
@@ -253,7 +233,6 @@ const rootRouteChildren: RootRouteChildren = {
   AuthVerifyOtpRoute: AuthVerifyOtpRoute,
   OnboardingForgotPasswordRoute: OnboardingForgotPasswordRoute,
   OnboardingRegisterRoute: OnboardingRegisterRoute,
-  DemoMcpTodosRoute: DemoMcpTodosRoute,
   PublicIndexRoute: PublicIndexRoute,
 }
 export const routeTree = rootRouteImport
