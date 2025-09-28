@@ -2,9 +2,9 @@ import { createServerFn } from '@tanstack/react-start'
 import { loginUserService } from '@/core/services/auth/auth.service'
 import { loginSchema } from '@/core/validators/auth.schema'
 import { logoutUserService } from '@/core/services/auth/auth.service'
-import { logoutSchema } from '@/core/validators/auth.schema'
 import { env } from '@/env'
-import { setCookie } from '@tanstack/react-start/server'
+import { getCookie, setCookie, deleteCookie} from '@tanstack/react-start/server'
+
 
 export const loginAction = createServerFn({ method: 'POST' })
   .inputValidator(loginSchema)
@@ -16,7 +16,7 @@ export const loginAction = createServerFn({ method: 'POST' })
         setCookie('otp_token', response.token, {
           httpOnly: true,
           secure: env.NODE_ENV === 'production',
-          sameSite: 'lax',
+          sameSite: 'strict',
           path: '/',
           maxAge: env.VITE_ACCESS_TOKEN_EXPIRY ?? 300, // seconds
         });
@@ -38,13 +38,20 @@ export const loginAction = createServerFn({ method: 'POST' })
   })
 
 export const logoutAction = createServerFn({ method: 'POST' })
-  .inputValidator(logoutSchema)
-  .handler(async ({ data }) => {
+  .handler(async () => {
     try {
-      const res = await logoutUserService(data)
+      const token = getCookie('auth_token')
+
+      if (!token) throw new Error('No active session')
+
+      const res = await logoutUserService(token)
+
+      deleteCookie('auth_token', { path: '/' })
 
       return { success: true, message: res.message }
+
     } catch (err: any) {
+      deleteCookie('auth_token', { path: '/' })
       throw {
         message: err?.message ?? 'Logout failed',
       }
