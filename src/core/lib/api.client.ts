@@ -48,6 +48,7 @@ export class ApiClient {
     const res = await fetch(`${this.baseUrl}${path}`, {
       ...options,
       headers,
+      credentials: 'include', // include cookies
     })
 
     return this.handleResponse<T>(res)
