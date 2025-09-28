@@ -46,12 +46,12 @@ export const logoutAction = createServerFn({ method: 'POST' })
 
       const res = await logoutUserService(token)
 
-      deleteCookie('auth_token', { path: '/' })
+      deleteCookie('auth_token', { path: '/login' })
 
       return { success: true, message: res.message }
 
     } catch (err: any) {
-      deleteCookie('auth_token', { path: '/' })
+      deleteCookie('auth_token', { path: '/login' })
       throw {
         message: err?.message ?? 'Logout failed',
       }

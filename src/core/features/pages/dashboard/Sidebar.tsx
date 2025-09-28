@@ -3,7 +3,6 @@ import { useMutation } from '@tanstack/react-query'
 import { Home, LineChart, User, LogOut } from 'lucide-react'
 import clsx from 'clsx'
 import { logoutAction } from '@/core/actions/auth/auth'
-import { SessionClient } from '@/core/lib/session.client'
 import { toast } from 'sonner'
 
 interface SidebarProps {
@@ -17,17 +16,13 @@ export const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
 
     const logoutMutation = useMutation({
         mutationFn: async () => {
-            const token = SessionClient.getAuthToken()
-            if (!token) throw new Error('No active session')
-            return logoutAction({ data: { token } })
+            return logoutAction()
         },
         onSuccess: (res) => {
-            SessionClient.clearAll()
             toast.success(res.message || 'Logged out successfully')
             router.navigate({ to: '/login' })
         },
         onError: () => {
-            SessionClient.clearAll()
             toast.success('Logged out successfully')
             router.navigate({ to: '/login' })
         },
