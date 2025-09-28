@@ -50,7 +50,7 @@ export default function LandingPage() {
               <a href="/login">Client Portal</a>
             </Button>
             <Button asChild>
-              <a href="/onboarding/signup">Open Account</a>
+              <a href="/register">Open Account</a>
             </Button>
           </div>
         </div>
