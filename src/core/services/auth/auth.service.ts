@@ -33,13 +33,13 @@ export async function logoutUserService(
       },
     })
 
-    SessionClient.clear()
+    SessionClient.clearAll()
 
     console.log('logout res', res)
     return res
   } catch (err: any) {
 
-    SessionClient.clear()
+    SessionClient.clearAll()
     
     if (err.response?.data?.message) {
       throw new Error(err.response.data.message)
