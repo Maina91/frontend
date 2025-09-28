@@ -4,12 +4,24 @@ import {
   resendOtpService,
   verifyOtpService,
 } from '@/core/services/auth/otp.service'
+import { env } from '@/env'
+import { setCookie } from '@tanstack/react-start/server'
 
 export const verifyOtpAction = createServerFn({ method: 'POST' })
   .inputValidator(otpSchema)
   .handler(async ({ data }) => {
     try {
       const res = await verifyOtpService(data)
+
+      if (res.token) {
+              setCookie('auth_token', res.token, {
+                httpOnly: true,
+                secure: env.NODE_ENV === 'production',
+                sameSite: 'lax',
+                path: '/',
+                maxAge: env.VITE_ACCESS_TOKEN_EXPIRY ?? 300, // seconds
+              });
+            }
 
       return {
         success: true,

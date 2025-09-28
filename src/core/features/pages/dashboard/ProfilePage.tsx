@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Input } from '@/components/ui/input'
 // import { Upload } from '@/components/ui/upload'
 import { Plus } from 'lucide-react'
 import { useCustomerProfile } from '@/core/hooks/customer/use-profile'

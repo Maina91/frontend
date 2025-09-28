@@ -1,35 +1,16 @@
 import { apiClient } from '@/core/lib/api.client'
-import type { AuthTokenData } from '@/core/validators/auth.schema'
-
-export interface NextOfKin {
-    id: number
-    full_name: string
-    id_passport_number: string | null
-    mobile: string | null
-    email: string | null
-    relationship: string
-}
-
-
-export interface NextOfKinResponse {
-    status: number
-    status_code: number
-    message: string
-    next_of_kin: NextOfKin[]
-    success?: boolean
-}
+import type { NextOfKinResponse, NextOfKinCreateInput, NextOfKinUpdateInput } from '@/core/types/kin'
 
 
 export async function fetchNextOfKinService(
-    data: AuthTokenData,
+    token: string,
 ): Promise<NextOfKinResponse> {
     try {
-        if (!data.token) throw new Error('Auth token is missing.')
         const NextOfKinEndpoint = '/client_next_of_kin'
 
         const res = await apiClient.get<NextOfKinResponse>(NextOfKinEndpoint, {
             headers: {
-                'auth-token': data.token,
+                'auth-token': token,
             },
         })
 
@@ -44,6 +25,89 @@ export async function fetchNextOfKinService(
             throw new Error(error.response.data.message)
         }
         throw new Error('Unable to fetch next of kin. Please try again later.')
+    }
+}
 
+
+export async function createNextOfKinService(
+    token: string,
+    data: NextOfKinCreateInput,
+): Promise<NextOfKinResponse> {
+    try {
+        const NextOfKinEndpoint = '/add_client_next_of_kin_details'
+
+        const res = await apiClient.post<NextOfKinResponse>(NextOfKinEndpoint, data, {
+            headers: {
+                'auth-token': token,
+            },
+        })
+
+        if (res.status_code !== 200 || !res.next_of_kin) {
+            throw new Error(res.message || 'Unable to create next of kin')
+        }
+
+        return res
+
+    } catch (error: any) {
+        if (error.response?.data?.message) {
+            throw new Error(error.response.data.message)
+        }
+        throw new Error('Unable to create next of kin. Please try again later.')
+    }
+}
+
+export async function updateNextOfKinService(
+    token: string,
+    data: NextOfKinUpdateInput,
+): Promise<NextOfKinResponse> {
+    try {
+        if (!data.id) throw new Error('Next of kin ID is missing.')
+
+        const NextOfKinEndpoint = `/update_client_next_of_kin/${data.id}`
+
+        const res = await apiClient.put<NextOfKinResponse>(NextOfKinEndpoint, data, {
+            headers: {
+                'auth-token': token,
+            },
+        })
+
+        if (res.status_code !== 200 || !res.next_of_kin) {
+            throw new Error(res.message || 'Unable to update next of kin')
+        }
+
+        return res
+    } catch (error: any) {
+        if (error.response?.data?.message) {
+            throw new Error(error.response.data.message)
+        }
+        throw new Error('Unable to update next of kin. Please try again later.')
+    }
+}
+
+export async function deleteNextOfKinService(
+    token: string,
+    id: number,
+): Promise<NextOfKinResponse> {
+    try {
+        if (!id) throw new Error('Next of kin ID is missing.')
+
+        const NextOfKinEndpoint = `/delete_client_next_of_kin/${id}`
+
+        const res = await apiClient.delete<NextOfKinResponse>(NextOfKinEndpoint, {
+            headers: {
+                'auth-token': token,
+            },
+        })
+
+        if (res.status_code !== 200) {
+            throw new Error(res.message || 'Unable to delete next of kin')
+        }
+
+        return res
+    } catch (error: any) {
+        if (error.response?.data?.message) {
+            throw new Error(error.response.data.message)
+        }
+        throw new Error('Unable to delete next of kin. Please try again later.')
     }
 }
