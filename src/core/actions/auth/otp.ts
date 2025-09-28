@@ -5,13 +5,17 @@ import {
   verifyOtpService,
 } from '@/core/services/auth/otp.service'
 import { env } from '@/env'
-import { setCookie } from '@tanstack/react-start/server'
+import { setCookie, getCookie } from '@tanstack/react-start/server'
 
 export const verifyOtpAction = createServerFn({ method: 'POST' })
   .inputValidator(otpSchema)
   .handler(async ({ data }) => {
     try {
-      const res = await verifyOtpService(data)
+      const token = getCookie('otp_token')
+
+      if (!token) throw new Error('Login token is missing.')
+
+      const res = await verifyOtpService(token, data)
 
       if (res.token) {
               setCookie('auth_token', res.token, {
@@ -42,7 +46,11 @@ export const resendOtpAction = createServerFn({ method: 'POST' })
 .inputValidator(resendOtpSchema)
 .handler(async ({ data }) => {
   try {
-    const res = await resendOtpService(data)
+    const token = getCookie('otp_token')
+
+    if (!token) throw new Error('Login token is missing.')
+
+    const res = await resendOtpService(token, data)
 
     return {
       success: true,

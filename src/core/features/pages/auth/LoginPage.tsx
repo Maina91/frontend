@@ -14,7 +14,6 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { SessionClient } from '@/core/lib/session.client'
 
 
 function getErrorMessages(errors: Array<any>): Array<string> {
@@ -29,8 +28,6 @@ export function LoginPage() {
     mutationFn: loginAction,
     onSuccess: (res) => {
       console.log('login res', res)
-
-      SessionClient.setOtpToken(res.token)
       
       toast.success('Successful login', {
         description:

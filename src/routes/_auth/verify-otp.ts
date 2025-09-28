@@ -4,18 +4,18 @@ import { SessionClient } from '@/core/lib/session.client'
 
 
 export const Route = createFileRoute('/_auth/verify-otp')({
-  beforeLoad: ({ location }) => {
+  // beforeLoad: ({ location }) => {
 
-    const token = SessionClient.getOtpToken()
-    const expired = SessionClient.isOtpExpired()
+  //   const token = SessionClient.getOtpToken()
+  //   const expired = SessionClient.isOtpExpired()
 
-    if (!token || expired) {
-      SessionClient.clearAll()
-      throw redirect({
-        to: '/login',
-        search: { redirect: location.pathname },
-      })
-    }
-  },
+  //   if (!token || expired) {
+  //     SessionClient.clearAll()
+  //     throw redirect({
+  //       to: '/login',
+  //       search: { redirect: location.pathname },
+  //     })
+  //   }
+  // },
   component: OtpPage,
 })

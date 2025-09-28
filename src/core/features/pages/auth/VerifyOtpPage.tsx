@@ -14,7 +14,6 @@ import { resendOtpAction, verifyOtpAction } from '@/core/actions/auth/otp'
 import {
   otpSchema
 } from '@/core/validators/otp.schema'
-import { SessionClient } from '@/core/lib/session.client'
 import { env } from '@/env'
 
 
@@ -27,8 +26,6 @@ export function OtpPage() {
   const userAgent =
     typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown'
 
-  const token = SessionClient.getOtpToken()
-
   const MAX_RESENDS = env.VITE_OTP_MAX_RETRIES
   const RESEND_INTERVAL = env.VITE_OTP_RESEND_INTERVAL        // seconds  
 
@@ -36,7 +33,6 @@ export function OtpPage() {
     defaultValues: {
       otp: '',
       user_agent: userAgent,
-      token: token || '',
     },
     validators: {
       onSubmit: otpSchema,
@@ -56,9 +52,6 @@ export function OtpPage() {
         description: res.message || 'You are now logged in.',
       })
 
-      SessionClient.clearOtpToken()
-      SessionClient.setAuthToken(res.token)
-
       router.navigate({ to: '/dashboard' })
     },
     onError: (err: any) => {
@@ -72,7 +65,7 @@ export function OtpPage() {
   // Resend OTP
   const resendMutation = useMutation({
     mutationFn: () =>
-      resendOtpAction({ data: { token: token!, description: destination } }),
+      resendOtpAction({ data: { description: destination } }),
     onSuccess: (res) => {
       console.log("resend otp res", res)
       toast.success('OTP Resent', {
