@@ -1,6 +1,4 @@
 import { apiClient } from '@/core/lib/api.client'
-import type { AuthTokenData } from '@/core/validators/auth.schema'
-
 
 export interface Beneficiary {
     id: number

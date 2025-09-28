@@ -1,5 +1,4 @@
 import { apiClient } from '@/core/lib/api.client'
-import type { AuthTokenData } from '@/core/validators/auth.schema'
 import type { RawProductResponse, ProductResponse } from '@/core/types/product'
 
 
