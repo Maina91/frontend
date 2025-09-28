@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button'
 import { useRouter } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
 import { logoutAction } from '@/core/actions/auth/auth'
-import { SessionClient } from '@/core/lib/session.client'
 import { toast } from 'sonner'
 import clsx from 'clsx'
 
@@ -22,17 +21,13 @@ export const Topbar = ({ onSidebarToggle }: TopbarProps) => {
 
     const logoutMutation = useMutation({
         mutationFn: async () => {
-            const token = SessionClient.getAuthToken()
-            if (!token) throw new Error('No active session')
-            return logoutAction({ data: { token } })
+            return logoutAction()
         },
         onSuccess: (res) => {
-            SessionClient.clearAll()
             toast.success(res.message || 'Logged out successfully')
             router.navigate({ to: '/login' })
         },
         onError: () => {
-            SessionClient.clearAll()
             toast.success('Logged out successfully')
             router.navigate({ to: '/login' })
         },

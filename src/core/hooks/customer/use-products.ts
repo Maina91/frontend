@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import { SessionClient } from '@/core/lib/session.client'
 import { queryClient } from '@/core/lib/query.client'
 import { fetchProducts } from '@/core/actions/product/product'
 import type { ProductResponse } from '@/core/types/product'
@@ -8,17 +7,8 @@ export const useProducts = () => {
     return useQuery<ProductResponse, Error>({
         queryKey: ['products'],
         queryFn: async () => {
-            const token = SessionClient.getAuthToken()
-            const expired = SessionClient.isAuthExpired()
-
-            if (!token || expired) {
-                SessionClient.clearAll()
-                window.location.href = '/login'
-                throw new Error('Session expired')
-            }
-
             try {
-                const res = await fetchProducts({ data: { token } })
+                const res = await fetchProducts()
 
                 return {
                     ...res,
@@ -29,8 +19,6 @@ export const useProducts = () => {
                 const error = 'Failed to load products'
 
                 if (apiError.includes('401')) {
-                    SessionClient.clearAll()
-                    queryClient.clear()
                     window.location.href = '/login'
                 }
 

@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import { SessionClient } from '@/core/lib/session.client'
 import { queryClient } from '@/core/lib/query.client'
 import { fetchBeneficiaries } from '@/core/actions/customer/beneficiaries'
 import type { BeneficiariesResponse } from '@/core/services/customer/beneficiaries'
@@ -9,17 +8,8 @@ export const useBeneficiary = () => {
     return useQuery<BeneficiariesResponse, Error>({
         queryKey: ['customer', 'beneficiaries'],
         queryFn: async () => {
-            const token = SessionClient.getAuthToken()
-            const expired = SessionClient.isAuthExpired()
-
-            if (!token || expired) {
-                SessionClient.clearAll()
-                window.location.href = '/login'
-                throw new Error('Session expired')
-            }
-
             try {
-                const res = await fetchBeneficiaries({ data: { token } })
+                const res = await fetchBeneficiaries()
 
                 return {
                     ...res,
@@ -30,8 +20,6 @@ export const useBeneficiary = () => {
                 const error = 'Failed to load next of kin'
 
                 if (apiError.includes('401')) {
-                    SessionClient.clearAll()
-                    queryClient.clear()
                     window.location.href = '/login'
                 }
 

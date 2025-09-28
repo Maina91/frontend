@@ -21,16 +21,16 @@ export interface CustomerProfileResponse {
 }
 
 export async function customerProfileService(
-    data: AuthTokenData,
+    token: string,
 ): Promise<CustomerProfile> {
     try {
-        if (!data.token) throw new Error('Auth token is missing.')
+        if (!token) throw new Error('Unauthorized')
 
         const clientProfileEndpoint = '/lofty/client_profile'
 
         const res = await apiClient.get<CustomerProfileResponse>(clientProfileEndpoint, {
             headers: {
-                'auth-token': data.token,
+                'auth-token': token,
             },
         })
 

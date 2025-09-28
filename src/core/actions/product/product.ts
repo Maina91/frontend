@@ -1,14 +1,16 @@
-// src/core/actions/products/fetch-products.ts
 import { createServerFn } from '@tanstack/react-start'
-import { authTokenSchema } from '@/core/validators/auth.schema'
 import { fetchProductsService } from '@/core/services/product/product'
 import type { ProductResponse } from '@/core/types/product'
+import { getCookie } from '@tanstack/react-start/server'
 
 export const fetchProducts = createServerFn({ method: 'GET' })
-    .inputValidator(authTokenSchema)
-    .handler(async ({ data }): Promise<ProductResponse> => {
+    .handler(async (): Promise<ProductResponse> => {
         try {
-            const res = await fetchProductsService(data)
+            const token = getCookie('auth_token')
+
+            if (!token) throw new Error('Unauthorized') 
+
+            const res = await fetchProductsService(token)
 
             return {
                 status: res.status,

@@ -1,5 +1,4 @@
 import { apiClient } from '@/core/lib/api.client'
-import type { AuthTokenData } from '@/core/validators/auth.schema'
 
 export interface BankAccount {
     id: number
@@ -26,15 +25,16 @@ export interface CustomerBankDetailsResponse {
 }
 
 export async function getCustomerBankDetailsService(
-    data: AuthTokenData,
+    token: string,
 ): Promise<CustomerBankDetailsResponse> {
     try {
-        if (!data.token) throw new Error('Auth token is missing.')
+        if (!token) throw new Error('Auth token is missing.')
+
         const clientBankDetailsEndpoint = '/lofty/client_bank_details'
 
         const res = await apiClient.get<CustomerBankDetailsResponse>(clientBankDetailsEndpoint, {
             headers: {
-                'auth-token': data.token,
+                'auth-token': token,
             },
         })
 

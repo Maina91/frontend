@@ -4,35 +4,28 @@ import type { RawProductResponse, ProductResponse } from '@/core/types/product'
 
 
 export async function fetchProductsService(
-    data: AuthTokenData,
+    token: string,
 ): Promise<ProductResponse> {
     try {
-        if (!data.token) throw new Error('Auth token is missing.')
+        if (!token) throw new Error('Unauthorized')
 
         const ProductsEndpoint = '/securities'
 
         const res = await apiClient.get<RawProductResponse>(ProductsEndpoint, {
             headers: {
-                'auth-token': data.token,
+                'auth-token': token,
             },
         })
 
-        // if (res.status_code !== 200 || !res.securities) {
-        //     throw new Error(res.message || 'Unable to fetch products')
-        // }
-
         console.log('Products response:', res)
 
-
-        // return res
-
-       return {
-      status: res.status,
-      status_code: res.status_code,
-      message: res.message,
-      securities: res.securities?.rows ?? [], 
-      success: res.success ?? false,
-    }
+        return {
+            status: res.status,
+            status_code: res.status_code,
+            message: res.message,
+            securities: res.securities?.rows ?? [],
+            success: res.success ?? false,
+        }
 
     } catch (error: any) {
         if (error.response?.data?.message) {

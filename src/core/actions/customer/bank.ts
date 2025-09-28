@@ -1,12 +1,15 @@
 import { createServerFn } from '@tanstack/react-start'
-import { authTokenSchema } from '@/core/validators/auth.schema'
 import { getCustomerBankDetailsService } from '@/core/services/customer/bank'
+import { getCookie } from '@tanstack/react-start/server'
 
 export const getClientBankDetailsAction = createServerFn({ method: 'GET' })
-    .inputValidator(authTokenSchema)
-    .handler(async ({ data }) => {
+    .handler(async () => {
         try {
-            const res = await getCustomerBankDetailsService(data)
+            const token = getCookie('auth_token')
+
+            if (!token) throw new Error('Unauthorized')
+
+            const res = await getCustomerBankDetailsService(token)
 
             return {
                 success: true,

@@ -23,15 +23,16 @@ export interface BeneficiariesResponse {
 
 
 export async function fetchBeneficiaryService(
-    data: AuthTokenData,
+    token: string,
 ): Promise<BeneficiariesResponse> {
     try {
-        if (!data.token) throw new Error('Auth token is missing.')
-        const NextOfKinEndpoint = '/client_beneficiaries'
+        if (!token) throw new Error('Unauthorized')
+
+            const NextOfKinEndpoint = '/client_beneficiaries'
 
         const res = await apiClient.get<BeneficiariesResponse>(NextOfKinEndpoint, {
             headers: {
-                'auth-token': data.token,
+                'auth-token': token,
             },
         })
 

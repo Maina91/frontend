@@ -1,14 +1,17 @@
 import { createServerFn } from '@tanstack/react-start'
-import { authTokenSchema } from '@/core/validators/auth.schema'
 import { fetchBeneficiaryService } from '@/core/services/customer/beneficiaries'
 import type { BeneficiariesResponse } from '@/core/services/customer/beneficiaries'
+import { getCookie } from '@tanstack/react-start/server'
 
 
 export const fetchBeneficiaries = createServerFn({ method: 'GET' })
-    .inputValidator(authTokenSchema)
-    .handler(async ({ data }): Promise<BeneficiariesResponse> => {
+    .handler(async (): Promise<BeneficiariesResponse> => {
         try {
-            const res = await fetchBeneficiaryService(data)
+            const token = getCookie('auth_token')
+
+            if (!token) throw new Error('Unauthorized')
+
+            const res = await fetchBeneficiaryService(token)
 
             return {
                 status: res.status,

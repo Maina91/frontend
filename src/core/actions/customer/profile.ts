@@ -1,12 +1,15 @@
 import { createServerFn } from '@tanstack/react-start'
 import { customerProfileService } from '@/core/services/customer/profile'
-import { authTokenSchema } from '@/core/validators/auth.schema'
+import { getCookie } from '@tanstack/react-start/server'
 
 export const clientProfileAction = createServerFn({ method: 'GET' })
-    .inputValidator(authTokenSchema)
-    .handler(async ({ data }) => {
+    .handler(async () => {
         try {
-            const profile = await customerProfileService(data)
+            const token = getCookie('auth_token')
+
+            if (!token) throw new Error('Unauthorized')
+
+            const profile = await customerProfileService(token)
 
             return {
                 success: true,
