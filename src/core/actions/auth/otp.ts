@@ -5,7 +5,7 @@ import {
   verifyOtpService,
 } from '@/core/services/auth/otp.service'
 import { env } from '@/env'
-import { setCookie, getCookie } from '@tanstack/react-start/server'
+import { setCookie, getCookie, deleteCookie } from '@tanstack/react-start/server'
 
 export const verifyOtpAction = createServerFn({ method: 'POST' })
   .inputValidator(otpSchema)
@@ -23,9 +23,11 @@ export const verifyOtpAction = createServerFn({ method: 'POST' })
                 secure: env.NODE_ENV === 'production',
                 sameSite: 'lax',
                 path: '/',
-                maxAge: env.VITE_ACCESS_TOKEN_EXPIRY ?? 300, // seconds
+                maxAge: env.VITE_ACCESS_TOKEN_EXPIRY ?? 600, // seconds
               });
             }
+
+      deleteCookie('otp_token', { path: '/' })
 
       return {
         success: true,

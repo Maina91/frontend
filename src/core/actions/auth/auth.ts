@@ -3,7 +3,8 @@ import { loginUserService } from '@/core/services/auth/auth.service'
 import { loginSchema } from '@/core/validators/auth.schema'
 import { logoutUserService } from '@/core/services/auth/auth.service'
 import { env } from '@/env'
-import { getCookie, setCookie, deleteCookie} from '@tanstack/react-start/server'
+import { getCookie, setCookie } from '@tanstack/react-start/server'
+import { logout } from '@/core/lib/auth.store'
 
 
 export const loginAction = createServerFn({ method: 'POST' })
@@ -46,12 +47,12 @@ export const logoutAction = createServerFn({ method: 'POST' })
 
       const res = await logoutUserService(token)
 
-      deleteCookie('auth_token', { path: '/login' })
+      logout()
 
       return { success: true, message: res.message }
 
     } catch (err: any) {
-      deleteCookie('auth_token', { path: '/login' })
+      logout()
       throw {
         message: err?.message ?? 'Logout failed',
       }
