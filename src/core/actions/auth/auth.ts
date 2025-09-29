@@ -19,7 +19,7 @@ export const loginAction = createServerFn({ method: 'POST' })
           secure: env.NODE_ENV === 'production',
           sameSite: 'strict',
           path: '/',
-          maxAge: env.VITE_ACCESS_TOKEN_EXPIRY ?? 300, // seconds
+          maxAge: env.VITE_ACCESS_TOKEN_EXPIRY ?? 600, // seconds
         });
       }
 
