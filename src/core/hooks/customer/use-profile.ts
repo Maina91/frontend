@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import { queryClient } from '@/core/lib/query.client'
 import { clientProfileAction } from '@/core/actions/customer/profile'
 import type { CustomerProfile } from '@/core/services/customer/profile'
 
@@ -11,10 +10,11 @@ export const useCustomerProfile = () => {
                 const res = await clientProfileAction()
                 return res.profile as CustomerProfile
             } catch (err: any) {
-                if (err?.message?.includes('401')) {
-                    window.location.href = '/login'
-                }
-                throw err
+                const error = err?.message ?? ''
+                console.error(error)
+
+                const error_message = 'Failed to load profile info'
+                throw new Error(error_message)
             }
         },
         staleTime: 1000 * 60 * 5,

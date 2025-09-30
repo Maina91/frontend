@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import { queryClient } from '@/core/lib/query.client'
 import { fetchNextOfKin } from '@/core/actions/customer/kin'
 import type { NextOfKinResponse } from '@/core/types/kin'
 
@@ -16,14 +15,11 @@ export const useKin = () => {
                     next_of_kin: res.next_of_kin ?? [],
                 }
             } catch (err: any) {
-                const apiError = err?.message ?? 'Unexpected error'
-                const error = 'Failed to load next of kin'
+                const error = err?.message ?? ''
+                console.error(error)
 
-                if (apiError.includes('401')) {
-                    window.location.href = '/login'
-                }
-
-                throw new Error(error)
+                const error_message = 'Failed to load next of kin details'
+                throw new Error(error_message)
             }
         },
         staleTime: 1000 * 60 * 5, // cache for 5 minutes

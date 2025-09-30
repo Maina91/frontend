@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import { queryClient } from '@/core/lib/query.client'
 import { getClientBankDetailsAction } from '@/core/actions/customer/bank'
 
 
@@ -11,11 +10,11 @@ export const useBank = () => {
                 const res = await getClientBankDetailsAction()
                 return res
             } catch (err: any) {
-                if (err?.message?.includes('401')) {
-                    queryClient.invalidateQueries()
-                    window.location.href = '/login'
-                }
-                throw err
+                const error = err?.message ?? ''
+                console.error(error)
+
+                const error_message = 'Failed to load bank details'
+                throw new Error(error_message)
             }
         },
         staleTime: 1000 * 60 * 5,
