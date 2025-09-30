@@ -1,16 +1,17 @@
 import { createServerFn } from '@tanstack/react-start'
 import { fetchProductsService } from '@/core/services/product/product'
 import type { ProductResponse } from '@/core/types/product'
-import { getCookie } from '@tanstack/react-start/server'
+import { useAppSession } from '@/core/lib/session'
 
 export const fetchProducts = createServerFn({ method: 'GET' })
     .handler(async (): Promise<ProductResponse> => {
         try {
-            const token = getCookie('auth_token')
+            const session = await useAppSession()
+            const auth_token = session.data.auth_token
 
-            if (!token) throw new Error('Unauthorized') 
+            if (!auth_token) throw new Error('Unauthorized') 
 
-            const res = await fetchProductsService(token)
+            const res = await fetchProductsService(auth_token)
 
             return {
                 status: res.status,

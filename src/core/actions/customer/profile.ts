@@ -1,15 +1,16 @@
 import { createServerFn } from '@tanstack/react-start'
 import { customerProfileService } from '@/core/services/customer/profile'
-import { getCookie } from '@tanstack/react-start/server'
+import { useAppSession } from '@/core/lib/session'
 
 export const clientProfileAction = createServerFn({ method: 'GET' })
     .handler(async () => {
         try {
-            const token = getCookie('auth_token')
+            const session = await useAppSession()
+            const auth_token = session.data.auth_token
 
-            if (!token) throw new Error('Unauthorized')
+            if (!auth_token) throw new Error('Unauthorized') 
 
-            const profile = await customerProfileService(token)
+            const profile = await customerProfileService(auth_token)
 
             return {
                 success: true,
