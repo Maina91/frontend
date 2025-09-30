@@ -3,8 +3,9 @@ import { z } from 'zod'
 
 export const env = createEnv({
   server: {
-    SERVER_URL: z.string().url().optional(),
     NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+    API_URL: z.string().url().optional(),
+    SESSION_SECRET: z.string().min(32).default('7d9c8a12a9c4e23c6f13c4a761dfbaf0e04cbf621ebc7a44ab7fa23e18c07d58c7e94f8a7c8492dfd6e4f1d3e8b9b6'),
   },
   clientPrefix: 'VITE_',
   client: {

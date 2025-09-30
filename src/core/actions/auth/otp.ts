@@ -4,35 +4,34 @@ import {
   resendOtpService,
   verifyOtpService,
 } from '@/core/services/auth/otp.service'
-import { env } from '@/env'
-import { setCookie, getCookie, deleteCookie } from '@tanstack/react-start/server'
+import { useAppSession } from '@/core/lib/session'
 
 export const verifyOtpAction = createServerFn({ method: 'POST' })
   .inputValidator(otpSchema)
   .handler(async ({ data }) => {
     try {
-      const token = getCookie('otp_token')
+      const session = await useAppSession()
+      const login_token = session.data.login_token
 
-      if (!token) throw new Error('Login token is missing.')
+      if (!login_token) {
+        throw new Error('OTP session expired or invalid')
+      }
 
-      const res = await verifyOtpService(token, data)
+      const res = await verifyOtpService(login_token, data)
 
-      if (res.token) {
-              setCookie('auth_token', res.token, {
-                httpOnly: true,
-                secure: env.NODE_ENV === 'production',
-                sameSite: 'lax',
-                path: '/',
-                maxAge: env.VITE_ACCESS_TOKEN_EXPIRY ?? 600, // seconds
-              });
-            }
+      if (!res.token) {
+        throw new Error("OTP verification failed")
+      }
 
-      deleteCookie('otp_token', { path: '/' })
+      await session.update({
+        is_authed: true,
+        auth_token: res.token,
+        login_token: undefined,
+      })
 
       return {
         success: true,
         message: res.message,
-        token: res.token,
         member_status: res.member_status,
         accounts_count: res.accounts_count,
       }
@@ -45,24 +44,31 @@ export const verifyOtpAction = createServerFn({ method: 'POST' })
   })
 
 export const resendOtpAction = createServerFn({ method: 'POST' })
-.inputValidator(resendOtpSchema)
-.handler(async ({ data }) => {
-  try {
-    const token = getCookie('otp_token')
+  .inputValidator(resendOtpSchema)
+  .handler(async ({ data }) => {
+    try {
+      const session = await useAppSession()
+      const login_token = session.data.login_token
 
-    if (!token) throw new Error('Login token is missing.')
+      if (!login_token) {
+        throw new Error('OTP session expired or invalid')
+      }
 
-    const res = await resendOtpService(token, data)
+      if (!login_token) {
+        throw new Error('OTP session expired or invalid')
+      }
 
-    return {
-      success: true,
-      message: res.message,
+      const res = await resendOtpService(login_token, data)
+
+      return {
+        success: true,
+        message: res.message,
+      }
+    } catch (err: any) {
+      throw {
+        message: err?.message ?? 'Resending OTP failed',
+        fieldErrors: err?.fieldErrors ?? null,
+      }
     }
-  } catch (err: any) {
-    throw {
-      message: err?.message ?? 'Resending OTP failed',
-      fieldErrors: err?.fieldErrors ?? null,
-    }
-  }
-})
+  })
 

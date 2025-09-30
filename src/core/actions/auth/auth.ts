@@ -2,9 +2,7 @@ import { createServerFn } from '@tanstack/react-start'
 import { loginUserService } from '@/core/services/auth/auth.service'
 import { loginSchema } from '@/core/validators/auth.schema'
 import { logoutUserService } from '@/core/services/auth/auth.service'
-import { env } from '@/env'
-import { getCookie, setCookie } from '@tanstack/react-start/server'
-import { logout } from '@/core/lib/auth.store'
+import { useAppSession } from '@/core/lib/session'
 
 
 export const loginAction = createServerFn({ method: 'POST' })
@@ -13,21 +11,23 @@ export const loginAction = createServerFn({ method: 'POST' })
     try {
       const response = await loginUserService(data)
 
-      if (response.token) {
-        setCookie('otp_token', response.token, {
-          httpOnly: true,
-          secure: env.NODE_ENV === 'production',
-          sameSite: 'strict',
-          path: '/',
-          maxAge: env.VITE_ACCESS_TOKEN_EXPIRY ?? 600, // seconds
-        });
+      if (!response.token) {
+        throw new Error("An error occurred")
       }
+
+      const session = await useAppSession()
+      await session.update({
+        is_authed: false,
+        login_token: response.token,
+        user: {
+          email: data.email_address,
+        },
+      })
 
       return {
         success: true,
         message: response.message,
         otp_generated: response.otp_generated,
-        token: response.token,
         member_status: response.member_status,
       }
     } catch (err: any) {
@@ -38,23 +38,30 @@ export const loginAction = createServerFn({ method: 'POST' })
     }
   })
 
+
 export const logoutAction = createServerFn({ method: 'POST' })
   .handler(async () => {
     try {
-      const token = getCookie('auth_token')
+      const session = await useAppSession()
+      const auth_token = session.data.auth_token
 
-      if (!token) throw new Error('No active session')
+      if (!auth_token) {
+        throw new Error('No active session')
+      }
 
-      const res = await logoutUserService(token)
+      const res = await logoutUserService(auth_token)
+      await session.clear()
 
-      logout()
-
-      return { success: true, message: res.message }
-
+      return {
+        success: true,
+        message: res.message ?? 'Logged out successfully'
+      }
     } catch (err: any) {
-      logout()
+      const session = await useAppSession()
+      await session.clear()
+
       throw {
-        message: err?.message ?? 'Logout failed',
+        message: err?.message ?? 'Logged out successfully',
       }
     }
   })
