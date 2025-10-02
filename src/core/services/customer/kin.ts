@@ -1,14 +1,15 @@
 import { apiClient } from '@/core/lib/api.client'
-import type { NextOfKinResponse, NextOfKinCreateInput, NextOfKinUpdateInput } from '@/core/types/kin'
+import type { NextOfKinResponse} from '@/core/types/kin'
+import type { NextOfKinCreateData, NextOfKinUpdateData } from '@/core/validators/kin.schema'
 
 
 export async function fetchNextOfKinService(
     token: string,
 ): Promise<NextOfKinResponse> {
     try {
-        const NextOfKinEndpoint = '/client_next_of_kin'
+        const endpoint = '/client_next_of_kin'
 
-        const res = await apiClient.get<NextOfKinResponse>(NextOfKinEndpoint, {
+        const res = await apiClient.get<NextOfKinResponse>(endpoint, {
             headers: {
                 'auth-token': token,
             },
@@ -31,12 +32,12 @@ export async function fetchNextOfKinService(
 
 export async function createNextOfKinService(
     token: string,
-    data: NextOfKinCreateInput,
+    data: NextOfKinCreateData,
 ): Promise<NextOfKinResponse> {
     try {
-        const NextOfKinEndpoint = '/add_client_next_of_kin_details'
+        const endpoint = '/add_client_next_of_kin_details'
 
-        const res = await apiClient.post<NextOfKinResponse>(NextOfKinEndpoint, data, {
+        const res = await apiClient.post<NextOfKinResponse>(endpoint, data, {
             headers: {
                 'auth-token': token,
             },
@@ -58,14 +59,13 @@ export async function createNextOfKinService(
 
 export async function updateNextOfKinService(
     token: string,
-    data: NextOfKinUpdateInput,
+    data: NextOfKinUpdateData,
 ): Promise<NextOfKinResponse> {
     try {
-        if (!data.id) throw new Error('Next of kin ID is missing.')
 
-        const NextOfKinEndpoint = `/update_client_next_of_kin/${data.id}`
+        const endpoint = `/update_client_next_of_kin`
 
-        const res = await apiClient.put<NextOfKinResponse>(NextOfKinEndpoint, data, {
+        const res = await apiClient.put<NextOfKinResponse>(endpoint, data, {
             headers: {
                 'auth-token': token,
             },
@@ -91,9 +91,9 @@ export async function deleteNextOfKinService(
     try {
         if (!id) throw new Error('Next of kin ID is missing.')
 
-        const NextOfKinEndpoint = `/delete_client_next_of_kin/${id}`
+        const endpoint = `/delete_client_next_of_kin/${id}`
 
-        const res = await apiClient.delete<NextOfKinResponse>(NextOfKinEndpoint, {
+        const res = await apiClient.delete<NextOfKinResponse>(endpoint, {
             headers: {
                 'auth-token': token,
             },

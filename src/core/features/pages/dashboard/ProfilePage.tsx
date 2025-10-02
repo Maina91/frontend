@@ -1,19 +1,70 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+
 // import { Upload } from '@/components/ui/upload'
 import { Plus } from 'lucide-react'
 import { useCustomerProfile } from '@/core/hooks/customer/use-profile'
 import { useBank } from '@/core/hooks/customer/use-bank'
-import { useKin } from '@/core/hooks/customer/use-kin'
+import { useKin, useCreateKin,useUpdateKin,useDeleteKin } from '@/core/hooks/customer/use-kin'
 import { useBeneficiary } from '@/core/hooks/customer/use-beneficiaries'
+
+import { NextOfKinForm } from '../../forms/dashboard/NextOfKinForm'
+import { NextOfKin } from '@/core/types/kin'
+import type { NextOfKinCreateData, NextOfKinUpdateData } from '@/core/validators/kin.schema'
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 
 
 export const ProfilePage = () => {
+  // profile
   const { data: profileDetails, isLoading: profileLoading, error: profileError } = useCustomerProfile()
-  const { data: bankDetails, isLoading: bankLoading, error: bankError } = useBank()
+
+  // next of kin
   const { data: kinDetails, isLoading: kinLoading, error: kinError } = useKin()
+  const createKin = useCreateKin()
+  const updateKin = useUpdateKin()
+  const deleteKin = useDeleteKin()
+
+  const [kinFormOpen, setKinFormOpen] = useState(false)
+  const [editingKin, setEditingKin] = useState<NextOfKin | null>(null)
+  const [deleteKinId, setDeleteKinId] = useState<number | null>(null)
+
+
+
+  const handleCreateOrUpdateKin = async (values: NextOfKinCreateData | NextOfKinUpdateData) => {
+    if (editingKin?.id) {
+      await updateKin.mutateAsync({ id: editingKin.id, ...values })
+    } else {
+      await createKin.mutateAsync(values as NextOfKinCreateData)
+    }
+    setKinFormOpen(false)
+    setEditingKin(null)
+  }
+
+  const handleDeleteKin = async () => {
+    if (!deleteKinId) return
+    await deleteKin.mutateAsync(deleteKinId)
+    setDeleteKinId(null) 
+  }
+
+
+  //beneficiaries
   const { data: beneficiaryDetails, isLoading: beneficiaryLoading, error: beneficiaryError } = useBeneficiary()
+
+  //banks
+  const { data: bankDetails, isLoading: bankLoading, error: bankError } = useBank()
+
 
   console.log('ProfilePage profile', profileDetails)
   console.log('ProfilePage bankDetails', bankDetails)
@@ -108,7 +159,14 @@ export const ProfilePage = () => {
       <section className="bg-white shadow rounded-md p-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold">Next of Kin</h2>
-          <Button variant="outline" size="sm">
+          <Button 
+          variant="outline" 
+          size="sm"
+            onClick={() => {
+              setEditingKin(null)
+              setKinFormOpen(true)
+            }}
+          >
             <Plus className="w-4 h-4 mr-1" /> Add Next of Kin
           </Button>
         </div>
@@ -138,6 +196,7 @@ export const ProfilePage = () => {
                 <TableHead>Relationship</TableHead>
                 <TableHead>ID/Passport Number</TableHead>
                 <TableHead>Mobile</TableHead>
+                <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -145,8 +204,27 @@ export const ProfilePage = () => {
                 <TableRow key={kin.id}>
                   <TableCell>{kin.full_name}</TableCell>
                   <TableCell>{kin.relationship}</TableCell>
-                  <TableCell>{kin.id_passport_number ?? '-'}</TableCell>
-                  <TableCell>{kin.mobile ?? '-'}</TableCell>
+                  <TableCell>{kin.identification_no ?? '-'}</TableCell>
+                  <TableCell>{kin.mobile_no ?? '-'}</TableCell>
+                  <TableCell className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setEditingKin(kin)
+                        setKinFormOpen(true)
+                      }}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => setDeleteKinId(kin.id)}
+                    >
+                      Delete
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -241,7 +319,40 @@ export const ProfilePage = () => {
             ))}
           </TableBody>
         </Table>
+
+        <NextOfKinForm
+          open={kinFormOpen}
+          onClose={() => {
+            setKinFormOpen(false)
+            setEditingKin(null)
+          }}
+          defaultValues={editingKin ?? undefined}
+          onSubmit={handleCreateOrUpdateKin}
+        />
       </section>
+
+      <AlertDialog open={!!deleteKinId} onOpenChange={(open) => !open && setDeleteKinId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Next of Kin</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete this Next of Kin? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setDeleteKinId(null)}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-600 hover:bg-red-700"
+              onClick={handleDeleteKin}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
     </div>
   )
 }

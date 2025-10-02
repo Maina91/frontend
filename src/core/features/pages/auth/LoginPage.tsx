@@ -27,7 +27,6 @@ export function LoginPage() {
   const mutation = useMutation({
     mutationFn: loginAction,
     onSuccess: (res) => {
-      console.log('login res', res)
       
       toast.success('Successful login', {
         description:
