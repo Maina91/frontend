@@ -4,7 +4,6 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { nextOfKinCreateSchema , nextOfKinUpdateSchema} from '@/core/validators/kin.schema'
-
 import type { NextOfKinCreateData, NextOfKinUpdateData } from '@/core/validators/kin.schema'
 
 
@@ -12,24 +11,39 @@ function getErrorMessages(errors: Array<any>): Array<string> {
     return errors.map((err) => (typeof err === 'string' ? err : err.message))
 }
 
+
 type KinFormProps = {
     open: boolean
     onClose: () => void
-    defaultValues?: Partial<NextOfKinCreateData>
-    onSubmit: (values: NextOfKinCreateData) => void
+    defaultValues?: Partial<NextOfKinUpdateData>
+    isEdit: boolean
+    onSubmit: (values: NextOfKinCreateData | NextOfKinUpdateData) => void
 }
 
-export function NextOfKinForm({ open, onClose, defaultValues, onSubmit }: KinFormProps) {
+
+export function NextOfKinForm({ 
+    open, 
+    onClose, 
+    defaultValues, 
+    onSubmit, 
+    isEdit 
+}: KinFormProps) {
     const form = useForm({
         defaultValues: {
+            id: defaultValues?.id,
             full_name: defaultValues?.full_name ?? '',
             relationship: defaultValues?.relationship ?? '',
             identification_no: defaultValues?.identification_no ?? '',
             mobile_no: defaultValues?.mobile_no ?? '',
             email_address: defaultValues?.email_address ?? '',
         },
+        
         // validators: {
-        //     onSubmit: nextOfKinCreateSchema,
+        //     onSubmit: (values) => {
+        //         return isEdit
+        //             ? nextOfKinUpdateSchema.safeParse(values)
+        //             : nextOfKinCreateSchema.safeParse(values)
+        //     },
         // },
         onSubmit: async ({ value }) => {
             await onSubmit(value)
@@ -46,9 +60,9 @@ export function NextOfKinForm({ open, onClose, defaultValues, onSubmit }: KinFor
                 </DialogHeader>
 
                 <form
-                    onSubmit={(e) => {
+                    onSubmit={async (e) => {
                         e.preventDefault()
-                        form.handleSubmit()
+                        await form.handleSubmit()
                     }}
                     className="space-y-4"
                 >
@@ -169,7 +183,7 @@ export function NextOfKinForm({ open, onClose, defaultValues, onSubmit }: KinFor
                         <form.Subscribe selector={(s) => [s.canSubmit, s.isSubmitting]}>
                             {([canSubmit, isSubmitting]) => (
                                 <Button type="submit" disabled={!canSubmit || isSubmitting}>
-                                    {defaultValues ? 'Update' : 'Create'}
+                                    {isEdit ? 'Update' : 'Create'}
                                 </Button>
                             )}
                         </form.Subscribe>

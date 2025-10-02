@@ -1,18 +1,14 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-
-// import { Upload } from '@/components/ui/upload'
 import { Plus } from 'lucide-react'
 import { useCustomerProfile } from '@/core/hooks/customer/use-profile'
 import { useBank } from '@/core/hooks/customer/use-bank'
 import { useKin, useCreateKin,useUpdateKin,useDeleteKin } from '@/core/hooks/customer/use-kin'
 import { useBeneficiary } from '@/core/hooks/customer/use-beneficiaries'
-
 import { NextOfKinForm } from '../../forms/dashboard/NextOfKinForm'
 import { NextOfKin } from '@/core/types/kin'
 import type { NextOfKinCreateData, NextOfKinUpdateData } from '@/core/validators/kin.schema'
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,7 +18,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 
 
@@ -43,8 +38,8 @@ export const ProfilePage = () => {
 
 
   const handleCreateOrUpdateKin = async (values: NextOfKinCreateData | NextOfKinUpdateData) => {
-    if (editingKin?.id) {
-      await updateKin.mutateAsync({ id: editingKin.id, ...values })
+    if ("id" in values && values.id) {
+      await updateKin.mutateAsync(values as NextOfKinUpdateData)
     } else {
       await createKin.mutateAsync(values as NextOfKinCreateData)
     }
@@ -71,7 +66,7 @@ export const ProfilePage = () => {
   console.log('ProfilePage kinDetails', kinDetails)
   console.log('ProfilePage beneficiaries', beneficiaryDetails)
 
-  const [kycDocuments, setKycDocuments] = useState([
+  const [kycDocuments] = useState([
     { name: 'ID or Passport', description: 'ID or Passport', number: '', actions: '' },
     { name: 'Tax/KRA PIN', description: 'Tax Identification (KRA PIN for Kenyans)', number: '', actions: '' },
     { name: 'Color passport sized photos', description: 'Passport sized photos (in color)', number: '', actions: '' },
@@ -327,6 +322,7 @@ export const ProfilePage = () => {
             setEditingKin(null)
           }}
           defaultValues={editingKin ?? undefined}
+          isEdit={!!editingKin}
           onSubmit={handleCreateOrUpdateKin}
         />
       </section>

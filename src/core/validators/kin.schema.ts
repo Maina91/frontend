@@ -23,11 +23,17 @@ export const nextOfKinCreateSchema = z
 export type NextOfKinCreateData = z.infer<typeof nextOfKinCreateSchema>
 
 export const nextOfKinUpdateSchema = z.object({
-    id: z.number(),
+    id: z.coerce.number(), 
     full_name: z.string().optional(),
     identification_no: z.string().optional().nullable(),
     mobile_no: z.string().optional().nullable(),
-    email_address: z.string().email('Invalid email').optional().nullable(),
+    // email_address: z.string().email('Invalid email').optional().nullable(),
+    email_address: z
+        .string()
+        .email('Invalid email address')
+        .optional()
+        .nullable()
+        .transform((val) => (val === '' ? null : val)),
     relationship: z.string().optional(),
 })
 
