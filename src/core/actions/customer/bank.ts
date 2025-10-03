@@ -31,16 +31,23 @@ export const fetchBankDetails = createServerFn({ method: 'GET' })
     })
 
   
-export const createBankDetails = createServerFn({ method: 'GET' })
+export const createBankDetails = createServerFn({ method: 'POST' })
     .inputValidator(bankCreateSchema)
-    .handler(async (): Promise<BankDetailsResponse> => {
+    .handler(async ({ data }): Promise<BankDetailsResponse> => {
         try {
             const session = await useAppSession()
             const auth_token = session.data.auth_token
+            const member_no = session.data.user?.member_no
 
             if (!auth_token) throw new Error('Unauthorized')
+            if (!member_no) throw new Error('Member number not found in session')
 
-            const res = await fetchBankDetailsService(auth_token)
+            const payload = {
+                ...data,
+                member_no,
+            }
+
+            const res = await createBankDetailsService(auth_token, payload)
             return res
         } catch (err: any) {
             throw {
@@ -51,16 +58,16 @@ export const createBankDetails = createServerFn({ method: 'GET' })
     })
 
     
-export const updateBankDetails = createServerFn({ method: 'GET' })
+export const updateBankDetails = createServerFn({ method: 'POST' })
     .inputValidator(bankUpdateSchema)
-    .handler(async (): Promise<BankDetailsResponse> => {
+    .handler(async ({ data }): Promise<BankDetailsResponse> => {
         try {
             const session = await useAppSession()
             const auth_token = session.data.auth_token
 
             if (!auth_token) throw new Error('Unauthorized')
 
-            const res = await fetchBankDetailsService(auth_token)
+            const res = await updateBankDetailsService(auth_token, data)
             return res
         } catch (err: any) {
             throw {
@@ -71,7 +78,7 @@ export const updateBankDetails = createServerFn({ method: 'GET' })
     })
     
     
-export const deleteBankDetails = createServerFn({ method: 'GET' })
+export const deleteBankDetails = createServerFn({ method: 'POST' })
     .inputValidator(bankUpdateSchema.pick({ id: true }))
     .handler(async ({ data }): Promise<BankDetailsResponse> => {
         try {
