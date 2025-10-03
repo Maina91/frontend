@@ -43,7 +43,7 @@ export async function createNextOfKinService(
             },
         })
 
-        if (res.status_code !== 200 || !res.next_of_kin) {
+        if (res.status_code !== 200) {
             throw new Error(res.message || 'Unable to create next of kin')
         }
 
@@ -71,7 +71,7 @@ export async function updateNextOfKinService(
             },
         })
 
-        if (res.status_code !== 200 || !res.next_of_kin) {
+        if (res.status_code !== 200) {
             throw new Error(res.message || 'Unable to update next of kin')
         }
 

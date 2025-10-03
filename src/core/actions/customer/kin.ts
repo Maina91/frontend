@@ -31,6 +31,7 @@ export const fetchNextOfKin = createServerFn({ method: 'GET' })
             }
         }
     })
+    
 
 export const createNextOfKin = createServerFn({ method: 'POST' })
     .inputValidator(nextOfKinCreateSchema)

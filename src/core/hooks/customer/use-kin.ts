@@ -9,11 +9,9 @@ import type {
     NextOfKinResponse,
 } from '@/core/types/kin'
 import { toast } from "sonner";
-
 import type { NextOfKinCreateData, NextOfKinUpdateData } from '@/core/validators/kin.schema'
 
 
-// fetch next of kin
 export const useKin = () => {
     return useQuery<NextOfKinResponse, Error>({
         queryKey: ['customer', 'nextOfKin'],
@@ -33,7 +31,7 @@ export const useKin = () => {
                 throw new Error(error_message)
             }
         },
-        staleTime: 1000 * 60 * 5, // cache for 5 minutes
+        staleTime: 1000 * 60 * 5, 
         retry: (failureCount, error: Error) => {
             if (failureCount >= 3) return false
             if (error.message.startsWith('4')) return false
@@ -44,7 +42,6 @@ export const useKin = () => {
 }
 
 
-// Create Next of Kin
 export function useCreateKin() {
     const queryClient = useQueryClient()
     return useMutation({
@@ -56,12 +53,12 @@ export function useCreateKin() {
             toast.error(err?.message ?? "Failed to add next of kin")
         },
         onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ["customer", "nextOfKin"] })
+            queryClient.invalidateQueries({ queryKey: ['customer', 'nextOfKin'] })
         },
     })
 }
 
-// Update Next of Kin
+
 export function useUpdateKin() {
     const queryClient = useQueryClient()
     return useMutation({
@@ -73,12 +70,12 @@ export function useUpdateKin() {
             toast.error(err?.message ?? "Failed to update next of kin")
         },
         onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ["customer", "nextOfKin"] })
+            queryClient.invalidateQueries({ queryKey: ['customer', 'nextOfKin'] })
         },
     })
 }
 
-// Delete Next of Kin
+
 export function useDeleteKin() {
     const queryClient = useQueryClient()
     return useMutation({
@@ -90,7 +87,7 @@ export function useDeleteKin() {
             toast.error(err?.message ?? "Failed to delete next of kin")
         },
         onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ["customer", "nextOfKin"] })
+            queryClient.invalidateQueries({ queryKey: ['customer', 'nextOfKin'] })
         },
     })
 }

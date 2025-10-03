@@ -15,9 +15,10 @@ export interface BankAccount {
     payment_type?: string
 }
 
-export interface CustomerBankDetailsResponse {
+export interface BankDetailsResponse {
     status_code: number
     success: boolean
+    message: string
     banks: BankAccount[]
     mobile_payments_no: string | null
 }
