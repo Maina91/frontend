@@ -38,10 +38,17 @@ export const createNextOfKin = createServerFn({ method: 'POST' })
         try {
             const session = await useAppSession()
             const auth_token = session.data.auth_token
+            const member_no = session.data.user?.member_no
 
             if (!auth_token) throw new Error('Unauthorized') 
+            if (!member_no) throw new Error('Member number not found in session')
+                
+            const payload = {
+                ...data,
+                member_no,
+            }
 
-            const res = await createNextOfKinService(auth_token, data)
+            const res = await createNextOfKinService(auth_token, payload)
             return res
         } catch (err: any) {
             throw {

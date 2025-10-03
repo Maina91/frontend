@@ -2,7 +2,7 @@ import { useSession } from '@tanstack/react-start/server'
 import { env } from '@/env'
 
 export type SessionUSer = {
-    userId?: string
+    member_no?: string
     email?: string
     role?: string
 }
