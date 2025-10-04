@@ -1,9 +1,9 @@
 export interface NextOfKin {
     id: number
     full_name: string
-    identification_no?: string 
-    mobile_no?: string 
-    email_address?: string 
+    id_passport_number?: string 
+    mobile?: string 
+    email?: string 
     relationship: string
 }
 

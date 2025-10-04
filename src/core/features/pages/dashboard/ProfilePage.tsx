@@ -8,7 +8,7 @@ import { useKin, useCreateKin,useUpdateKin,useDeleteKin } from '@/core/hooks/cus
 import { useBeneficiary } from '@/core/hooks/customer/use-beneficiaries'
 import { NextOfKinForm } from '../../forms/dashboard/NextOfKinForm'
 import { NextOfKin } from '@/core/types/kin'
-import type { NextOfKinCreateData, NextOfKinUpdateData } from '@/core/validators/kin.schema'
+import type { NextOfKinData } from '@/core/validators/kin.schema'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -37,11 +37,11 @@ export const ProfilePage = () => {
 
 
 
-  const handleCreateOrUpdateKin = async (values: NextOfKinCreateData | NextOfKinUpdateData) => {
+  const handleCreateOrUpdateKin = async (values: NextOfKinData ) => {
     if ("id" in values && values.id) {
-      await updateKin.mutateAsync(values as NextOfKinUpdateData)
+      await updateKin.mutateAsync(values as NextOfKinData)
     } else {
-      await createKin.mutateAsync(values as NextOfKinCreateData)
+      await createKin.mutateAsync(values as NextOfKinData)
     }
     setKinFormOpen(false)
     setEditingKin(null)
@@ -191,16 +191,18 @@ export const ProfilePage = () => {
                 <TableHead>Relationship</TableHead>
                 <TableHead>ID/Passport Number</TableHead>
                 <TableHead>Mobile</TableHead>
+                <TableHead>Email</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {kinDetails.next_of_kin.map((kin) => (
                 <TableRow key={kin.id}>
-                  <TableCell>{kin.full_name}</TableCell>
-                  <TableCell>{kin.relationship}</TableCell>
-                  <TableCell>{kin.identification_no ?? '-'}</TableCell>
-                  <TableCell>{kin.mobile_no ?? '-'}</TableCell>
+                  <TableCell>{kin.full_name ?? '-'}</TableCell>
+                  <TableCell>{kin.relationship ?? '-'}</TableCell>
+                  <TableCell>{kin.id_passport_number ?? '-'}</TableCell>
+                  <TableCell>{kin.mobile ?? '-'}</TableCell>
+                  <TableCell>{kin.email ?? '-'}</TableCell>
                   <TableCell className="flex gap-2">
                     <Button
                       variant="outline"
