@@ -73,6 +73,22 @@ export function NextOfKinForm({
                     </DialogTitle>
                 </DialogHeader>
 
+                <form.Subscribe selector={(s) => s.values}>
+                    {() => {
+                        if (defaultValues) {
+                            form.reset({
+                                id: defaultValues.id,
+                                full_name: defaultValues.full_name ?? '',
+                                relationship: defaultValues.relationship ?? '',
+                                identification_no: defaultValues.identification_no ?? '',
+                                mobile_no: defaultValues.mobile_no ?? '',
+                                email_address: defaultValues.email_address ?? '',
+                            })
+                        }
+                        return null
+                    }}
+                </form.Subscribe>
+
                 <form
                     onSubmit={async (e) => {
                         e.preventDefault()
