@@ -1,6 +1,6 @@
 import { apiClient } from '@/core/lib/api.client'
 import type { NextOfKinResponse} from '@/core/types/kin'
-import type { NextOfKinCreateData, NextOfKinUpdateData } from '@/core/validators/kin.schema'
+import type { NextOfKinData } from '@/core/validators/kin.schema'
 
 
 export async function fetchNextOfKinService(
@@ -32,7 +32,7 @@ export async function fetchNextOfKinService(
 
 export async function createNextOfKinService(
     token: string,
-    data: NextOfKinCreateData,
+    data: NextOfKinData,
 ): Promise<NextOfKinResponse> {
     try {
         const endpoint = '/add_client_next_of_kin_details'
@@ -59,7 +59,7 @@ export async function createNextOfKinService(
 
 export async function updateNextOfKinService(
     token: string,
-    data: NextOfKinUpdateData,
+    data: NextOfKinData,
 ): Promise<NextOfKinResponse> {
     try {
 

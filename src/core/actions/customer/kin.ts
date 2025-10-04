@@ -1,5 +1,5 @@
 import { createServerFn } from '@tanstack/react-start'
-import { nextOfKinCreateSchema, nextOfKinUpdateSchema} from '@/core/validators/kin.schema'
+import { nextOfKinSchema, nextOfKinDeleteSchema } from '@/core/validators/kin.schema'
 import type { NextOfKinResponse } from '@/core/types/kin'
 import { createNextOfKinService, updateNextOfKinService, deleteNextOfKinService, fetchNextOfKinService } from '@/core/services/customer/kin'
 import { useAppSession } from '@/core/lib/session'
@@ -34,7 +34,7 @@ export const fetchNextOfKin = createServerFn({ method: 'GET' })
     
 
 export const createNextOfKin = createServerFn({ method: 'POST' })
-    .inputValidator(nextOfKinCreateSchema)
+    .inputValidator(nextOfKinSchema)
     .handler(async ({ data }): Promise<NextOfKinResponse> => {
         try {
             const session = await useAppSession()
@@ -59,8 +59,9 @@ export const createNextOfKin = createServerFn({ method: 'POST' })
         }   
     })
 
+    
 export const updateNextOfKin = createServerFn({ method: 'POST' })
-    .inputValidator(nextOfKinUpdateSchema)
+    .inputValidator(nextOfKinSchema)
     .handler(async ({ data }): Promise<NextOfKinResponse> => {
         try {
             const session = await useAppSession()
@@ -79,8 +80,9 @@ export const updateNextOfKin = createServerFn({ method: 'POST' })
         }   
     })
     
+
 export const deleteNextOfKin = createServerFn({ method: 'POST' })
-    .inputValidator(nextOfKinUpdateSchema.pick({ id: true }))
+    .inputValidator(nextOfKinDeleteSchema.pick({ id: true }))
     .handler(async ({ data }): Promise<NextOfKinResponse> => {
         try {
             const session = await useAppSession()

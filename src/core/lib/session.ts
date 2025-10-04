@@ -23,6 +23,6 @@ export const useAppSession = () =>
             sameSite: 'lax',
             httpOnly: true,
             path: '/',
-            maxAge: 60 * 10,
+            maxAge: env.SESSION_EXPIRY,
         },
     })

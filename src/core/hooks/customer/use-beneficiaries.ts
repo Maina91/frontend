@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { fetchBeneficiaries } from '@/core/actions/customer/beneficiaries'
-import type { BeneficiariesResponse } from '@/core/services/customer/beneficiaries'
+import type { BeneficiariesResponse } from '@/core/types/beneficiaries'
 
 
 export const useBeneficiary = () => {

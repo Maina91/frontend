@@ -1,10 +1,9 @@
-import { useForm } from '@tanstack/react-form'
+import { useForm, revalidateLogic } from '@tanstack/react-form'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { nextOfKinCreateSchema , nextOfKinUpdateSchema} from '@/core/validators/kin.schema'
-import type { NextOfKinCreateData, NextOfKinUpdateData } from '@/core/validators/kin.schema'
+import { nextOfKinSchema, type NextOfKinData } from '@/core/validators/kin.schema'
 
 
 function getErrorMessages(errors: Array<any>): Array<string> {
@@ -15,19 +14,20 @@ function getErrorMessages(errors: Array<any>): Array<string> {
 type KinFormProps = {
     open: boolean
     onClose: () => void
-    defaultValues?: Partial<NextOfKinUpdateData>
+    defaultValues?: Partial<NextOfKinData>
     isEdit: boolean
-    onSubmit: (values: NextOfKinCreateData | NextOfKinUpdateData) => void
+    onSubmit: (values: NextOfKinData) => Promise<void>
 }
 
 
-export function NextOfKinForm({ 
-    open, 
-    onClose, 
-    defaultValues, 
-    onSubmit, 
-    isEdit 
+export function NextOfKinForm({
+    open,
+    onClose,
+    defaultValues,
+    onSubmit,
+    isEdit
 }: KinFormProps) {
+
     const form = useForm({
         defaultValues: {
             id: defaultValues?.id,
@@ -37,16 +37,30 @@ export function NextOfKinForm({
             mobile_no: defaultValues?.mobile_no ?? '',
             email_address: defaultValues?.email_address ?? '',
         },
-        
-        // validators: {
-        //     onSubmit: (values) => {
-        //         return isEdit
-        //             ? nextOfKinUpdateSchema.safeParse(values)
-        //             : nextOfKinCreateSchema.safeParse(values)
-        //     },
-        // },
+        validators: {
+            onChange: ({ value }) => {
+                const result = nextOfKinSchema.safeParse(value)
+                if (!result.success) {
+                    return result.error.format()._errors.join(', ') || 'Validation failed'
+                }
+                return undefined
+            },
+        },
+        validationLogic: revalidateLogic({
+            mode: 'submit',
+            modeAfterSubmission: 'blur',
+        }),
         onSubmit: async ({ value }) => {
-            await onSubmit(value)
+            try {
+                nextOfKinSchema.parse(value)
+
+                await onSubmit(value)
+
+                form.reset()
+                onClose()
+            } catch (error) {
+                console.error(error)
+            }
         },
     })
 
@@ -66,24 +80,34 @@ export function NextOfKinForm({
                     }}
                     className="space-y-4"
                 >
-                    {/* Full Name */}
                     <form.Field
                         name="full_name"
                         validators={{
-                            onChange: ({ value }) =>
-                                value.trim() === '' ? 'Full name is required' : undefined,
+                            onChangeAsyncDebounceMs: 500,
+                            onChangeAsync: nextOfKinSchema.shape.full_name,
                         }}
                     >
                         {(field) => (
                             <div className="space-y-1.5">
-                                <Label>Full Name</Label>
+                                <Label htmlFor="full_name">
+                                    Full Name <span className="text-red-500">*</span>
+                                </Label>
                                 <Input
-                                    placeholder="Full Name"
+                                    id="full_name"
+                                    name={field.name}
+                                    placeholder="Enter full name"
                                     value={field.state.value}
                                     onChange={(e) => field.handleChange(e.target.value)}
+                                    onBlur={field.handleBlur}
+                                    aria-invalid={field.state.meta.errors.length > 0}
+                                    aria-describedby={
+                                        field.state.meta.errors.length > 0
+                                            ? `${field.name}-error`
+                                            : undefined
+                                    }
                                 />
-                                {field.state.meta.errors.length > 0 && (
-                                    <p className="text-sm text-red-500">
+                                {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
+                                    <p id={`${field.name}-error`} className="text-sm text-red-500">
                                         {getErrorMessages(field.state.meta.errors).join(', ')}
                                     </p>
                                 )}
@@ -91,24 +115,34 @@ export function NextOfKinForm({
                         )}
                     </form.Field>
 
-                    {/* Relationship */}
                     <form.Field
                         name="relationship"
                         validators={{
-                            onChange: ({ value }) =>
-                                value.trim() === '' ? 'Relationship is required' : undefined,
+                            onChangeAsyncDebounceMs: 500,
+                            onChangeAsync: nextOfKinSchema.shape.relationship,
                         }}
                     >
                         {(field) => (
                             <div className="space-y-1.5">
-                                <Label>Relationship</Label>
+                                <Label htmlFor="relationship">
+                                    Relationship <span className="text-red-500">*</span>
+                                </Label>
                                 <Input
-                                    placeholder="Relationship"
+                                    id="relationship"
+                                    name={field.name}
+                                    placeholder="e.g., Spouse, Parent, Sibling"
                                     value={field.state.value}
                                     onChange={(e) => field.handleChange(e.target.value)}
+                                    onBlur={field.handleBlur}
+                                    aria-invalid={field.state.meta.errors.length > 0}
+                                    aria-describedby={
+                                        field.state.meta.errors.length > 0
+                                            ? `${field.name}-error`
+                                            : undefined
+                                    }
                                 />
-                                {field.state.meta.errors.length > 0 && (
-                                    <p className="text-sm text-red-500">
+                                {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
+                                    <p id={`${field.name}-error`} className="text-sm text-red-500">
                                         {getErrorMessages(field.state.meta.errors).join(', ')}
                                     </p>
                                 )}
@@ -116,58 +150,108 @@ export function NextOfKinForm({
                         )}
                     </form.Field>
 
-                    {/* ID/Passport */}
-                    <form.Field name="identification_no">
+                    <form.Field
+                        name="identification_no"
+                        validators={{
+                            onChangeAsyncDebounceMs: 500,
+                            onChangeAsync: nextOfKinSchema.shape.identification_no,
+                        }}
+                    >
                         {(field) => (
                             <div className="space-y-1.5">
-                                <Label>ID/Passport Number</Label>
+                                <Label htmlFor="identification_no">
+                                    ID/Passport Number <span className="text-red-500">*</span>
+                                </Label>
                                 <Input
-                                    placeholder="ID/Passport Number"
+                                    id="identification_no"
+                                    name={field.name}
+                                    placeholder="Enter ID or passport number"
                                     value={field.state.value}
                                     onChange={(e) => field.handleChange(e.target.value)}
+                                    onBlur={field.handleBlur}
+                                    aria-invalid={field.state.meta.errors.length > 0}
+                                    aria-describedby={
+                                        field.state.meta.errors.length > 0
+                                            ? `${field.name}-error`
+                                            : undefined
+                                    }
                                 />
+                                {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
+                                    <p id={`${field.name}-error`} className="text-sm text-red-500">
+                                        {getErrorMessages(field.state.meta.errors).join(', ')}
+                                    </p>
+                                )}
                             </div>
                         )}
                     </form.Field>
 
-                    {/* Mobile */}
-                    <form.Field name="mobile_no">
+                    <form.Field
+                        name="mobile_no"
+                        validators={{
+                            onChangeAsyncDebounceMs: 500,
+                            onChangeAsync: nextOfKinSchema.shape.mobile_no,
+                        }}
+                    >
                         {(field) => (
                             <div className="space-y-1.5">
-                                <Label>Mobile</Label>
+                                <Label htmlFor="mobile_no">
+                                    Mobile Number
+                                    <span className="text-red-500">*</span>
+                                </Label>
                                 <Input
-                                    placeholder="Mobile"
+                                    id="mobile_no"
+                                    name={field.name}
+                                    type="tel"
+                                    placeholder="e.g., 0712345678 or +254712345678"
                                     value={field.state.value}
                                     onChange={(e) => field.handleChange(e.target.value)}
+                                    onBlur={field.handleBlur}
+                                    aria-invalid={field.state.meta.errors.length > 0}
+                                    aria-describedby={
+                                        field.state.meta.errors.length > 0
+                                            ? `${field.name}-error`
+                                            : undefined
+                                    }
                                 />
+                                {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
+                                    <p id={`${field.name}-error`} className="text-sm text-red-500">
+                                        {getErrorMessages(field.state.meta.errors).join(', ')}
+                                    </p>
+                                )}
                             </div>
                         )}
                     </form.Field>
 
-                    {/* Email */}
                     <form.Field
                         name="email_address"
                         validators={{
-                            onChange: ({ value }) => {
-                                if (!value) return undefined
-                                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-                                return !emailRegex.test(value)
-                                    ? 'Please enter a valid email address.'
-                                    : undefined
-                            },
+                            onChangeAsyncDebounceMs: 500,
+                            onChangeAsync: nextOfKinSchema.shape.email_address,
                         }}
                     >
                         {(field) => (
                             <div className="space-y-1.5">
-                                <Label>Email</Label>
+                                <Label htmlFor="email_address">
+                                    Email Address
+                                    <span className="text-red-500">*</span>
+                                </Label>
                                 <Input
+                                    id="email_address"
+                                    name={field.name}
                                     type="email"
-                                    placeholder="Email"
+                                    placeholder="email@example.com"
                                     value={field.state.value}
                                     onChange={(e) => field.handleChange(e.target.value)}
+                                    onBlur={field.handleBlur}
+                                    aria-invalid={field.state.meta.errors.length > 0}
+                                    aria-describedby={
+                                        field.state.meta.errors.length > 0
+                                            ? `${field.name}-error`
+                                            : undefined
+                                    }
                                 />
-                                {field.state.meta.errors.length > 0 && (
-                                    <p className="text-sm text-red-500">
+                                {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
+                                    <p id={`${field.name}-error`} className="text-sm text-red-500">
                                         {getErrorMessages(field.state.meta.errors).join(', ')}
                                     </p>
                                 )}
@@ -175,15 +259,30 @@ export function NextOfKinForm({
                         )}
                     </form.Field>
 
-                    {/* Submit */}
                     <div className="flex justify-end gap-2 pt-2">
-                        <Button variant="outline" type="button" onClick={onClose}>
+                        <Button
+                            variant="outline"
+                            type="button"
+                            onClick={onClose}
+                            disabled={form.state.isSubmitting}
+                        >
                             Cancel
                         </Button>
-                        <form.Subscribe selector={(s) => [s.canSubmit, s.isSubmitting]}>
+                        <form.Subscribe
+                            selector={(s) => [s.canSubmit, s.isSubmitting]}>
                             {([canSubmit, isSubmitting]) => (
-                                <Button type="submit" disabled={!canSubmit || isSubmitting}>
-                                    {isEdit ? 'Update' : 'Create'}
+                                <Button
+                                    type="submit"
+                                    disabled={!canSubmit}
+                                >
+                                    {isSubmitting ? (
+                                        <>
+                                            <span className="mr-2 animate-spin">⏳</span>
+                                            {isEdit ? 'Updating...' : 'Creating...'}
+                                        </>
+                                    ) : (
+                                        <>{isEdit ? 'Update' : 'Create'}</>
+                                    )}
                                 </Button>
                             )}
                         </form.Subscribe>
