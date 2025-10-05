@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { useRouter } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
-import { useForm } from '@tanstack/react-form'
+import { useForm, revalidateLogic } from '@tanstack/react-form'
 import { toast } from 'sonner'
 import { Eye, EyeOff } from 'lucide-react'
+import { Spinner } from "@/components/ui/spinner"
 
 import type { LoginData } from '@/core/validators/auth.schema'
 import { loginSchema } from '@/core/validators/auth.schema'
@@ -27,7 +28,7 @@ export function LoginPage() {
   const mutation = useMutation({
     mutationFn: loginAction,
     onSuccess: (res) => {
-      
+
       toast.success('Successful login', {
         description:
           res.message ||
@@ -63,6 +64,10 @@ export function LoginPage() {
     validators: {
       onSubmit: loginSchema,
     },
+    validationLogic: revalidateLogic({
+      mode: 'submit',
+      modeAfterSubmission: 'blur',
+    }),
     onSubmit: async ({ value }) => {
       await mutation.mutateAsync({ data: value })
     },
@@ -89,8 +94,8 @@ export function LoginPage() {
             }}
             className="space-y-6"
           >
-            {/* User type */}
-            <form.Field name="user_type">
+            <form.Field
+              name="user_type">
               {(field) => (
                 <div className="space-y-1.5">
                   <Label>Login as</Label>
@@ -119,31 +124,36 @@ export function LoginPage() {
               )}
             </form.Field>
 
-            {/* Email */}
             <form.Field
               name="email_address"
               validators={{
-                onChange: ({ value }) => {
-                  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-                  return !emailRegex.test(value)
-                    ? 'Please enter a valid email address.'
-                    : undefined
-                },
+                onChangeAsyncDebounceMs: 500,
+                onChangeAsync: loginSchema.shape.email_address,
               }}
             >
               {(field) => (
                 <div className="space-y-1.5">
-                  <Label>Email address</Label>
+                  <Label htmlFor="email_address">
+                    Email address
+                  </Label>
                   <Input
-                    id="email"
+                    id={field.name}
+                    name={field.name}
                     type="email"
                     placeholder="Enter email address"
                     value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
                     autoComplete="email"
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    onBlur={field.handleBlur}
+                    aria-invalid={field.state.meta.errors.length > 0}
+                    aria-describedby={
+                      field.state.meta.errors.length > 0
+                        ? `${field.name}-error`
+                        : undefined
+                    }
                   />
-                  {field.state.meta.errors.length > 0 && (
-                    <p className="text-red-500 text-sm">
+                  {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
+                    <p id={`${field.name}-error`} className="text-sm text-red-500">
                       {getErrorMessages(field.state.meta.errors).join(', ')}
                     </p>
                   )}
@@ -151,12 +161,11 @@ export function LoginPage() {
               )}
             </form.Field>
 
-            {/* Password */}
             <form.Field
               name="password"
               validators={{
-                onChange: ({ value }) =>
-                  value.trim() === '' ? 'Password is required' : undefined,
+                onChangeAsyncDebounceMs: 500,
+                onChangeAsync: loginSchema.shape.password,
               }}
             >
               {(field) => (
@@ -164,13 +173,21 @@ export function LoginPage() {
                   <Label>Password</Label>
                   <div className="relative flex items-center">
                     <Input
-                      id="password"
+                      id={field.name}
+                      name={field.name}
                       type={showPassword ? 'text' : 'password'}
                       placeholder="Enter password"
                       value={field.state.value}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      autoComplete="new-password"
+                      autoComplete="current-password"
                       className="pr-10"
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      onBlur={field.handleBlur}
+                      aria-invalid={field.state.meta.errors.length > 0}
+                      aria-describedby={
+                        field.state.meta.errors.length > 0
+                          ? `${field.name}-error`
+                          : undefined
+                      }
                     />
                     <button
                       type="button"
@@ -184,8 +201,8 @@ export function LoginPage() {
                       )}
                     </button>
                   </div>
-                  {field.state.meta.errors.length > 0 && (
-                    <p className="text-red-500 text-sm mt-1">
+                  {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
+                    <p id={`${field.name}-error`} className="text-sm text-red-500">
                       {getErrorMessages(field.state.meta.errors).join(', ')}
                     </p>
                   )}
@@ -193,15 +210,22 @@ export function LoginPage() {
               )}
             </form.Field>
 
-            {/* Submit button */}
             <form.Subscribe selector={(s) => [s.canSubmit]}>
               {([canSubmit]) => (
                 <Button
                   type="submit"
-                  className="w-full"
+                  className="w-full flex items-center justify-center gap-2"
                   disabled={!canSubmit || mutation.isPending}
                 >
-                  {mutation.isPending ? 'Signing in...' : 'Sign In'}
+                  {/* {mutation.isPending ? 'Signing in...' : 'Sign In'} */}
+                  {mutation.isPending ? (
+                    <>
+                      <Spinner className="h-4 w-4 animate-spin text-white" />
+                      <span>Signing in...</span>
+                    </>
+                  ) : (
+                    "Sign In"
+                  )}
                 </Button>
               )}
             </form.Subscribe>

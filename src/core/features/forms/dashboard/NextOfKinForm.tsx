@@ -1,5 +1,6 @@
 import { useForm, revalidateLogic } from '@tanstack/react-form'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Spinner } from "@/components/ui/spinner"
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
@@ -290,10 +291,11 @@ export function NextOfKinForm({
                                 <Button
                                     type="submit"
                                     disabled={!canSubmit}
+                                    className="w-full flex items-center justify-center gap-2"
                                 >
                                     {isSubmitting ? (
                                         <>
-                                            <span className="mr-2 animate-spin">⏳</span>
+                                            <Spinner className="h-4 w-4 animate-spin text-white" />
                                             {isEdit ? 'Updating...' : 'Creating...'}
                                         </>
                                     ) : (
