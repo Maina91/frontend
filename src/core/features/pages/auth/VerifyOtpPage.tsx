@@ -1,14 +1,20 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
-import { useForm } from '@tanstack/react-form'
-import { toast } from 'sonner'
+import { useForm, revalidateLogic } from '@tanstack/react-form'
 
-import { Input } from '@/components/ui/input'
+import { toast } from 'sonner'
+import { Spinner } from "@/components/ui/spinner"
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp"
 
 import { resendOtpAction, verifyOtpAction } from '@/core/actions/auth/otp'
 import {
@@ -16,6 +22,10 @@ import {
 } from '@/core/validators/otp.schema'
 import { env } from '@/env'
 
+
+function getErrorMessages(errors: Array<any>): Array<string> {
+  return errors.map((err) => (typeof err === 'string' ? err : err.message))
+}
 
 export function OtpPage() {
   const router = useRouter()
@@ -37,6 +47,10 @@ export function OtpPage() {
     validators: {
       onSubmit: otpSchema,
     },
+    validationLogic: revalidateLogic({
+      mode: 'submit',
+      modeAfterSubmission: 'blur',
+    }),
     onSubmit: async ({ value }) => {
       await verifyMutation.mutateAsync({ data: value })
     },
@@ -95,13 +109,13 @@ export function OtpPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <Card className="w-full max-w-md shadow-2xl rounded-2xl">
-        <CardHeader>
-          <CardTitle className="text-center text-xl font-bold">
+      <Card className="w-full max-w-md shadow-2xl rounded-2xl p-6">
+        <CardHeader className="space-y-2">
+          <CardTitle className="text-center text-xl font-bold tracking-tight">
             Enter OTP
           </CardTitle>
-          <p className="text-center text-muted-foreground text-sm mt-2">
-            We have sent a code to your email/phone. Please enter it below.
+          <p className="text-center text-muted-foreground text-sm">
+            We have sent a 6-digit code to your email/phone. Please enter it below.
           </p>
         </CardHeader>
 
@@ -114,50 +128,84 @@ export function OtpPage() {
             className="space-y-6"
           >
 
-            {/* OTP Input */}
             <form.Field
               name="otp"
               validators={{
-                onChange: ({ value }) =>
-                  !/^\d{6}$/.test(value)
-                    ? 'Enter a valid 6-digit OTP'
-                    : undefined,
+                onChangeAsyncDebounceMs: 800,
+                onChangeAsync: otpSchema.shape.otp,
               }}
             >
               {(field) => (
-                <div>
-                  <Label>OTP</Label>
-                  <Input
-                    id="otp"
-                    type="text"
-                    placeholder="Enter 6-digit code"
-                    value={field.state.value}
-                    onChange={(e) => field.handleChange(e.target.value)}
+                <div className="flex flex-col items-center space-y-4">
+                  <InputOTP
+                    id={field.name}
+                    name={field.name}
                     maxLength={6}
-                  />
-                  {field.state.meta.errors.length > 0 && (
-                    <p className="text-red-500 text-sm">
-                      {field.state.meta.errors.join(', ')}
+                    value={field.state.value}
+                    onChange={(val) => field.handleChange(val)}
+                    onBlur={field.handleBlur}
+                    aria-invalid={field.state.meta.errors.length > 0}
+                    aria-describedby={
+                      field.state.meta.errors.length > 0
+                        ? `${field.name}-error`
+                        : undefined
+                    }
+                    className="mx-auto"
+                  >
+                    <InputOTPGroup>
+                      <InputOTPSlot index={0} />
+                      <InputOTPSlot index={1} />
+                    </InputOTPGroup>
+                    <InputOTPSeparator />
+                    <InputOTPGroup>
+                      <InputOTPSlot index={2} />
+                      <InputOTPSlot index={3} />
+                    </InputOTPGroup>
+                    <InputOTPSeparator />
+                    <InputOTPGroup>
+                      <InputOTPSlot index={4} />
+                      <InputOTPSlot index={5} />
+                    </InputOTPGroup>
+                  </InputOTP>
+
+                  {!field.state.meta.errors.length && (
+                    <div className="text-center text-muted-foreground text-sm">
+                      Enter your one-time password
+                    </div>
+                  )}
+
+                  {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
+                    <p
+                      id={`${field.name}-error`}
+                      className="text-sm text-red-500 text-center"
+                      aria-live="polite"
+                    >
+                      {getErrorMessages(field.state.meta.errors)[0]}
                     </p>
                   )}
                 </div>
               )}
             </form.Field>
 
-            {/* Verify button */}
             <form.Subscribe selector={(s) => [s.canSubmit]}>
               {([canSubmit]) => (
                 <Button
                   type="submit"
-                  className="w-full"
+                  className="w-full flex items-center justify-center gap-2"
                   disabled={!canSubmit || verifyMutation.isPending}
                 >
-                  {verifyMutation.isPending ? 'Verifying...' : 'Verify OTP'}
+                  {verifyMutation.isPending ? (
+                    <>
+                      <Spinner className="h-4 w-4 animate-spin text-white" />
+                      <span>Verifying...</span>
+                    </>
+                  ) : (
+                    "Verify OTP"
+                  )}
                 </Button>
               )}
             </form.Subscribe>
 
-            {/* Divider */}
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <span className="w-full border-t border-border" />
@@ -169,7 +217,6 @@ export function OtpPage() {
               </div>
             </div>
 
-            {/* Resend OTP */}
             <div className="space-y-2 mt-4 text-center ">
               <RadioGroup
                 value={destination}
@@ -199,7 +246,6 @@ export function OtpPage() {
                     : 'Resend OTP'}
               </Button>
             </div>
-
           </form>
         </CardContent>
       </Card>

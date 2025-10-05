@@ -124,8 +124,12 @@ export function NextOfKinForm({
                                     }
                                 />
                                 {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
-                                    <p id={`${field.name}-error`} className="text-sm text-red-500">
-                                        {getErrorMessages(field.state.meta.errors).join(', ')}
+                                    <p
+                                        id={`${field.name}-error`}
+                                        className="text-sm text-red-500"
+                                        aria-live="polite"
+                                    >
+                                        {getErrorMessages(field.state.meta.errors)[0]}
                                     </p>
                                 )}
                             </div>
@@ -159,8 +163,12 @@ export function NextOfKinForm({
                                     }
                                 />
                                 {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
-                                    <p id={`${field.name}-error`} className="text-sm text-red-500">
-                                        {getErrorMessages(field.state.meta.errors).join(', ')}
+                                    <p
+                                        id={`${field.name}-error`}
+                                        className="text-sm text-red-500"
+                                        aria-live="polite"
+                                    >
+                                        {getErrorMessages(field.state.meta.errors)[0]}
                                     </p>
                                 )}
                             </div>
@@ -194,8 +202,12 @@ export function NextOfKinForm({
                                     }
                                 />
                                 {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
-                                    <p id={`${field.name}-error`} className="text-sm text-red-500">
-                                        {getErrorMessages(field.state.meta.errors).join(', ')}
+                                    <p
+                                        id={`${field.name}-error`}
+                                        className="text-sm text-red-500"
+                                        aria-live="polite"
+                                    >
+                                        {getErrorMessages(field.state.meta.errors)[0]}
                                     </p>
                                 )}
                             </div>
@@ -231,8 +243,12 @@ export function NextOfKinForm({
                                     }
                                 />
                                 {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
-                                    <p id={`${field.name}-error`} className="text-sm text-red-500">
-                                        {getErrorMessages(field.state.meta.errors).join(', ')}
+                                    <p
+                                        id={`${field.name}-error`}
+                                        className="text-sm text-red-500"
+                                        aria-live="polite"
+                                    >
+                                        {getErrorMessages(field.state.meta.errors)[0]}
                                     </p>
                                 )}
                             </div>
@@ -268,8 +284,12 @@ export function NextOfKinForm({
                                     }
                                 />
                                 {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
-                                    <p id={`${field.name}-error`} className="text-sm text-red-500">
-                                        {getErrorMessages(field.state.meta.errors).join(', ')}
+                                    <p
+                                        id={`${field.name}-error`}
+                                        className="text-sm text-red-500"
+                                        aria-live="polite"
+                                    >
+                                        {getErrorMessages(field.state.meta.errors)[0]}
                                     </p>
                                 )}
                             </div>

@@ -115,9 +115,13 @@ export function LoginPage() {
                       <Label htmlFor="agent">Agent</Label>
                     </div>
                   </RadioGroup>
-                  {field.state.meta.errors.length > 0 && (
-                    <p className="text-red-500 text-sm">
-                      {getErrorMessages(field.state.meta.errors).join(', ')}
+                  {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
+                    <p
+                      id={`${field.name}-error`}
+                      className="text-sm text-red-500"
+                      aria-live="polite"
+                    >
+                      {getErrorMessages(field.state.meta.errors)[0]}
                     </p>
                   )}
                 </div>
@@ -153,8 +157,12 @@ export function LoginPage() {
                     }
                   />
                   {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
-                    <p id={`${field.name}-error`} className="text-sm text-red-500">
-                      {getErrorMessages(field.state.meta.errors).join(', ')}
+                    <p
+                      id={`${field.name}-error`}
+                      className="text-sm text-red-500"
+                      aria-live="polite"
+                    >
+                      {getErrorMessages(field.state.meta.errors)[0]}
                     </p>
                   )}
                 </div>
@@ -202,8 +210,12 @@ export function LoginPage() {
                     </button>
                   </div>
                   {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
-                    <p id={`${field.name}-error`} className="text-sm text-red-500">
-                      {getErrorMessages(field.state.meta.errors).join(', ')}
+                    <p
+                      id={`${field.name}-error`}
+                      className="text-sm text-red-500"
+                      aria-live="polite"
+                    >
+                      {getErrorMessages(field.state.meta.errors)[0]}
                     </p>
                   )}
                 </div>
@@ -217,7 +229,6 @@ export function LoginPage() {
                   className="w-full flex items-center justify-center gap-2"
                   disabled={!canSubmit || mutation.isPending}
                 >
-                  {/* {mutation.isPending ? 'Signing in...' : 'Sign In'} */}
                   {mutation.isPending ? (
                     <>
                       <Spinner className="h-4 w-4 animate-spin text-white" />
