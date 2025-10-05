@@ -59,7 +59,7 @@ export function LoginPage() {
     defaultValues: {
       email_address: '',
       password: '',
-      user_type: 'customer' as 'customer' | 'agent',
+      user_type: 'CUSTOMER' as 'CUSTOMER' | 'AGENT',
     },
     validators: {
       onSubmit: loginSchema,
@@ -107,11 +107,11 @@ export function LoginPage() {
                     className="flex gap-4 mt-2"
                   >
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="customer" id="customer" />
+                      <RadioGroupItem value="CUSTOMER" id="customer" />
                       <Label htmlFor="customer">Customer</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="agent" id="agent" />
+                      <RadioGroupItem value="AGENT" id="agent" />
                       <Label htmlFor="agent">Agent</Label>
                     </div>
                   </RadioGroup>

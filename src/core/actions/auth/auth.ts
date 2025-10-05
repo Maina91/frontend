@@ -21,6 +21,7 @@ export const loginAction = createServerFn({ method: 'POST' })
         login_token: response.token,
         user: {
           email: data.email_address,
+          role: data.user_type
         },
       })
 

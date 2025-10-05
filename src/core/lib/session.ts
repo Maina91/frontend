@@ -1,10 +1,12 @@
 import { useSession } from '@tanstack/react-start/server'
 import { env } from '@/env'
+import type { UserType } from './constants'
+
 
 export type SessionUSer = {
     member_no?: string
     email?: string
-    role?: string
+    role: UserType
 }
 
 export type SessionData = {

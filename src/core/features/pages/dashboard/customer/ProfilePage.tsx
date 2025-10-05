@@ -6,7 +6,7 @@ import { useCustomerProfile } from '@/core/hooks/customer/use-profile'
 import { useBank } from '@/core/hooks/customer/use-bank'
 import { useKin, useCreateKin,useUpdateKin,useDeleteKin } from '@/core/hooks/customer/use-kin'
 import { useBeneficiary } from '@/core/hooks/customer/use-beneficiaries'
-import { NextOfKinForm } from '../../forms/dashboard/NextOfKinForm'
+import { NextOfKinForm } from '../../../forms/dashboard/NextOfKinForm'
 import { NextOfKin } from '@/core/types/kin'
 import type { NextOfKinData } from '@/core/validators/kin.schema'
 import {

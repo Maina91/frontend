@@ -1,18 +1,29 @@
 import { Link, useRouter, useRouterState } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
-import { Home, LineChart, User, LogOut } from 'lucide-react'
+import { LogOut } from 'lucide-react'
 import clsx from 'clsx'
 import { logoutAction } from '@/core/actions/auth/auth'
 import { toast } from 'sonner'
+import { navConfig } from './navConfig'
+
 
 interface SidebarProps {
     isOpen: boolean
     onToggle?: () => void
+    role: string
 }
 
-export const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
+export const Sidebar = ({ isOpen, onToggle, role }: SidebarProps) => {
     const router = useRouter()
     const routerState = useRouterState()
+
+    const normalizedRole = role?.toUpperCase() ?? ""
+    const navItems = [
+        ...navConfig.shared,
+        ...(normalizedRole.includes("CUSTOMER") ? navConfig.customer : []),
+        ...(normalizedRole.includes("AGENT") ? navConfig.agent : []),
+    ]
+    
 
     const logoutMutation = useMutation({
         mutationFn: async () => {
@@ -28,12 +39,6 @@ export const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
         },
     })
 
-    const navItems = [
-        { to: '/dashboard', label: 'Dashboard', icon: Home },
-        { to: '/dashboard/investments', label: 'Investments', icon: LineChart },
-        { to: '/dashboard/profile', label: 'Profile', icon: User },
-    ]
-
     const handleNavClick = () => {
         // Close sidebar on mobile after clicking menu
         if (onToggle && window.innerWidth < 768) onToggle()
@@ -41,7 +46,6 @@ export const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
 
     return (
         <>
-            {/* Sidebar */}
             <aside
                 className={clsx(
                     'fixed top-0 left-0 h-full w-64 bg-gray-900 text-white border-r border-gray-800 flex flex-col transition-transform duration-300 z-40',
@@ -55,7 +59,7 @@ export const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
 
                 <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
                     {navItems.map(({ to, label, icon: Icon }) => {
-                        const isActive = routerState.location.pathname === to
+                        const isActive = routerState.location.pathname.startsWith(to)
                         return (
                             <Link
                                 key={to}
@@ -87,7 +91,6 @@ export const Sidebar = ({ isOpen, onToggle }: SidebarProps) => {
                 </div>
             </aside>
 
-            {/* Mobile overlay */}
             {isOpen && onToggle && (
                 <div
                     onClick={onToggle}
