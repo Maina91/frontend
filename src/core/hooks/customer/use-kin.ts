@@ -9,7 +9,7 @@ import type {
     NextOfKinResponse,
 } from '@/core/types/kin'
 import { toast } from "sonner";
-import type { NextOfKinCreateData, NextOfKinUpdateData } from '@/core/validators/kin.schema'
+import type { NextOfKinData } from '@/core/validators/kin.schema'
 
 
 export const useKin = () => {
@@ -45,7 +45,7 @@ export const useKin = () => {
 export function useCreateKin() {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: (data: NextOfKinCreateData) => createNextOfKin({ data }),
+        mutationFn: (data: NextOfKinData) => createNextOfKin({ data }),
         onSuccess: () => {
             toast.success("Next of kin added successfully")
         },
@@ -62,7 +62,7 @@ export function useCreateKin() {
 export function useUpdateKin() {
     const queryClient = useQueryClient()
     return useMutation({
-        mutationFn: (data: NextOfKinUpdateData) => updateNextOfKin({ data }),
+        mutationFn: (data: NextOfKinData) => updateNextOfKin({ data }),
         onSuccess: () => {
             toast.success("Next of kin updated successfully")
         },
