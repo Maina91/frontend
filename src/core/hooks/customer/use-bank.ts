@@ -10,7 +10,6 @@ import type { BankCreateData, BankUpdateData } from '@/core/validators/bank.sche
 import { toast } from "sonner";
 
 
-
 export const useBank = () => {
     return useQuery <BankDetailsResponse, Error>({
         queryKey: ['customer', 'bankDetails'],

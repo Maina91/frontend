@@ -1,4 +1,3 @@
-// src/core/types/product.ts
 export interface Product {
     rate_date: string | null
     interest_rate: number | null

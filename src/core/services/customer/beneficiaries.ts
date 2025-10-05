@@ -1,5 +1,5 @@
 import { apiClient } from '@/core/lib/api.client'
-import { Beneficiary, BeneficiariesResponse } from '@/core/types/beneficiaries'
+import { BeneficiariesResponse } from '@/core/types/beneficiaries'
 
 
 export async function fetchBeneficiaryService(

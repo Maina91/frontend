@@ -17,7 +17,7 @@ export const clientProfileAction = createServerFn({ method: 'GET' })
             if (member_no){
                 await session.update({
                     user: {
-                        ...session.data.user,
+                        ...session.data.user!,
                         member_no,
                     },   
                 })

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { clientProfileAction } from '@/core/actions/customer/profile'
-import type { CustomerProfile } from '@/core/services/customer/profile'
+import type { CustomerProfile } from '@/core/types/customer-profile'
 
 export const useCustomerProfile = () => {
     return useQuery<CustomerProfile, Error>({
