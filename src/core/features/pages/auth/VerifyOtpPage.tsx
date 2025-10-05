@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useRouter } from '@tanstack/react-router'
+import { useRouter, useRouteContext } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
 import { useForm, revalidateLogic } from '@tanstack/react-form'
 
@@ -21,6 +21,8 @@ import {
   otpSchema
 } from '@/core/validators/otp.schema'
 import { env } from '@/env'
+import { logoutAction } from '@/core/actions/auth/auth'
+
 
 
 function getErrorMessages(errors: Array<any>): Array<string> {
@@ -29,6 +31,17 @@ function getErrorMessages(errors: Array<any>): Array<string> {
 
 export function OtpPage() {
   const router = useRouter()
+
+  // check for user /agent
+  const { session } = useRouteContext({ from: '/_auth/verify-otp' })
+  const role = session.user?.role as "CUSTOMER" | "AGENT" 
+
+  // logout if no role is available
+      if (!role) {
+          return logoutAction()
+      }
+
+
   const [destination, setDestination] = useState<'EMAIL' | 'MOBILE'>('EMAIL')
   const [resendCooldown, setResendCooldown] = useState(0)
   const [resendCount, setResendCount] = useState(0)
@@ -66,7 +79,11 @@ export function OtpPage() {
         description: res.message || 'You are now logged in.',
       })
 
-      router.navigate({ to: '/dashboard' })
+      if (role === 'CUSTOMER') {
+        router.navigate({ to: '/dashboard/customer' })
+      } else if (role === 'AGENT') {
+        router.navigate({ to: '/dashboard/agent' })
+      }
     },
     onError: (err: any) => {
       toast.error('OTP Verification Failed', {

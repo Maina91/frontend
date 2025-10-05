@@ -7,9 +7,17 @@ export const Route = createFileRoute('/_auth/verify-otp')({
   beforeLoad: async ({ location }) => {
     const session = await getSession()
 
-    if (session.is_authed && session.auth_token) {
+    if (session.is_authed && session.auth_token && session.user?.role) {
+      const role = session.user.role
+      const redirectTo =
+      role === 'CUSTOMER'
+        ? '/dashboard/customer'
+        : role === 'AGENT'
+          ? '/dashboard/agent'
+          : '/login'
+
       throw redirect({
-        to: '/dashboard',
+        to: redirectTo,
         search: { redirect: location.href },
       })
     }
@@ -21,6 +29,7 @@ export const Route = createFileRoute('/_auth/verify-otp')({
         search: { redirect: location.href },
       })
     }
+    return { session }
   },
   component: OtpPage,
 })
