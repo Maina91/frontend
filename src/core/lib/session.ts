@@ -3,17 +3,17 @@ import { env } from '@/env'
 import type { UserType } from './constants'
 
 
-export type SessionUSer = {
+export type SessionUser = {
     member_no?: string
-    email?: string
+    email: string
     role: UserType
 }
 
 export type SessionData = {
-    is_authed?: boolean
-    login_token?: string
-    auth_token?: string
-    user?: SessionUSer
+    is_authed: boolean
+    login_token: string |null
+    auth_token: string | null
+    user: SessionUser | null
 }
 
 export const useAppSession = () =>

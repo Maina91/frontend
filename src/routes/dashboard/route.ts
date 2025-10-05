@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { DashboardLayout } from '@/core/features/pages/dashboard/DashboardLayout'
-import { getSession } from '@/core/actions/auth/get_session'
+import { getSession, clearSession } from '@/core/actions/auth/session'
 
 
 export const Route = createFileRoute('/dashboard')({
@@ -8,6 +8,8 @@ export const Route = createFileRoute('/dashboard')({
     const session = await getSession()
 
     if (!session.is_authed || !session.auth_token || !session.user?.role) {
+      await clearSession()
+
       throw redirect({
         to: '/login',
         search: { redirect: location.href },
