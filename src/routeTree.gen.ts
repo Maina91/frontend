@@ -15,6 +15,8 @@ import { Route as OnboardingRegisterRouteImport } from './routes/_onboarding/reg
 import { Route as OnboardingForgotPasswordRouteImport } from './routes/_onboarding/forgot-password'
 import { Route as AuthVerifyOtpRouteImport } from './routes/_auth/verify-otp'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
+import { Route as DashboardCustomerRouteRouteImport } from './routes/dashboard/customer/route'
+import { Route as DashboardAgentRouteRouteImport } from './routes/dashboard/agent/route'
 import { Route as DashboardCustomerIndexRouteImport } from './routes/dashboard/customer/index'
 import { Route as DashboardAgentIndexRouteImport } from './routes/dashboard/agent/index'
 import { Route as DashboardCustomerProfileRouteImport } from './routes/dashboard/customer/profile'
@@ -51,31 +53,43 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardCustomerIndexRoute = DashboardCustomerIndexRouteImport.update({
-  id: '/customer/',
-  path: '/customer/',
+const DashboardCustomerRouteRoute = DashboardCustomerRouteRouteImport.update({
+  id: '/customer',
+  path: '/customer',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
-const DashboardAgentIndexRoute = DashboardAgentIndexRouteImport.update({
-  id: '/agent/',
-  path: '/agent/',
+const DashboardAgentRouteRoute = DashboardAgentRouteRouteImport.update({
+  id: '/agent',
+  path: '/agent',
   getParentRoute: () => DashboardRouteRoute,
+} as any)
+const DashboardCustomerIndexRoute = DashboardCustomerIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardCustomerRouteRoute,
+} as any)
+const DashboardAgentIndexRoute = DashboardAgentIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardAgentRouteRoute,
 } as any)
 const DashboardCustomerProfileRoute =
   DashboardCustomerProfileRouteImport.update({
-    id: '/customer/profile',
-    path: '/customer/profile',
-    getParentRoute: () => DashboardRouteRoute,
+    id: '/profile',
+    path: '/profile',
+    getParentRoute: () => DashboardCustomerRouteRoute,
   } as any)
 const DashboardCustomerInvestmentsRoute =
   DashboardCustomerInvestmentsRouteImport.update({
-    id: '/customer/investments',
-    path: '/customer/investments',
-    getParentRoute: () => DashboardRouteRoute,
+    id: '/investments',
+    path: '/investments',
+    getParentRoute: () => DashboardCustomerRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/dashboard/agent': typeof DashboardAgentRouteRouteWithChildren
+  '/dashboard/customer': typeof DashboardCustomerRouteRouteWithChildren
   '/login': typeof AuthLoginRoute
   '/verify-otp': typeof AuthVerifyOtpRoute
   '/forgot-password': typeof OnboardingForgotPasswordRoute
@@ -83,8 +97,8 @@ export interface FileRoutesByFullPath {
   '/': typeof PublicIndexRoute
   '/dashboard/customer/investments': typeof DashboardCustomerInvestmentsRoute
   '/dashboard/customer/profile': typeof DashboardCustomerProfileRoute
-  '/dashboard/agent': typeof DashboardAgentIndexRoute
-  '/dashboard/customer': typeof DashboardCustomerIndexRoute
+  '/dashboard/agent/': typeof DashboardAgentIndexRoute
+  '/dashboard/customer/': typeof DashboardCustomerIndexRoute
 }
 export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRouteRouteWithChildren
@@ -101,6 +115,8 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/dashboard/agent': typeof DashboardAgentRouteRouteWithChildren
+  '/dashboard/customer': typeof DashboardCustomerRouteRouteWithChildren
   '/_auth/login': typeof AuthLoginRoute
   '/_auth/verify-otp': typeof AuthVerifyOtpRoute
   '/_onboarding/forgot-password': typeof OnboardingForgotPasswordRoute
@@ -115,6 +131,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/dashboard'
+    | '/dashboard/agent'
+    | '/dashboard/customer'
     | '/login'
     | '/verify-otp'
     | '/forgot-password'
@@ -122,8 +140,8 @@ export interface FileRouteTypes {
     | '/'
     | '/dashboard/customer/investments'
     | '/dashboard/customer/profile'
-    | '/dashboard/agent'
-    | '/dashboard/customer'
+    | '/dashboard/agent/'
+    | '/dashboard/customer/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/dashboard'
@@ -139,6 +157,8 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/dashboard'
+    | '/dashboard/agent'
+    | '/dashboard/customer'
     | '/_auth/login'
     | '/_auth/verify-otp'
     | '/_onboarding/forgot-password'
@@ -203,49 +223,88 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard/customer/': {
-      id: '/dashboard/customer/'
+    '/dashboard/customer': {
+      id: '/dashboard/customer'
       path: '/customer'
       fullPath: '/dashboard/customer'
-      preLoaderRoute: typeof DashboardCustomerIndexRouteImport
+      preLoaderRoute: typeof DashboardCustomerRouteRouteImport
       parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/agent': {
+      id: '/dashboard/agent'
+      path: '/agent'
+      fullPath: '/dashboard/agent'
+      preLoaderRoute: typeof DashboardAgentRouteRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/customer/': {
+      id: '/dashboard/customer/'
+      path: '/'
+      fullPath: '/dashboard/customer/'
+      preLoaderRoute: typeof DashboardCustomerIndexRouteImport
+      parentRoute: typeof DashboardCustomerRouteRoute
     }
     '/dashboard/agent/': {
       id: '/dashboard/agent/'
-      path: '/agent'
-      fullPath: '/dashboard/agent'
+      path: '/'
+      fullPath: '/dashboard/agent/'
       preLoaderRoute: typeof DashboardAgentIndexRouteImport
-      parentRoute: typeof DashboardRouteRoute
+      parentRoute: typeof DashboardAgentRouteRoute
     }
     '/dashboard/customer/profile': {
       id: '/dashboard/customer/profile'
-      path: '/customer/profile'
+      path: '/profile'
       fullPath: '/dashboard/customer/profile'
       preLoaderRoute: typeof DashboardCustomerProfileRouteImport
-      parentRoute: typeof DashboardRouteRoute
+      parentRoute: typeof DashboardCustomerRouteRoute
     }
     '/dashboard/customer/investments': {
       id: '/dashboard/customer/investments'
-      path: '/customer/investments'
+      path: '/investments'
       fullPath: '/dashboard/customer/investments'
       preLoaderRoute: typeof DashboardCustomerInvestmentsRouteImport
-      parentRoute: typeof DashboardRouteRoute
+      parentRoute: typeof DashboardCustomerRouteRoute
     }
   }
 }
 
-interface DashboardRouteRouteChildren {
+interface DashboardAgentRouteRouteChildren {
+  DashboardAgentIndexRoute: typeof DashboardAgentIndexRoute
+}
+
+const DashboardAgentRouteRouteChildren: DashboardAgentRouteRouteChildren = {
+  DashboardAgentIndexRoute: DashboardAgentIndexRoute,
+}
+
+const DashboardAgentRouteRouteWithChildren =
+  DashboardAgentRouteRoute._addFileChildren(DashboardAgentRouteRouteChildren)
+
+interface DashboardCustomerRouteRouteChildren {
   DashboardCustomerInvestmentsRoute: typeof DashboardCustomerInvestmentsRoute
   DashboardCustomerProfileRoute: typeof DashboardCustomerProfileRoute
-  DashboardAgentIndexRoute: typeof DashboardAgentIndexRoute
   DashboardCustomerIndexRoute: typeof DashboardCustomerIndexRoute
 }
 
+const DashboardCustomerRouteRouteChildren: DashboardCustomerRouteRouteChildren =
+  {
+    DashboardCustomerInvestmentsRoute: DashboardCustomerInvestmentsRoute,
+    DashboardCustomerProfileRoute: DashboardCustomerProfileRoute,
+    DashboardCustomerIndexRoute: DashboardCustomerIndexRoute,
+  }
+
+const DashboardCustomerRouteRouteWithChildren =
+  DashboardCustomerRouteRoute._addFileChildren(
+    DashboardCustomerRouteRouteChildren,
+  )
+
+interface DashboardRouteRouteChildren {
+  DashboardAgentRouteRoute: typeof DashboardAgentRouteRouteWithChildren
+  DashboardCustomerRouteRoute: typeof DashboardCustomerRouteRouteWithChildren
+}
+
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
-  DashboardCustomerInvestmentsRoute: DashboardCustomerInvestmentsRoute,
-  DashboardCustomerProfileRoute: DashboardCustomerProfileRoute,
-  DashboardAgentIndexRoute: DashboardAgentIndexRoute,
-  DashboardCustomerIndexRoute: DashboardCustomerIndexRoute,
+  DashboardAgentRouteRoute: DashboardAgentRouteRouteWithChildren,
+  DashboardCustomerRouteRoute: DashboardCustomerRouteRouteWithChildren,
 }
 
 const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(

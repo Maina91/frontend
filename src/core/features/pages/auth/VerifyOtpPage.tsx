@@ -21,7 +21,7 @@ import {
   otpSchema
 } from '@/core/validators/otp.schema'
 import { env } from '@/env'
-import { logoutAction } from '@/core/actions/auth/auth'
+import { clearSession } from '@/core/actions/auth/session'
 
 
 
@@ -38,7 +38,7 @@ export function OtpPage() {
 
   // logout if no role is available
       if (!role) {
-          return logoutAction()
+        return clearSession()
       }
 
 

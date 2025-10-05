@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Outlet, useRouteContext } from '@tanstack/react-router'
 import { Sidebar } from './Sidebar'
 import { Topbar } from './header'
-import { logoutAction } from '@/core/actions/auth/auth'
+import { clearSession } from '@/core/actions/auth/session'
 
 
 
@@ -15,7 +15,7 @@ export const DashboardLayout = () => {
 
     // logout if no role is available
     if (!role) {
-        return logoutAction()
+        return clearSession()
     }
 
     return (
