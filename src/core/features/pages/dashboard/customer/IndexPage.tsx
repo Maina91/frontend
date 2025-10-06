@@ -1,23 +1,24 @@
-// src/core/features/pages/dashboard/DashboardIndexPage.tsx
+import { useState } from 'react'
+
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Wallet, ArrowLeftRight, ArrowDown, ArrowUp } from "lucide-react"
+
 import { useProducts } from "@/core/hooks/customer/use-products"
+import { useTransactions } from '@/core/hooks/customer/use-transactions'
+
+import { TransactionsTable } from '@/core/features/tables/TransactionsTable'
 
 
-
-const mockTransactions = [
-  { date: "2025-09-15", type: "Top-up", amount: 2000 },
-  { date: "2025-09-12", type: "Interest", amount: 180 },
-  { date: "2025-09-10", type: "Withdraw", amount: -1000 },
-]
 
 export function IndexPage() {
+  const [selectedAccount, setSelectedAccount] = useState<string>("")
+
   const { data: productsData, isLoading: productsLoading, error: productsError } = useProducts()
+  const { data: transactions, isLoading: transactionsLoading, error: transactionsError } = useTransactions(selectedAccount)
 
-
-  console.log('ProductsData', productsData)  
-
+  console.log('Products', productsData)
+  console.log('Transactions', transactions) 
 
 
   return (
@@ -60,31 +61,46 @@ export function IndexPage() {
         </Card>
       </section>
 
-      {/* 🧾 Recent Activities */}
-      <section>
-        <h2 className="text-xl font-semibold mb-3">Recent Transactions</h2>
-        <Card>
-          <CardContent className="divide-y">
-            {mockTransactions.map((tx, i) => (
-              <div key={i} className="flex justify-between py-2">
-                <span className="text-sm">{tx.date}</span>
-                <span className="text-sm">{tx.type}</span>
-                <span
-                  className={`text-sm font-semibold ${tx.amount > 0 ? "text-green-600" : "text-red-600"
-                    }`}
-                >
-                  {tx.amount > 0 ? `+KES ${tx.amount}` : `-KES ${Math.abs(tx.amount)}`}
-                </span>
+      <section className="bg-white shadow rounded-md p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-lg font-semibold">Recent Transactions</h2>
+        </div>
+
+        <div className="mb-3">
+          <select
+            className="border rounded px-3 py-2 text-sm"
+            onChange={(e) => setSelectedAccount(e.target.value)}
+          >
+            <option value="">Select Account</option>
+            <option value="00040-000414-0002-0">00040-000414-0002-0</option>
+            <option value="00040-1-000414-0001-2">00040-1-000414-0001-2</option>
+            <option value="00040-1-000414-0002">00040-1-000414-0002</option>
+            <option value="00040-001-000414-0001-1">00040-001-000414-0001-1</option>
+          </select>
+        </div>
+
+            {transactionsLoading && <p className="text-sm text-gray-500">Loading...</p>}
+            {transactionsError && (
+              <p className="text-sm text-red-500">{transactionsError.message}</p>
+            )}
+
+            {transactions && transactions.transactions.length === 0 && (
+              <p className="text-sm text-gray-500">No transactions found.</p>
+            )}
+
+            {transactions && transactions.transactions.length > 0 && (
+              <TransactionsTable data={transactions.transactions} />
+            )}
+
+            {transactions && transactions.transactions.length > 5 && (
+              <div className="text-right pt-2">
+                <Button variant="link" size="sm">
+                  View All
+                </Button>
               </div>
-            ))}
-            <div className="text-right pt-2">
-              <Button variant="link" size="sm">View All</Button>
-            </div>
-          </CardContent>
-        </Card>
+            )}
       </section>
 
-      {/* 📦 Products */}
       <section>
         <h2 className="text-xl font-semibold mb-3">Our Products</h2>
 
