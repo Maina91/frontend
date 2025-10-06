@@ -9,16 +9,27 @@ import { useTransactions } from '@/core/hooks/customer/use-transactions'
 
 import { TransactionsTable } from '@/core/features/tables/TransactionsTable'
 
+const INITIAL_COUNT = 5
+const PAGE_SIZE = 5
 
 
 export function IndexPage() {
   const [selectedAccount, setSelectedAccount] = useState<string>("")
+  const [visibleCount, setVisibleCount] = useState<number>(INITIAL_COUNT)
 
   const { data: productsData, isLoading: productsLoading, error: productsError } = useProducts()
   const { data: transactions, isLoading: transactionsLoading, error: transactionsError } = useTransactions(selectedAccount)
 
+  const handleShowMore = () => setVisibleCount((prev) => prev + PAGE_SIZE)
+  const handleShowLess = () => setVisibleCount(INITIAL_COUNT)
+
+  const transactionList = transactions?.transactions ?? []
+  const totalTransactions = transactionList.length
+  const hasMore = visibleCount < totalTransactions
+  const hasLess = visibleCount > INITIAL_COUNT
+
   console.log('Products', productsData)
-  console.log('Transactions', transactions) 
+  console.log('Transactions', transactions)
 
 
   return (
@@ -39,7 +50,7 @@ export function IndexPage() {
           <Button className="flex flex-col h-20 justify-center" variant="outline">
             <Wallet className="h-5 w-5 mb-1" /> Switch Fund
           </Button>
-                 </div>
+        </div>
       </section>
 
       {/* 📊 My Investment */}
@@ -69,7 +80,11 @@ export function IndexPage() {
         <div className="mb-3">
           <select
             className="border rounded px-3 py-2 text-sm"
-            onChange={(e) => setSelectedAccount(e.target.value)}
+            value={selectedAccount}
+            onChange={(e) => {
+              setSelectedAccount(e.target.value)
+              setVisibleCount(INITIAL_COUNT) // reset when switching accounts
+            }}
           >
             <option value="">Select Account</option>
             <option value="00040-000414-0002-0">00040-000414-0002-0</option>
@@ -79,26 +94,42 @@ export function IndexPage() {
           </select>
         </div>
 
-            {transactionsLoading && <p className="text-sm text-gray-500">Loading...</p>}
-            {transactionsError && (
-              <p className="text-sm text-red-500">{transactionsError.message}</p>
-            )}
+        {!selectedAccount && (
+          <p className="text-sm text-gray-500 italic">
+            Please select an account to view transactions.
+          </p>
+        )}
 
-            {transactions && transactions.transactions.length === 0 && (
-              <p className="text-sm text-gray-500">No transactions found.</p>
-            )}
+        {selectedAccount && (
+          <>
+        {transactionsLoading && <p className="text-sm text-gray-500">Loading...</p>}
+        {transactionsError && (
+          <p className="text-sm text-red-500">{transactionsError.message}</p>
+        )}
+        {!transactionsLoading && totalTransactions === 0 && (
+          <p className="text-sm text-gray-500">No transactions found.</p>
+        )}
 
-            {transactions && transactions.transactions.length > 0 && (
-              <TransactionsTable data={transactions.transactions} />
-            )}
+        {totalTransactions > 0 && (
+          <>
+            <TransactionsTable data={transactionList.slice(0, visibleCount)} />
 
-            {transactions && transactions.transactions.length > 5 && (
-              <div className="text-right pt-2">
-                <Button variant="link" size="sm">
-                  View All
+            <div className="flex justify-end space-x-2 pt-2">
+              {hasMore && (
+                <Button variant="link" size="sm" onClick={handleShowMore}>
+                  Show More
                 </Button>
-              </div>
-            )}
+              )}
+              {hasLess && (
+                <Button variant="link" size="sm" onClick={handleShowLess}>
+                  Show Less
+                </Button>
+              )}
+            </div>
+          </>
+        )}
+          </>
+        )}
       </section>
 
       <section>
