@@ -8,6 +8,8 @@ import { useMutation } from '@tanstack/react-query'
 import { logoutAction } from '@/core/actions/auth/auth'
 import { toast } from 'sonner'
 import clsx from 'clsx'
+import { clearSession } from '@/core/actions/auth/session'
+
 
 interface TopbarProps {
     onSidebarToggle?: () => void
@@ -25,10 +27,12 @@ export const Topbar = ({ onSidebarToggle }: TopbarProps) => {
         },
         onSuccess: (res) => {
             toast.success(res.message || 'Logged out successfully')
+            clearSession()
             router.navigate({ to: '/login' })
         },
         onError: () => {
             toast.success('Logged out successfully')
+            clearSession()
             router.navigate({ to: '/login' })
         },
     })

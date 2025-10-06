@@ -5,6 +5,8 @@ import clsx from 'clsx'
 import { logoutAction } from '@/core/actions/auth/auth'
 import { toast } from 'sonner'
 import { navConfig } from './navConfig'
+import { clearSession } from '@/core/actions/auth/session'
+
 
 
 interface SidebarProps {
@@ -31,10 +33,12 @@ export const Sidebar = ({ isOpen, onToggle, role }: SidebarProps) => {
         },
         onSuccess: (res) => {
             toast.success(res.message || 'Logged out successfully')
+            clearSession()
             router.navigate({ to: '/login' })
         },
         onError: () => {
             toast.success('Logged out successfully')
+            clearSession()
             router.navigate({ to: '/login' })
         },
     })
