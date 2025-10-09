@@ -54,10 +54,6 @@ export const resendOtpAction = createServerFn({ method: 'POST' })
         throw new Error('OTP session expired or invalid')
       }
 
-      if (!login_token) {
-        throw new Error('OTP session expired or invalid')
-      }
-
       const res = await resendOtpService(login_token, data)
 
       return {
