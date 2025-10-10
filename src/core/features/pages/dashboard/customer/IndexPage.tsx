@@ -96,7 +96,7 @@ export function IndexPage() {
 
         {!selectedAccount && (
           <p className="text-sm text-gray-500 italic">
-            Please select an account to view transactions.
+            Please select an account to view your transactions.
           </p>
         )}
 
