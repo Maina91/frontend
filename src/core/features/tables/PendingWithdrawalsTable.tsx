@@ -8,6 +8,7 @@ import {
     DialogFooter,
 } from "@/components/ui/dialog"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Spinner } from "@/components/ui/spinner"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import type { PendingWithdrawalTransaction } from '@/core/types/transaction'
@@ -34,7 +35,7 @@ export const PendingWithdrawalsTable: FC<Props> = ({ data }) => {
         },
         validators: {
             onChange: ({ value }) => {
-                const result = cancelPendingWithdrawalSchema.safeParse(value)
+                const result = cancelPendingWithdrawalSchema.shape.reason.safeParse(value.reason)
                 if (!result.success) {
                     return result.error.format()._errors.join(', ') || 'Validation failed'
                 }
@@ -47,13 +48,20 @@ export const PendingWithdrawalsTable: FC<Props> = ({ data }) => {
         }),
         onSubmit: async ({ value }) => {
             if (!selectedTx) return
-            await cancelMutation.mutateAsync({
+
+            const result = cancelPendingWithdrawalSchema.safeParse({
                 account_no: selectedTx.account_no,
                 transaction_id: selectedTx.trans_id,
                 reason: value.reason,
             })
-            setSelectedTx(null)
+
+            if (!result.success) {
+                return result.error.format()._errors.join(', ') || 'Validation failed'
+            }
+
+            await cancelMutation.mutateAsync(result.data)
             form.reset()
+            setSelectedTx(null)
         },
     })
 
@@ -94,16 +102,21 @@ export const PendingWithdrawalsTable: FC<Props> = ({ data }) => {
             </Table>
 
             {/* Cancel Confirmation Dialog */}
-            <Dialog open={!!selectedTx} onOpenChange={() => setSelectedTx(null)}>
+            <Dialog
+                open={!!selectedTx}
+                onOpenChange={(open) => {
+                    if (!open && !cancelMutation.isPending) setSelectedTx(null)
+                }}
+            >
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>Cancel Pending Withdrawal</DialogTitle>
                     </DialogHeader>
 
                     <form
-                        onSubmit={(e) => {
+                        onSubmit={async (e) => {
                             e.preventDefault()
-                            form.handleSubmit()
+                            await form.handleSubmit()
                         }}
                         className="space-y-4"
                     >
@@ -116,34 +129,34 @@ export const PendingWithdrawalsTable: FC<Props> = ({ data }) => {
                         >
                             {(field) => (
                                 <div className="space-y-1.5">
-                            <Label htmlFor={field.name}>
-                                Reason for Cancellation
-                            </Label>
-                            <Input
-                                id={field.name}
-                                name={field.name}
-                                placeholder="Enter reason"
-                                value={form.state.values.reason}
-                                onChange={(e) => field.handleChange(e.target.value)}
-                                onBlur={field.handleBlur}
-                                aria-invalid={field.state.meta.errors.length > 0}
-                                aria-describedby={
-                                    field.state.meta.errors.length > 0
-                                        ? `${field.name}-error`
-                                        : undefined
-                                }
-                            />
-                            {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
-                                <p
-                                    id={`${field.name}-error`}
-                                    className="text-sm text-red-500"
-                                    aria-live="polite"
-                                >
-                                    {getErrorMessages(field.state.meta.errors)[0]}
-                                </p>
+                                    <Label htmlFor={field.name}>
+                                        Reason for Cancellation
+                                    </Label>
+                                    <Input
+                                        id={field.name}
+                                        name={field.name}
+                                        placeholder="Enter reason"
+                                        value={field.state.value}
+                                        onChange={(e) => field.handleChange(e.target.value)}
+                                        onBlur={field.handleBlur}
+                                        aria-invalid={field.state.meta.errors.length > 0}
+                                        aria-describedby={
+                                            field.state.meta.errors.length > 0
+                                                ? `${field.name}-error`
+                                                : undefined
+                                        }
+                                    />
+                                    {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
+                                        <p
+                                            id={`${field.name}-error`}
+                                            className="text-sm text-red-500"
+                                            aria-live="polite"
+                                        >
+                                            {getErrorMessages(field.state.meta.errors)[0]}
+                                        </p>
+                                    )}
+                                </div>
                             )}
-                        </div>
-                        )}
                         </form.Field>
 
                         <DialogFooter className="pt-3">
@@ -151,15 +164,28 @@ export const PendingWithdrawalsTable: FC<Props> = ({ data }) => {
                                 type="button"
                                 variant="outline"
                                 onClick={() => setSelectedTx(null)}
-                            >
-                                Close
-                            </Button>
-                            <Button
-                                type="submit"
                                 disabled={cancelMutation.isPending}
                             >
-                                {cancelMutation.isPending ? "Cancelling..." : "Confirm Cancel"}
+                                Cancel
                             </Button>
+                            <form.Subscribe selector={(s) => [s.canSubmit, s.isSubmitting]}>
+                                {([canSubmit, isSubmitting]) => (
+                                    <Button
+                                        type="submit"
+                                        disabled={!canSubmit || isSubmitting || cancelMutation.isPending}
+                                        className="flex items-center justify-center gap-2"
+                                    >
+                                        {isSubmitting || cancelMutation.isPending ? (
+                                            <>
+                                                <Spinner className="h-4 w-4 animate-spin text-white" />
+                                                Cancelling...
+                                            </>
+                                        ) : (
+                                            "Confirm Cancel"
+                                        )}
+                                    </Button>
+                                )}
+                            </form.Subscribe>
                         </DialogFooter>
                     </form>
                 </DialogContent>

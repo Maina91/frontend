@@ -10,6 +10,7 @@ export const cancelPendingWithdrawalSchema = z.object({
     account_no: z
         .string(),
     transaction_id: z
+        .coerce
         .string(),
     reason: z
         .string()
