@@ -14,7 +14,7 @@ export type TransactionsResponse = {
 export interface PendingWithdrawalTransaction {
     trans_type: string
     trans_date: string 
-    trans_id: string | number
+    trans_id: string 
     account_no: string
     amount: number
     mop: string | null
@@ -30,4 +30,10 @@ export type PendingWithdrawalsResponse = {
     totals: number| null
     count_pending_transactions: number
     count_monthly_transactions: number
+}
+
+export interface CancelPendingWithdrawalResponse {
+    status: number;
+    status_code: number;
+    message: string;
 }
