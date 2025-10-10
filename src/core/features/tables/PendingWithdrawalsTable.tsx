@@ -5,6 +5,7 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
+    DialogDescription,
     DialogFooter,
 } from "@/components/ui/dialog"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
@@ -110,7 +111,12 @@ export const PendingWithdrawalsTable: FC<Props> = ({ data }) => {
             >
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Cancel Pending Withdrawal</DialogTitle>
+                        <DialogTitle>
+                            Cancel Pending Withdrawal
+                        </DialogTitle>
+                        <DialogDescription>
+                            Please provide a reason for cancelling this withdrawal. This action cannot be undone.
+                        </DialogDescription>
                     </DialogHeader>
 
                     <form
