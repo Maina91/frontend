@@ -5,9 +5,14 @@ import { Button } from "@/components/ui/button"
 import { Wallet, ArrowLeftRight, ArrowDown, ArrowUp } from "lucide-react"
 
 import { useProducts } from "@/core/hooks/customer/use-products"
-import { useTransactions } from '@/core/hooks/customer/use-transactions'
+import {
+  useTransactions,
+  usePendingWithdrawals
+} from '@/core/hooks/customer/use-transactions'
 
 import { TransactionsTable } from '@/core/features/tables/TransactionsTable'
+import { PendingWithdrawalsTable } from "@/core/features/tables/PendingWithdrawalsTable"
+
 
 const INITIAL_COUNT = 5
 const PAGE_SIZE = 5
@@ -15,21 +20,45 @@ const PAGE_SIZE = 5
 
 export function IndexPage() {
   const [selectedAccount, setSelectedAccount] = useState<string>("")
-  const [visibleCount, setVisibleCount] = useState<number>(INITIAL_COUNT)
+  const [transactionsCount, setTransactionsCount] = useState<number>(INITIAL_COUNT)
+  const [withdrawalCount, setWithdrawalCount] = useState<number>(INITIAL_COUNT)
 
   const { data: productsData, isLoading: productsLoading, error: productsError } = useProducts()
   const { data: transactions, isLoading: transactionsLoading, error: transactionsError } = useTransactions(selectedAccount)
+  const { data: pendingWithdrawals, isLoading: pendingWithdrawalsLoading, error: pendingWithdrawalsError } =
+    usePendingWithdrawals(selectedAccount)
 
-  const handleShowMore = () => setVisibleCount((prev) => prev + PAGE_SIZE)
-  const handleShowLess = () => setVisibleCount(INITIAL_COUNT)
+  const handleAccountChange = (account: string) => {
+    setSelectedAccount(account)
+    setTransactionsCount(INITIAL_COUNT)
+    setWithdrawalCount(INITIAL_COUNT)
+  }
+
+  const handleShowMoreTransactions = () =>
+    setTransactionsCount((prev) => prev + PAGE_SIZE)
+
+  const handleShowLessTransactions = () =>
+    setTransactionsCount(INITIAL_COUNT)
+
+  const handleShowMoreWithdrawals = () =>
+    setWithdrawalCount((prev) => prev + PAGE_SIZE)
+
+  const handleShowLessWithdrawals = () =>
+    setWithdrawalCount(INITIAL_COUNT)
 
   const transactionList = transactions?.transactions ?? []
   const totalTransactions = transactionList.length
-  const hasMore = visibleCount < totalTransactions
-  const hasLess = visibleCount > INITIAL_COUNT
+  const hasMoreTransactions = transactionsCount < totalTransactions
+  const hasLessTransactions = transactionsCount > INITIAL_COUNT
+
+  const pendingList = pendingWithdrawals?.transactions ?? []
+  const totalPending = pendingList.length
+  const hasMorePending = withdrawalCount < totalPending
+  const hasLessPending = withdrawalCount > INITIAL_COUNT
 
   console.log('Products', productsData)
   console.log('Transactions', transactions)
+  console.log('Pending Withdrawals', pendingWithdrawals)
 
 
   return (
@@ -81,10 +110,7 @@ export function IndexPage() {
           <select
             className="border rounded px-3 py-2 text-sm"
             value={selectedAccount}
-            onChange={(e) => {
-              setSelectedAccount(e.target.value)
-              setVisibleCount(INITIAL_COUNT) // reset when switching accounts
-            }}
+            onChange={(e) => handleAccountChange(e.target.value)}
           >
             <option value="">Select Account</option>
             <option value="00040-000414-0002-0">00040-000414-0002-0</option>
@@ -102,32 +128,89 @@ export function IndexPage() {
 
         {selectedAccount && (
           <>
-        {transactionsLoading && <p className="text-sm text-gray-500">Loading...</p>}
-        {transactionsError && (
-          <p className="text-sm text-red-500">{transactionsError.message}</p>
-        )}
-        {!transactionsLoading && totalTransactions === 0 && (
-          <p className="text-sm text-gray-500">No transactions found.</p>
-        )}
+            {transactionsLoading && <p className="text-sm text-gray-500">Loading...</p>}
+            {transactionsError && (
+              <p className="text-sm text-red-500">{transactionsError.message}</p>
+            )}
+            {!transactionsLoading && totalTransactions === 0 && (
+              <p className="text-sm text-gray-500">No transactions found.</p>
+            )}
 
-        {totalTransactions > 0 && (
-          <>
-            <TransactionsTable data={transactionList.slice(0, visibleCount)} />
+            {totalTransactions > 0 && (
+              <>
+                <TransactionsTable data={transactionList.slice(0, transactionsCount)} />
 
-            <div className="flex justify-end space-x-2 pt-2">
-              {hasMore && (
-                <Button variant="link" size="sm" onClick={handleShowMore}>
-                  Show More
-                </Button>
-              )}
-              {hasLess && (
-                <Button variant="link" size="sm" onClick={handleShowLess}>
-                  Show Less
-                </Button>
-              )}
-            </div>
+                <div className="flex justify-end space-x-2 pt-2">
+                  {hasMoreTransactions && (
+                    <Button variant="link" size="sm" onClick={handleShowMoreTransactions}>
+                      Show More
+                    </Button>
+                  )}
+                  {hasLessTransactions && (
+                    <Button variant="link" size="sm" onClick={handleShowLessTransactions  }>
+                      Show Less
+                    </Button>
+                  )}
+                </div>
+              </>
+            )}
           </>
         )}
+      </section>
+
+      <section className="bg-white shadow rounded-md p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-lg font-semibold">Pending Withdrawals</h2>
+        </div>
+
+        <div className="mb-3">
+          <select
+            className="border rounded px-3 py-2 text-sm"
+            value={selectedAccount}
+            onChange={(e) => handleAccountChange(e.target.value)}
+          >
+            <option value="">Select Account</option>
+            <option value="00040-000414-0002-0">00040-000414-0002-0</option>
+            <option value="00040-1-000414-0001-2">00040-1-000414-0001-2</option>
+            <option value="00040-1-000414-0002">00040-1-000414-0002</option>
+            <option value="00040-001-000414-0001-1">00040-001-000414-0001-1</option>
+          </select>
+        </div>
+
+        {!selectedAccount && (
+          <p className="text-sm text-gray-500 italic">
+            Please select an account to view pending withdrawals.
+          </p>
+        )}
+
+        {selectedAccount && (
+          <>
+            {pendingWithdrawalsLoading && <p className="text-sm text-gray-500">Loading...</p>}
+            {pendingWithdrawalsError && (
+              <p className="text-sm text-red-500">{pendingWithdrawalsError.message}</p>
+            )}
+            {!pendingWithdrawalsLoading && totalPending === 0 && (
+              <p className="text-sm text-gray-500">No pending withdrawals found.</p>
+            )}
+
+            {totalPending > 0 && (
+              <>
+                <PendingWithdrawalsTable data={pendingList.slice(0, withdrawalCount)} />
+
+                <div className="flex justify-end space-x-2 pt-2">
+                  {hasMorePending && (
+                    <Button variant="link" size="sm" onClick={handleShowMoreWithdrawals}>
+                      Show More
+                    </Button>
+                  )}
+                  {hasLessPending && (
+                    <Button variant="link" size="sm" onClick={handleShowLessWithdrawals}>
+                      Show Less
+                    </Button>
+                  )}
+                </div>
+              </>
+            )}
           </>
         )}
       </section>
