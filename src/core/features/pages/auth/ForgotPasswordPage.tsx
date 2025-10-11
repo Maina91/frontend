@@ -21,8 +21,13 @@ export function ForgotPasswordPage() {
   const mutation = useMutation({
     mutationFn: resetPassword,
     onSuccess: (res) => {
-      toast.success('Email Sent', {
-        description: res.message,
+      toast.success('Success', {
+        description: res.message ||
+          'Proceed to verify the code sent to your email / mobile no',
+      })
+      router.navigate({
+        to: '/verify-otp',
+        search: { context: 'reset' },
       })
     },
     onError: (err: any) => {

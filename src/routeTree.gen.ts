@@ -12,9 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as PublicIndexRouteImport } from './routes/_public/index'
 import { Route as OnboardingRegisterRouteImport } from './routes/_onboarding/register'
-import { Route as OnboardingForgotPasswordRouteImport } from './routes/_onboarding/forgot-password'
 import { Route as AuthVerifyOtpRouteImport } from './routes/_auth/verify-otp'
+import { Route as AuthResetPasswordRouteImport } from './routes/_auth/reset-password'
 import { Route as AuthLoginRouteImport } from './routes/_auth/login'
+import { Route as AuthForgotPasswordRouteImport } from './routes/_auth/forgot-password'
 import { Route as DashboardCustomerRouteRouteImport } from './routes/dashboard/customer/route'
 import { Route as DashboardAgentRouteRouteImport } from './routes/dashboard/agent/route'
 import { Route as DashboardCustomerIndexRouteImport } from './routes/dashboard/customer/index'
@@ -37,20 +38,24 @@ const OnboardingRegisterRoute = OnboardingRegisterRouteImport.update({
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
-const OnboardingForgotPasswordRoute =
-  OnboardingForgotPasswordRouteImport.update({
-    id: '/_onboarding/forgot-password',
-    path: '/forgot-password',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const AuthVerifyOtpRoute = AuthVerifyOtpRouteImport.update({
   id: '/_auth/verify-otp',
   path: '/verify-otp',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
+  id: '/_auth/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthLoginRoute = AuthLoginRouteImport.update({
   id: '/_auth/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
+  id: '/_auth/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardCustomerRouteRoute = DashboardCustomerRouteRouteImport.update({
@@ -90,9 +95,10 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/dashboard/agent': typeof DashboardAgentRouteRouteWithChildren
   '/dashboard/customer': typeof DashboardCustomerRouteRouteWithChildren
+  '/forgot-password': typeof AuthForgotPasswordRoute
   '/login': typeof AuthLoginRoute
+  '/reset-password': typeof AuthResetPasswordRoute
   '/verify-otp': typeof AuthVerifyOtpRoute
-  '/forgot-password': typeof OnboardingForgotPasswordRoute
   '/register': typeof OnboardingRegisterRoute
   '/': typeof PublicIndexRoute
   '/dashboard/customer/investments': typeof DashboardCustomerInvestmentsRoute
@@ -102,9 +108,10 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/forgot-password': typeof AuthForgotPasswordRoute
   '/login': typeof AuthLoginRoute
+  '/reset-password': typeof AuthResetPasswordRoute
   '/verify-otp': typeof AuthVerifyOtpRoute
-  '/forgot-password': typeof OnboardingForgotPasswordRoute
   '/register': typeof OnboardingRegisterRoute
   '/': typeof PublicIndexRoute
   '/dashboard/customer/investments': typeof DashboardCustomerInvestmentsRoute
@@ -117,9 +124,10 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRouteRouteWithChildren
   '/dashboard/agent': typeof DashboardAgentRouteRouteWithChildren
   '/dashboard/customer': typeof DashboardCustomerRouteRouteWithChildren
+  '/_auth/forgot-password': typeof AuthForgotPasswordRoute
   '/_auth/login': typeof AuthLoginRoute
+  '/_auth/reset-password': typeof AuthResetPasswordRoute
   '/_auth/verify-otp': typeof AuthVerifyOtpRoute
-  '/_onboarding/forgot-password': typeof OnboardingForgotPasswordRoute
   '/_onboarding/register': typeof OnboardingRegisterRoute
   '/_public/': typeof PublicIndexRoute
   '/dashboard/customer/investments': typeof DashboardCustomerInvestmentsRoute
@@ -133,9 +141,10 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/dashboard/agent'
     | '/dashboard/customer'
-    | '/login'
-    | '/verify-otp'
     | '/forgot-password'
+    | '/login'
+    | '/reset-password'
+    | '/verify-otp'
     | '/register'
     | '/'
     | '/dashboard/customer/investments'
@@ -145,9 +154,10 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/dashboard'
-    | '/login'
-    | '/verify-otp'
     | '/forgot-password'
+    | '/login'
+    | '/reset-password'
+    | '/verify-otp'
     | '/register'
     | '/'
     | '/dashboard/customer/investments'
@@ -159,9 +169,10 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/dashboard/agent'
     | '/dashboard/customer'
+    | '/_auth/forgot-password'
     | '/_auth/login'
+    | '/_auth/reset-password'
     | '/_auth/verify-otp'
-    | '/_onboarding/forgot-password'
     | '/_onboarding/register'
     | '/_public/'
     | '/dashboard/customer/investments'
@@ -172,9 +183,10 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
+  AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
   AuthLoginRoute: typeof AuthLoginRoute
+  AuthResetPasswordRoute: typeof AuthResetPasswordRoute
   AuthVerifyOtpRoute: typeof AuthVerifyOtpRoute
-  OnboardingForgotPasswordRoute: typeof OnboardingForgotPasswordRoute
   OnboardingRegisterRoute: typeof OnboardingRegisterRoute
   PublicIndexRoute: typeof PublicIndexRoute
 }
@@ -202,13 +214,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OnboardingRegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_onboarding/forgot-password': {
-      id: '/_onboarding/forgot-password'
-      path: '/forgot-password'
-      fullPath: '/forgot-password'
-      preLoaderRoute: typeof OnboardingForgotPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_auth/verify-otp': {
       id: '/_auth/verify-otp'
       path: '/verify-otp'
@@ -216,11 +221,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthVerifyOtpRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_auth/reset-password': {
+      id: '/_auth/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof AuthResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_auth/login': {
       id: '/_auth/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth/forgot-password': {
+      id: '/_auth/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/customer': {
@@ -313,9 +332,10 @@ const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
 
 const rootRouteChildren: RootRouteChildren = {
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
+  AuthForgotPasswordRoute: AuthForgotPasswordRoute,
   AuthLoginRoute: AuthLoginRoute,
+  AuthResetPasswordRoute: AuthResetPasswordRoute,
   AuthVerifyOtpRoute: AuthVerifyOtpRoute,
-  OnboardingForgotPasswordRoute: OnboardingForgotPasswordRoute,
   OnboardingRegisterRoute: OnboardingRegisterRoute,
   PublicIndexRoute: PublicIndexRoute,
 }
