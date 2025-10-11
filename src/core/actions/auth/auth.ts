@@ -1,7 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
-import { loginUserService } from '@/core/services/auth/auth.service'
-import { loginSchema } from '@/core/validators/auth.schema'
-import { logoutUserService } from '@/core/services/auth/auth.service'
+import { loginUserService, logoutUserService, resetPasswordService } from '@/core/services/auth/auth.service'
+import { loginSchema, resetPasswordSchema  } from '@/core/validators/auth.schema'
 import { useAppSession } from '@/core/lib/session'
 
 
@@ -63,6 +62,41 @@ export const logoutAction = createServerFn({ method: 'POST' })
 
       throw {
         message: err?.message ?? 'Logged out successfully',
+      }
+    }
+  })
+
+
+export const resetPassword = createServerFn({ method: 'POST' })
+  .inputValidator(resetPasswordSchema)
+  .handler(async ({ data }) => {
+    try {
+      const response = await resetPasswordService(data)
+
+      if (response.status_code !== 200) {
+        throw new Error(response.message || 'Unable to reset password')
+      }
+
+      const session = await useAppSession()
+      await session.update({
+        is_authed: false,
+        login_token: response.token,
+        user: {
+          email: data.email,
+          role: "CUSTOMER",
+        },
+      })
+
+      return {
+        success: true,
+        message: response.message,
+        member_status: response.member_status,
+      }
+
+    } catch (err: any) {
+      throw {
+        message: err?.message ?? 'Reset password failed',
+        fieldErrors: err?.fieldErrors ?? null,
       }
     }
   })

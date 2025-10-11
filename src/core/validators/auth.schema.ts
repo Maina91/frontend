@@ -12,7 +12,11 @@ export const loginSchema = z.object({
 export type LoginData = z.infer<typeof loginSchema>
 
 
-export const authTokenSchema = z.object({
-  token: z.string().min(1, 'Login token is required'),
+export const resetPasswordSchema = z.object({
+  email : z
+    .string()
+    .min(1, 'Email or username is required')
+    .email('Invalid email address'),
 })
-export type AuthTokenData = z.infer<typeof authTokenSchema>
+export type ResetPasswordData = z.infer<typeof resetPasswordSchema>
+
