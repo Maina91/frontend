@@ -36,6 +36,7 @@ export function LoginPage() {
       })
       router.navigate({
         to: '/verify-otp',
+        search: { context: 'login' },
       })
     },
     onError: (err: any) => {

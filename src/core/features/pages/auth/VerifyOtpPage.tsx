@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useRouter, useRouteContext } from '@tanstack/react-router'
+import { useRouter, useRouteContext, useSearch } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
 import { useForm, revalidateLogic } from '@tanstack/react-form'
 
@@ -31,16 +31,17 @@ function getErrorMessages(errors: Array<any>): Array<string> {
 
 export function OtpPage() {
   const router = useRouter()
+  const { context } = useSearch({ from: '/_auth/verify-otp' }) as { context?: 'login' | 'reset' }
+
 
   // check for user /agent
   const { session } = useRouteContext({ from: '/_auth/verify-otp' })
-  const role = session.user?.role as "CUSTOMER" | "AGENT" 
+  const role = session.user?.role as "CUSTOMER" | "AGENT"
 
   // logout if no role is available
-      if (!role) {
-        return clearSession()
-      }
-
+  if (!role) {
+    return clearSession()
+  }
 
   const [destination, setDestination] = useState<'EMAIL' | 'MOBILE'>('EMAIL')
   const [resendCooldown, setResendCooldown] = useState(0)
@@ -73,16 +74,17 @@ export function OtpPage() {
   const verifyMutation = useMutation({
     mutationFn: verifyOtpAction,
     onSuccess: (res) => {
-      console.log("otp res", res)
-
       toast.success('OTP Verified Successfully', {
-        description: res.message || 'You are now logged in.',
+        description: res.message || 'Verification successful',
+        richColors: true,
       })
 
-      if (role === 'CUSTOMER') {
-        router.navigate({ to: '/dashboard/customer' })
-      } else if (role === 'AGENT') {
-        router.navigate({ to: '/dashboard/agent' })
+      if (context === 'reset') {
+        router.navigate({ to: '/reset-password' })
+      } else {
+        router.navigate({
+          to: role === 'AGENT' ? '/dashboard/agent' : '/dashboard/customer',
+        })
       }
     },
     onError: (err: any) => {

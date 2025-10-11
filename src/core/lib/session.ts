@@ -12,6 +12,7 @@ export type SessionUser = {
 export type SessionData = {
     is_authed: boolean
     login_token: string |null
+    reset_token: Record<string, any> | null
     auth_token: string | null
     user: SessionUser | null
 }

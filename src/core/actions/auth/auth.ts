@@ -71,16 +71,17 @@ export const resetPassword = createServerFn({ method: 'POST' })
   .inputValidator(resetPasswordSchema)
   .handler(async ({ data }) => {
     try {
-      const response = await resetPasswordService(data)
+      const res = await resetPasswordService(data)
 
-      if (response.status_code !== 200) {
-        throw new Error(response.message || 'Unable to reset password')
+      if (res.status_code !== 200) {
+        throw new Error(res.message || 'Unable to reset password')
       }
 
       const session = await useAppSession()
       await session.update({
         is_authed: false,
-        login_token: response.token,
+        reset_token: res,
+        login_token: res.member_token,
         user: {
           email: data.email,
           role: "CUSTOMER",
@@ -89,8 +90,8 @@ export const resetPassword = createServerFn({ method: 'POST' })
 
       return {
         success: true,
-        message: response.message,
-        member_status: response.member_status,
+        message: res.message,
+        member_status: res.member_status,
       }
 
     } catch (err: any) {
