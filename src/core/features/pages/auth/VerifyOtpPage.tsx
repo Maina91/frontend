@@ -20,8 +20,7 @@ function getErrorMessages(errors: Array<any>): Array<string> {
 
 export function OtpPage() {
   const router = useRouter()
-  const { context } = useSearch({ from: '/_auth/verify-otp' }) as { context?: 'login' | 'reset' }
-
+  const { context } = useSearch({ from: '/_auth/verify-otp' })
 
   // check for user /agent
   const { session } = useRouteContext({ from: '/_auth/verify-otp' })
