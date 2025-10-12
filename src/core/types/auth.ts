@@ -21,3 +21,11 @@ export interface ResetPasswordResponse {
   member_token?: string
   member_no?: string
 }
+
+export interface UpdatePasswordResponse {
+  status_code: number
+  message?: string
+}
+
+
+

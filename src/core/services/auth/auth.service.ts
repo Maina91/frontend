@@ -1,4 +1,4 @@
-import type { LoginData, ResetPasswordData} from '@/core/validators/auth.schema'
+import type { LoginData, ResetPasswordData, updatePasswordData } from '@/core/validators/auth.schema'
 import type { LoginResponse, LogoutResponse, ResetPasswordResponse } from '@/core/types/auth'
 import { apiClient } from '@/core/lib/api.client'
 
@@ -34,7 +34,7 @@ export async function logoutUserService(
     console.log('logout res', res)
 
     return res
-  } catch (err: any) {    
+  } catch (err: any) {
     if (err.response?.data?.message) {
       throw new Error(err.response.data.message)
     }
@@ -50,6 +50,29 @@ export async function resetPasswordService(
 
     const res = await apiClient.post<ResetPasswordResponse>(endpoint, data)
     console.log('reset pass res', res)
+
+    return res
+  } catch (err: any) {
+    if (err.response?.data?.message) {
+      throw new Error(err.response.data.message)
+    }
+    throw new Error('Unable reset password. Please try again later.')
+  }
+}
+
+export async function updatePasswordService(
+  token: string,
+  data: updatePasswordData,
+): Promise<ResetPasswordResponse> {
+  try {
+    const endpoint = '/lofty/reset_email'
+
+    const res = await apiClient.post<ResetPasswordResponse>(endpoint, data, {
+      headers: {
+        'auth-token': token,
+      },
+    })
+    console.log('update pass res', res)
 
     return res
   } catch (err: any) {

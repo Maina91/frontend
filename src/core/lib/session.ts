@@ -1,18 +1,18 @@
 import { useSession } from '@tanstack/react-start/server'
-import { env } from '@/env'
 import type { UserType } from './constants'
+import { env } from '@/env'
 
 
 export type SessionUser = {
     member_no?: string
     email: string
     role: UserType
+    custom_ref?: string
 }
 
 export type SessionData = {
     is_authed: boolean
-    login_token: string |null
-    reset_token: Record<string, any> | null
+    login_token: string | null
     auth_token: string | null
     user: SessionUser | null
 }
@@ -20,7 +20,7 @@ export type SessionData = {
 export const useAppSession = () =>
     useSession<SessionData>({
         name: 'app-session',
-        password: env.SESSION_SECRET!,
+        password: env.SESSION_SECRET,
         cookie: {
             secure: env.NODE_ENV === 'production',
             sameSite: 'lax',

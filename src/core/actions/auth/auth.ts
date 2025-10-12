@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
-import { loginUserService, logoutUserService, resetPasswordService } from '@/core/services/auth/auth.service'
-import { loginSchema, resetPasswordSchema  } from '@/core/validators/auth.schema'
+import { loginUserService, logoutUserService, resetPasswordService, updatePasswordService } from '@/core/services/auth/auth.service'
+import { loginSchema, resetPasswordSchema, updatePasswordSchema  } from '@/core/validators/auth.schema'
 import { useAppSession } from '@/core/lib/session'
 
 
@@ -38,7 +38,6 @@ export const loginAction = createServerFn({ method: 'POST' })
     }
   })
 
-
 export const logoutAction = createServerFn({ method: 'POST' })
   .handler(async () => {
     try {
@@ -54,7 +53,7 @@ export const logoutAction = createServerFn({ method: 'POST' })
 
       return {
         success: true,
-        message: res.message ?? 'Logged out successfully'
+        message: res.message
       }
     } catch (err: any) {
       const session = await useAppSession()
@@ -65,7 +64,6 @@ export const logoutAction = createServerFn({ method: 'POST' })
       }
     }
   })
-
 
 export const resetPassword = createServerFn({ method: 'POST' })
   .inputValidator(resetPasswordSchema)
@@ -80,11 +78,11 @@ export const resetPassword = createServerFn({ method: 'POST' })
       const session = await useAppSession()
       await session.update({
         is_authed: false,
-        reset_token: res,
         login_token: res.member_token,
         user: {
           email: data.email,
           role: "CUSTOMER",
+          custom_ref: res.customer_ref,
         },
       })
 
@@ -94,6 +92,37 @@ export const resetPassword = createServerFn({ method: 'POST' })
         member_status: res.member_status,
       }
 
+    } catch (err: any) {
+      throw {
+        message: err?.message ?? 'Reset password failed',
+        fieldErrors: err?.fieldErrors ?? null,
+      }
+    }
+  })
+
+export const updatePassword = createServerFn({ method: 'POST' })
+  .inputValidator(updatePasswordSchema)
+  .handler(async ({ data }) => {
+    try {
+      const session = await useAppSession()
+      const login_token = session.data.login_token
+
+      if (!login_token) {
+        throw new Error('OTP session expired or invalid')
+      }
+
+      const res = await updatePasswordService(login_token, data)
+
+      if (res.status_code !== 200) {
+        throw new Error(res.message || 'Unable to reset password')
+      }
+
+      await session.clear()
+
+      return {
+        success: true,
+        message: res.message,
+      }
     } catch (err: any) {
       throw {
         message: err?.message ?? 'Reset password failed',
