@@ -1,10 +1,8 @@
 import { createServerFn } from '@tanstack/react-start'
 import { otpSchema, resendOtpSchema } from '@/core/validators/otp.schema'
-import {
-  resendOtpService,
-  verifyOtpService,
-} from '@/core/services/auth/otp.service'
+import { resendOtpService, verifyOtpService, } from '@/core/services/auth/otp.service'
 import { useAppSession } from '@/core/lib/session'
+
 
 export const verifyOtpAction = createServerFn({ method: 'POST' })
   .inputValidator(otpSchema)

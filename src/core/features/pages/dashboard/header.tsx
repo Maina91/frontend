@@ -1,14 +1,14 @@
-import { useCustomerProfile } from '@/core/hooks/customer/use-profile'
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef, useState,  } from 'react'
 import { Bell, ChevronDown, Menu } from 'lucide-react'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
 import { useRouter } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
-import { logoutAction } from '@/core/actions/auth/auth'
-import { toast } from 'sonner'
 import clsx from 'clsx'
+import { toast } from 'sonner'
 import { clearSession } from '@/core/actions/auth/session'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import { useCustomerProfile } from '@/core/hooks/customer/use-profile'
+import { logoutAction } from '@/core/actions/auth/auth'
 
 
 interface TopbarProps {

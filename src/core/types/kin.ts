@@ -12,6 +12,6 @@ export interface NextOfKinResponse {
     status: number
     status_code: number
     message: string
-    next_of_kin: NextOfKin[]
+    next_of_kin: Array<NextOfKin>
     success?: boolean
 }

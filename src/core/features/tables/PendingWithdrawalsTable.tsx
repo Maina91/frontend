@@ -1,20 +1,20 @@
 import { FC, useState } from "react"
+import { revalidateLogic, useForm } from '@tanstack/react-form'
+import type { PendingWithdrawalTransaction } from '@/core/types/transaction'
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
     DialogContent,
-    DialogHeader,
-    DialogTitle,
     DialogDescription,
     DialogFooter,
+    DialogHeader,
+    DialogTitle,
 } from "@/components/ui/dialog"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Spinner } from "@/components/ui/spinner"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import type { PendingWithdrawalTransaction } from '@/core/types/transaction'
 import { useCancelPendingWithdrawal } from "@/core/hooks/customer/use-transactions"
-import { useForm, revalidateLogic } from '@tanstack/react-form'
 import { cancelPendingWithdrawalSchema } from "@/core/validators/transaction.schema"
 
 interface Props {

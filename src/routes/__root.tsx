@@ -4,12 +4,9 @@ import {
   createRootRouteWithContext,
 } from '@tanstack/react-router'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-
-import appCss from '@/styles.css?url'
-
 import type { QueryClient } from '@tanstack/react-query'
-
 import { Toaster } from '@/components/ui/sonner'
+import appCss from '@/styles.css?url'
 
 
 interface MyRouterContext {

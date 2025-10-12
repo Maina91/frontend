@@ -1,6 +1,7 @@
-import { apiClient } from '@/core/lib/api.client'
 import type { NextOfKinResponse} from '@/core/types/kin'
 import type { NextOfKinData } from '@/core/validators/kin.schema'
+import { apiClient } from '@/core/lib/api.client'
+
 
 
 export async function fetchNextOfKinService(
@@ -15,7 +16,7 @@ export async function fetchNextOfKinService(
             },
         })
 
-        if (res.status_code !== 200 || !res.next_of_kin) {
+        if (res.status_code !== 200) {
             throw new Error(res.message || 'Unable to fetch next of kin')
         }
 

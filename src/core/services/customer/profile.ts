@@ -1,10 +1,10 @@
+import type { CustomerProfileResponse } from '@/core/types/customer-profile'
 import { apiClient } from '@/core/lib/api.client'
-import { CustomerProfile, CustomerProfileResponse } from '@/core/types/customer-profile'
 
 
 export async function customerProfileService(
     token: string,
-): Promise<CustomerProfile> {
+): Promise<CustomerProfileResponse> {
     try {
         if (!token) throw new Error('Unauthorized')
 
@@ -16,11 +16,11 @@ export async function customerProfileService(
             },
         })
 
-        if (!res.success || !res.profile) {
+        if (res.status_code !== 200) {
             throw new Error('Unable to fetch client profile')
         }
 
-        return res.profile
+        return res
         
     } catch (error: any) {
         if (error.response?.data?.message) {

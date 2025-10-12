@@ -22,10 +22,8 @@ import {
 
 
 export const ProfilePage = () => {
-  // profile
   const { data: profileDetails, isLoading: profileLoading, error: profileError } = useCustomerProfile()
 
-  // next of kin
   const { data: kinDetails, isLoading: kinLoading, error: kinError } = useKin()
   const createKin = useCreateKin()
   const updateKin = useUpdateKin()
@@ -34,7 +32,6 @@ export const ProfilePage = () => {
   const [kinFormOpen, setKinFormOpen] = useState(false)
   const [editingKin, setEditingKin] = useState<NextOfKin | null>(null)
   const [deleteKinId, setDeleteKinId] = useState<number | null>(null)
-
 
 
   const handleCreateOrUpdateKin = async (values: NextOfKinData ) => {
@@ -54,10 +51,7 @@ export const ProfilePage = () => {
   }
 
 
-  //beneficiaries
   const { data: beneficiaryDetails, isLoading: beneficiaryLoading, error: beneficiaryError } = useBeneficiary()
-
-  //banks
   const { data: bankDetails, isLoading: bankLoading, error: bankError } = useBank()
 
 

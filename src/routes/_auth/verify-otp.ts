@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { OtpPage } from '@/core/features/pages/auth/VerifyOtpPage'
-import { getSession, clearSession } from '@/core/actions/auth/session'
+import { clearSession, getSession } from '@/core/actions/auth/session'
 
 
 export const Route = createFileRoute('/_auth/verify-otp')({
@@ -12,9 +12,7 @@ export const Route = createFileRoute('/_auth/verify-otp')({
       const redirectTo =
       role === 'CUSTOMER'
         ? '/dashboard/customer'
-        : role === 'AGENT'
-          ? '/dashboard/agent'
-          : '/login'
+        : '/dashboard/agent'
 
       throw redirect({
         to: redirectTo,

@@ -5,7 +5,7 @@ export interface Transaction {
 }
 
 export type TransactionsResponse = {
-    transactions: Transaction[]
+    transactions: Array<Transaction>
     status: number
     status_code: number
     message: string
@@ -26,7 +26,7 @@ export type PendingWithdrawalsResponse = {
     status: number
     status_code: number
     message: string
-    transactions: PendingWithdrawalTransaction[]
+    transactions: Array<PendingWithdrawalTransaction>
     totals: number| null
     count_pending_transactions: number
     count_monthly_transactions: number

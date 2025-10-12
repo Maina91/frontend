@@ -1,10 +1,11 @@
-import { useForm, revalidateLogic } from '@tanstack/react-form'
+import { revalidateLogic, useForm } from '@tanstack/react-form'
+import type { NextOfKinData } from '@/core/validators/kin.schema'
+import { nextOfKinSchema } from '@/core/validators/kin.schema'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Spinner } from "@/components/ui/spinner"
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { nextOfKinSchema, type NextOfKinData } from '@/core/validators/kin.schema'
 
 
 function getErrorMessages(errors: Array<any>): Array<string> {

@@ -13,7 +13,7 @@ export const clientProfileAction = createServerFn({ method: 'GET' })
             const profile = await customerProfileService(auth_token)
 
             // user session data to be updated later
-            const member_no = profile.member_no
+            const member_no = profile.profile.member_no
             if (member_no){
                 await session.update({
                     user: {
@@ -25,7 +25,7 @@ export const clientProfileAction = createServerFn({ method: 'GET' })
 
             return {
                 success: true,
-                profile
+                profile: profile.profile
             }
 
         } catch (err: any) {

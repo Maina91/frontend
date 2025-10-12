@@ -13,6 +13,8 @@ export const otpSchema = z.object({
 export type OtpData = z.infer<typeof otpSchema>
 
 export const resendOtpSchema = z.object({
-  description: z.string().optional(),
+  description: z
+    .string()
+    .optional(),
 })
 export type ResendOtpData = z.infer<typeof resendOtpSchema>

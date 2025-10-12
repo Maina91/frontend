@@ -1,5 +1,5 @@
+import type { BeneficiariesResponse } from '@/core/types/beneficiaries'
 import { apiClient } from '@/core/lib/api.client'
-import { BeneficiariesResponse } from '@/core/types/beneficiaries'
 
 
 export async function fetchBeneficiaryService(
@@ -16,7 +16,7 @@ export async function fetchBeneficiaryService(
             },
         })
 
-        if (res.status_code !== 200 || !res.beneficiaries) {
+        if (res.status_code !== 200) {
             throw new Error(res.message || 'Unable to fetch beneficiaries')
         }
 

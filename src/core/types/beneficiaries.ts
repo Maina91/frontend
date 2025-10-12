@@ -13,6 +13,6 @@ export interface BeneficiariesResponse {
     status: number
     status_code: number
     message: string
-    beneficiaries: Beneficiary[]
+    beneficiaries: Array<Beneficiary>
     success?: boolean
 }

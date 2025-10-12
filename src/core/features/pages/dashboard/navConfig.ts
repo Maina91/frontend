@@ -1,4 +1,4 @@
-import { Home, LineChart, User, BarChart2, Ticket } from 'lucide-react'
+import { BarChart2, Home, LineChart, Ticket, User } from 'lucide-react'
 
 
 export const navConfig = {

@@ -2,11 +2,10 @@ import { Link, useRouter, useRouterState } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
 import { LogOut } from 'lucide-react'
 import clsx from 'clsx'
-import { logoutAction } from '@/core/actions/auth/auth'
 import { toast } from 'sonner'
 import { navConfig } from './navConfig'
 import { clearSession } from '@/core/actions/auth/session'
-
+import { logoutAction } from '@/core/actions/auth/auth'
 
 
 interface SidebarProps {
@@ -19,7 +18,7 @@ export const Sidebar = ({ isOpen, onToggle, role }: SidebarProps) => {
     const router = useRouter()
     const routerState = useRouterState()
 
-    const normalizedRole = role?.toUpperCase() ?? ""
+    const normalizedRole = role.toUpperCase()
     const navItems = [
         ...navConfig.shared,
         ...(normalizedRole.includes("CUSTOMER") ? navConfig.customer : []),

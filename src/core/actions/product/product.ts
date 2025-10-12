@@ -1,7 +1,8 @@
 import { createServerFn } from '@tanstack/react-start'
-import { fetchProductsService } from '@/core/services/product/product'
 import type { ProductResponse } from '@/core/types/product'
+import { fetchProductsService } from '@/core/services/product/product'
 import { useAppSession } from '@/core/lib/session'
+
 
 export const fetchProducts = createServerFn({ method: 'GET' })
     .handler(async (): Promise<ProductResponse> => {

@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { ResetPasswordPage } from '@/core/features/pages/auth/ResetPasswordPage'
-import { getSession, clearSession } from '@/core/actions/auth/session'
+import { clearSession, getSession } from '@/core/actions/auth/session'
 
 
 export const Route = createFileRoute('/_auth/reset-password')({
@@ -12,9 +12,7 @@ export const Route = createFileRoute('/_auth/reset-password')({
       const redirectTo =
         role === 'CUSTOMER'
           ? '/dashboard/customer'
-          : role === 'AGENT'
-            ? '/dashboard/agent'
-            : '/login'
+          : '/dashboard/agent'
 
       throw redirect({
         to: redirectTo,
@@ -22,7 +20,7 @@ export const Route = createFileRoute('/_auth/reset-password')({
       })
     }
 
-    if (!session.login_token ) {
+    if (!session.login_token) {
       await clearSession()
       throw redirect({
         to: '/login',

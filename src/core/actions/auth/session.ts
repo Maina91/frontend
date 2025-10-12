@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
-import { useAppSession } from "@/core/lib/session";
 import type { SessionData } from "@/core/lib/session"
+import { useAppSession } from "@/core/lib/session";
 
 
 export const getSession = createServerFn({ method: 'GET' })

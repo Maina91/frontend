@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
-import { fetchBankDetailsService, createBankDetailsService, updateBankDetailsService, deleteBankDetailsService } from '@/core/services/customer/bank'
-import { BankDetailsResponse } from '@/core/types/banks'
+import type { BankDetailsResponse } from '@/core/types/banks'
+import { createBankDetailsService, deleteBankDetailsService, fetchBankDetailsService,  updateBankDetailsService } from '@/core/services/customer/bank'
 import { bankCreateSchema,bankUpdateSchema } from '@/core/validators/bank.schema'
 import { useAppSession } from '@/core/lib/session'
 

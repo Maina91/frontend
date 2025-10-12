@@ -1,15 +1,9 @@
 import { useState } from 'react'
-
-import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card"
+import { ArrowDown, ArrowLeftRight, ArrowUp, Wallet, } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Wallet, ArrowLeftRight, ArrowDown, ArrowUp } from "lucide-react"
-
 import { useProducts } from "@/core/hooks/customer/use-products"
-import {
-  useTransactions,
-  usePendingWithdrawals
-} from '@/core/hooks/customer/use-transactions'
-
+import { usePendingWithdrawals, useTransactions } from '@/core/hooks/customer/use-transactions'
 import { TransactionsTable } from '@/core/features/tables/TransactionsTable'
 import { PendingWithdrawalsTable } from "@/core/features/tables/PendingWithdrawalsTable"
 
@@ -236,7 +230,7 @@ export function IndexPage() {
 
         {!productsLoading && !productsError && (
           <>
-            {productsData?.securities?.length ? (
+            {productsData?.securities.length ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {productsData.securities.map((product) => (
                   <Card key={product.security_code}>

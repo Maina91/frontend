@@ -1,5 +1,5 @@
+import type { ProductResponse, RawProductResponse } from '@/core/types/product'
 import { apiClient } from '@/core/lib/api.client'
-import type { RawProductResponse, ProductResponse } from '@/core/types/product'
 
 
 export async function fetchProductsService(
@@ -22,7 +22,7 @@ export async function fetchProductsService(
             status: res.status,
             status_code: res.status_code,
             message: res.message,
-            securities: res.securities?.rows ?? [],
+            securities: res.securities.rows,
             success: res.success ?? false,
         }
 

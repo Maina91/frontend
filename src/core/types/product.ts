@@ -29,7 +29,7 @@ export interface RawProductResponse {
     status_code: number
     message: string
     securities: {
-        rows: Product[]
+        rows: Array<Product>
     }
     success?: boolean
 }
@@ -39,6 +39,6 @@ export interface ProductResponse {
     status: number
     status_code: number
     message: string
-    securities: Product[]   
+    securities: Array<Product>   
     success?: boolean
 }

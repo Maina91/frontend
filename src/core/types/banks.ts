@@ -19,6 +19,6 @@ export interface BankDetailsResponse {
     status_code: number
     success: boolean
     message: string
-    banks: BankAccount[]
+    banks: Array<BankAccount>
     mobile_payments_no: string | null
 }

@@ -1,28 +1,18 @@
-import { useState, useEffect } from 'react'
-import { useRouter, useRouteContext, useSearch } from '@tanstack/react-router'
+import { useEffect, useState } from 'react'
+import { useRouteContext, useRouter, useSearch } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
-import { useForm, revalidateLogic } from '@tanstack/react-form'
-
+import { revalidateLogic, useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
 import { Spinner } from "@/components/ui/spinner"
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Label } from '@/components/ui/label'
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSeparator,
-  InputOTPSlot,
-} from "@/components/ui/input-otp"
-
+import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot} from "@/components/ui/input-otp"
 import { resendOtpAction, verifyOtpAction } from '@/core/actions/auth/otp'
-import {
-  otpSchema
-} from '@/core/validators/otp.schema'
+import { otpSchema } from '@/core/validators/otp.schema'
 import { env } from '@/env'
 import { clearSession } from '@/core/actions/auth/session'
-
 
 
 function getErrorMessages(errors: Array<any>): Array<string> {
@@ -37,11 +27,6 @@ export function OtpPage() {
   // check for user /agent
   const { session } = useRouteContext({ from: '/_auth/verify-otp' })
   const role = session.user?.role as "CUSTOMER" | "AGENT"
-
-  // logout if no role is available
-  if (!role) {
-    return clearSession()
-  }
 
   const [destination, setDestination] = useState<'EMAIL' | 'MOBILE'>('EMAIL')
   const [resendCooldown, setResendCooldown] = useState(0)

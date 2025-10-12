@@ -1,6 +1,6 @@
-import { apiClient } from '@/core/lib/api.client'
 import type { BankDetailsResponse } from '@/core/types/banks'
 import type { BankCreateData, BankUpdateData } from '@/core/validators/bank.schema'
+import { apiClient } from '@/core/lib/api.client'
 
 
 export async function fetchBankDetailsService(
@@ -15,7 +15,7 @@ export async function fetchBankDetailsService(
             },
         })
 
-        if (res.status_code !== 200 || !res.banks) {
+        if (res.status_code !== 200) {
             throw new Error('Unable to fetch bank details')
         }
         return res
@@ -41,7 +41,7 @@ export async function createBankDetailsService(
             },
         })
 
-        if (res.status_code! == 200){
+        if (res.status_code !== 200) {
             throw new Error(res.message || 'Unable to create bank')
         }
 
@@ -68,7 +68,7 @@ export async function updateBankDetailsService(
             },
         })
 
-        if (res.status_code! == 200) {
+        if (res.status_code !== 200) {
             throw new Error(res.message || 'Unable to create bank')
         }
 
@@ -83,7 +83,7 @@ export async function updateBankDetailsService(
 
 export async function deleteBankDetailsService(
     token: string,
-    id: Number,
+    id: number,
 ): Promise<BankDetailsResponse> {
     try {
         if (!id) throw new Error('Bank details id is missing.')
@@ -96,7 +96,7 @@ export async function deleteBankDetailsService(
             },
         })
 
-        if (res.status_code! == 200) {
+        if (res.status_code !== 200) {
             throw new Error(res.message || 'Unable to delete bank details.')
         }
 

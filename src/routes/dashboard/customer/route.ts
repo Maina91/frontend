@@ -1,6 +1,6 @@
-import { createFileRoute, redirect } from '@tanstack/react-router'
-import { getSession, clearSession } from '@/core/actions/auth/session'
-import { Outlet } from '@tanstack/react-router'
+import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
+import { clearSession, getSession } from '@/core/actions/auth/session'
+
 
 export const Route = createFileRoute('/dashboard/customer')({
   beforeLoad: async ({ location }) => {

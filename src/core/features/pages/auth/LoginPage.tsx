@@ -1,15 +1,13 @@
 import { useState } from 'react'
 import { useRouter } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
-import { useForm, revalidateLogic } from '@tanstack/react-form'
+import { revalidateLogic, useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
 import { Eye, EyeOff } from 'lucide-react'
-import { Spinner } from "@/components/ui/spinner"
-
 import type { LoginData } from '@/core/validators/auth.schema'
 import { loginSchema } from '@/core/validators/auth.schema'
 import { loginAction } from '@/core/actions/auth/auth'
-
+import { Spinner } from "@/components/ui/spinner"
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'

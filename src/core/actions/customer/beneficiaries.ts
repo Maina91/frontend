@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
-import { fetchBeneficiaryService } from '@/core/services/customer/beneficiaries'
 import type { BeneficiariesResponse } from '@/core/types/beneficiaries'
+import { fetchBeneficiaryService } from '@/core/services/customer/beneficiaries'
 import { useAppSession } from '@/core/lib/session'
 
 
