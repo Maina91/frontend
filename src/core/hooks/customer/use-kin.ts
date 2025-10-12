@@ -1,15 +1,15 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-    fetchNextOfKin,
-    createNextOfKin,
-    updateNextOfKin,
-    deleteNextOfKin,
-} from '@/core/actions/customer/kin'
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import type {
     NextOfKinResponse,
 } from '@/core/types/kin'
-import { toast } from "sonner";
 import type { NextOfKinData } from '@/core/validators/kin.schema'
+import {
+    createNextOfKin,
+    deleteNextOfKin,
+    fetchNextOfKin,
+    updateNextOfKin,
+} from '@/core/actions/customer/kin'
 
 
 export const useKin = () => {
@@ -21,7 +21,7 @@ export const useKin = () => {
 
                 return {
                     ...res,
-                    next_of_kin: res.next_of_kin ?? [],
+                    next_of_kin: res.next_of_kin,
                 }
             } catch (err: any) {
                 const error = err?.message ?? ''

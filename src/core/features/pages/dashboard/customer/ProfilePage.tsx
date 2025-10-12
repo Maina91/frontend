@@ -1,14 +1,14 @@
 import { useState } from 'react'
+import { Plus } from 'lucide-react'
+import { NextOfKinForm } from '../../../forms/dashboard/NextOfKinForm'
+import type { NextOfKin } from '@/core/types/kin'
+import type { NextOfKinData } from '@/core/validators/kin.schema'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Plus } from 'lucide-react'
 import { useCustomerProfile } from '@/core/hooks/customer/use-profile'
 import { useBank } from '@/core/hooks/customer/use-bank'
-import { useKin, useCreateKin,useUpdateKin,useDeleteKin } from '@/core/hooks/customer/use-kin'
+import { useCreateKin, useDeleteKin,useKin,useUpdateKin } from '@/core/hooks/customer/use-kin'
 import { useBeneficiary } from '@/core/hooks/customer/use-beneficiaries'
-import { NextOfKinForm } from '../../../forms/dashboard/NextOfKinForm'
-import { NextOfKin } from '@/core/types/kin'
-import type { NextOfKinData } from '@/core/validators/kin.schema'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -36,9 +36,9 @@ export const ProfilePage = () => {
 
   const handleCreateOrUpdateKin = async (values: NextOfKinData ) => {
     if ("id" in values && values.id) {
-      await updateKin.mutateAsync(values as NextOfKinData)
+      await updateKin.mutateAsync(values)
     } else {
-      await createKin.mutateAsync(values as NextOfKinData)
+      await createKin.mutateAsync(values)
     }
     setKinFormOpen(false)
     setEditingKin(null)
@@ -109,7 +109,7 @@ export const ProfilePage = () => {
           </div>
         ) : bankError ? (
           <p className="text-red-600 text-sm">Failed to load bank details.</p>
-        ) : !bankDetails?.banks?.length && !bankDetails?.mobile_payments_no ? (
+        ) : !bankDetails?.banks.length && !bankDetails?.mobile_payments_no ? (
           <p className="text-gray-500 text-sm">No bank or mobile money accounts found.</p>
         ) : (
           <>
@@ -123,7 +123,7 @@ export const ProfilePage = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {bankDetails?.banks?.map((acc) => (
+                {bankDetails.banks.map((acc) => (
                   <TableRow key={acc.id}>
                     <TableCell>{acc.account_name}</TableCell>
                     <TableCell>{acc.account_no}</TableCell>
@@ -134,7 +134,7 @@ export const ProfilePage = () => {
               </TableBody>
             </Table>
 
-            {bankDetails?.mobile_payments_no && (
+            {bankDetails.mobile_payments_no && (
               <div className="mt-4">
                 <h3 className="text-sm font-medium text-gray-700">Mobile Payment Number</h3>
                 <p className="text-gray-900">{bankDetails.mobile_payments_no}</p>
@@ -169,7 +169,7 @@ export const ProfilePage = () => {
 
         {kinError && (
           <p className="text-red-500 text-sm">
-            {(kinError as Error)?.message || 'Failed to load next of kin.'}
+            {(kinError).message || 'Failed to load next of kin.'}
           </p>
         )}
 
@@ -192,8 +192,8 @@ export const ProfilePage = () => {
             <TableBody>
               {kinDetails.next_of_kin.map((kin) => (
                 <TableRow key={kin.id}>
-                  <TableCell>{kin.full_name ?? '-'}</TableCell>
-                  <TableCell>{kin.relationship ?? '-'}</TableCell>
+                  <TableCell>{kin.full_name }</TableCell>
+                  <TableCell>{kin.relationship}</TableCell>
                   <TableCell>{kin.id_passport_number ?? '-'}</TableCell>
                   <TableCell>{kin.mobile ?? '-'}</TableCell>
                   <TableCell>{kin.email ?? '-'}</TableCell>
@@ -241,7 +241,7 @@ export const ProfilePage = () => {
 
         {beneficiaryError && (
           <p className="text-red-500 text-sm">
-            {(beneficiaryError as Error)?.message || 'Failed to load beneficiaries.'}
+            {(beneficiaryError).message || 'Failed to load beneficiaries.'}
           </p>
         )}
 

@@ -1,13 +1,13 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import {
-    fetchBankDetails,
-    createBankDetails,
-    updateBankDetails,
-    deleteBankDetails
-} from '@/core/actions/customer/bank'
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import type { BankDetailsResponse } from "@/core/types/banks";
 import type { BankCreateData, BankUpdateData } from '@/core/validators/bank.schema'
-import { toast } from "sonner";
+import {
+    createBankDetails,
+    deleteBankDetails,
+    fetchBankDetails,
+    updateBankDetails
+} from '@/core/actions/customer/bank'
 
 
 export const useBank = () => {
@@ -19,7 +19,7 @@ export const useBank = () => {
 
                 return {
                     ...res,
-                    banks: res.banks ?? [],
+                    banks: res.banks,
                 }
             } catch (err: any) {
                 const error = err?.message ?? ''

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { fetchBeneficiaries } from '@/core/actions/customer/beneficiaries'
 import type { BeneficiariesResponse } from '@/core/types/beneficiaries'
+import { fetchBeneficiaries } from '@/core/actions/customer/beneficiaries'
 
 
 export const useBeneficiary = () => {
@@ -12,7 +12,7 @@ export const useBeneficiary = () => {
 
                 return {
                     ...res,
-                    beneficiaries: res.beneficiaries ?? [],
+                    beneficiaries: res.beneficiaries,
                 }
             } catch (err: any) {
                 const error = err?.message ?? ''

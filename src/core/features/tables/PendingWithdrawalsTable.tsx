@@ -1,5 +1,6 @@
-import { FC, useState } from "react"
+import { useState } from "react"
 import { revalidateLogic, useForm } from '@tanstack/react-form'
+import type { FC} from "react";
 import type { PendingWithdrawalTransaction } from '@/core/types/transaction'
 import { Button } from "@/components/ui/button"
 import {
@@ -18,7 +19,7 @@ import { useCancelPendingWithdrawal } from "@/core/hooks/customer/use-transactio
 import { cancelPendingWithdrawalSchema } from "@/core/validators/transaction.schema"
 
 interface Props {
-    data: PendingWithdrawalTransaction[]
+    data: Array<PendingWithdrawalTransaction>
 }
 
 function getErrorMessages(errors: Array<any>): Array<string> {

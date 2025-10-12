@@ -1,18 +1,19 @@
 import {
-    useReactTable,
-    getCoreRowModel,
     flexRender,
-    ColumnDef,
+    getCoreRowModel,
+    useReactTable
 } from '@tanstack/react-table'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type {
+    ColumnDef} from '@tanstack/react-table';
 import type { Transaction } from '@/core/types/transaction'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
 interface TransactionsTableProps {
-    data: Transaction[]
+    data: Array<Transaction>
 }
 
 export function TransactionsTable({ data }: TransactionsTableProps) {
-    const columns: ColumnDef<Transaction>[] = [
+    const columns: Array<ColumnDef<Transaction>> = [
         {
             accessorKey: 'trans_date',
             header: 'Date',

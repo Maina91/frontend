@@ -12,7 +12,6 @@ import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot} from "@/compo
 import { resendOtpAction, verifyOtpAction } from '@/core/actions/auth/otp'
 import { otpSchema } from '@/core/validators/otp.schema'
 import { env } from '@/env'
-import { clearSession } from '@/core/actions/auth/session'
 
 
 function getErrorMessages(errors: Array<any>): Array<string> {

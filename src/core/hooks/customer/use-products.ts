@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { fetchProducts } from '@/core/actions/product/product'
 import type { ProductResponse } from '@/core/types/product'
+import { fetchProducts } from '@/core/actions/product/product'
 
 export const useProducts = () => {
     return useQuery<ProductResponse, Error>({
@@ -11,7 +11,7 @@ export const useProducts = () => {
 
                 return {
                     ...res,
-                    securities: res.securities ?? [],
+                    securities: res.securities,
                 }
             } catch (err: any) {
                 const error = err?.message ?? ''
