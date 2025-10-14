@@ -13,11 +13,12 @@ export default defineConfig({
     viteTsConfigPaths({
       projects: ['./tsconfig.json'],
     }),
-    tanstackStart({
-      srcDirectory: 'src',
-      start: { entry: './start.tsx' },
-      server: { entry: './server.ts' },
-    }),
+    // tanstackStart({
+    //   srcDirectory: 'src',
+    //   start: { entry: './start.tsx' },
+    //   server: { entry: './server.ts' },
+    // }),
+    tanstackStart(),
     tailwindcss(),
     viteReact(),
   ],
