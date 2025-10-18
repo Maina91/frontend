@@ -297,12 +297,13 @@ export function NextOfKinForm({
                         )}
                     </form.Field>
 
-                    <div className="flex justify-end gap-2 pt-2">
+                    <div className="flex justify-between items-center pt-4">
                         <Button
                             variant="outline"
                             type="button"
                             onClick={onClose}
                             disabled={form.state.isSubmitting}
+                            className="min-w-[100px]"
                         >
                             Cancel
                         </Button>
@@ -312,7 +313,7 @@ export function NextOfKinForm({
                                 <Button
                                     type="submit"
                                     disabled={!canSubmit}
-                                    className="w-full flex items-center justify-center gap-2"
+                                    className="min-w-[100px] flex items-center justify-center gap-2"
                                 >
                                     {isSubmitting ? (
                                         <>
