@@ -2,6 +2,13 @@ import { useState } from 'react'
 import { ArrowDown, ArrowLeftRight, ArrowUp, Wallet, } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { useProducts } from "@/core/hooks/customer/use-products"
 import { usePendingWithdrawals, useTransactions } from '@/core/hooks/customer/use-transactions'
 import { TransactionsTable } from '@/core/features/tables/TransactionsTable'
@@ -101,17 +108,23 @@ export function IndexPage() {
         </div>
 
         <div className="mb-3">
-          <select
-            className="border rounded px-3 py-2 text-sm"
+          <Select
             value={selectedAccount}
-            onChange={(e) => handleAccountChange(e.target.value)}
+            onValueChange={(value) => {
+              setSelectedAccount(value)
+            }}
           >
-            <option value="">Select Account</option>
-            <option value="00040-000414-0002-0">00040-000414-0002-0</option>
-            <option value="00040-1-000414-0001-2">00040-1-000414-0001-2</option>
-            <option value="00040-1-000414-0002">00040-1-000414-0002</option>
-            <option value="00040-001-000414-0001-1">00040-001-000414-0001-1</option>
-          </select>
+            <SelectTrigger className="w-1/2">
+              <SelectValue placeholder="Select Account" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Select Account</SelectItem>
+              <SelectItem value="00040-000414-0002-0">00040-000414-0002-0</SelectItem>
+              <SelectItem value="00040-1-000414-0001-2">00040-1-000414-0001-2</SelectItem>
+              <SelectItem value="00040-1-000414-0002">00040-1-000414-0002</SelectItem>
+              <SelectItem value="00040-001-000414-0001-1">00040-001-000414-0001-1</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         {!selectedAccount && (
@@ -141,7 +154,7 @@ export function IndexPage() {
                     </Button>
                   )}
                   {hasLessTransactions && (
-                    <Button variant="link" size="sm" onClick={handleShowLessTransactions  }>
+                    <Button variant="link" size="sm" onClick={handleShowLessTransactions}>
                       Show Less
                     </Button>
                   )}
@@ -158,17 +171,23 @@ export function IndexPage() {
         </div>
 
         <div className="mb-3">
-          <select
-            className="border rounded px-3 py-2 text-sm"
+          <Select
             value={selectedAccount}
-            onChange={(e) => handleAccountChange(e.target.value)}
+            onValueChange={(value) => {
+              handleAccountChange(value)
+            }}
           >
-            <option value="">Select Account</option>
-            <option value="00040-000414-0002-0">00040-000414-0002-0</option>
-            <option value="00040-1-000414-0001-2">00040-1-000414-0001-2</option>
-            <option value="00040-1-000414-0002">00040-1-000414-0002</option>
-            <option value="00040-001-000414-0001-1">00040-001-000414-0001-1</option>
-          </select>
+            <SelectTrigger className="w-1/2">
+              <SelectValue placeholder="Select Account" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Select Account</SelectItem>
+              <SelectItem value="00040-000414-0002-0">00040-000414-0002-0</SelectItem>
+              <SelectItem value="00040-1-000414-0001-2">00040-1-000414-0001-2</SelectItem>
+              <SelectItem value="00040-1-000414-0002">00040-1-000414-0002</SelectItem>
+              <SelectItem value="00040-001-000414-0001-1">00040-001-000414-0001-1</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         {!selectedAccount && (
