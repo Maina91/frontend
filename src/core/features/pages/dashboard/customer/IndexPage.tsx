@@ -13,7 +13,9 @@ import { useProducts } from "@/core/hooks/customer/use-products"
 import { usePendingWithdrawals, useTransactions } from '@/core/hooks/customer/use-transactions'
 import { TransactionsTable } from '@/core/features/tables/TransactionsTable'
 import { PendingWithdrawalsTable } from "@/core/features/tables/PendingWithdrawalsTable"
-import { TopupModal } from '@/core/features/modals/TopupModal'
+
+import { TopupModal } from '@/core/features/modals/dashboard/TopupModal'
+import { WithdrawModal } from '@/core/features/modals/dashboard/WithdrawModal'
 
 
 const INITIAL_COUNT = 5
@@ -26,7 +28,7 @@ export function IndexPage() {
   const [withdrawalCount, setWithdrawalCount] = useState<number>(INITIAL_COUNT)
 
   const [isTopupOpen, setIsTopupOpen] = useState(false)
-
+  const [isWithdrawOpen, setIsWithdrawOpen] = useState(false)
 
   const { data: productsData, isLoading: productsLoading, error: productsError } = useProducts()
   const { data: transactions, isLoading: transactionsLoading, error: transactionsError } = useTransactions(selectedAccount)
@@ -77,13 +79,18 @@ export function IndexPage() {
           >
             <ArrowDown className="h-5 w-5 mb-1" /> Top-up
           </Button>
-          <Button className="flex flex-col h-20 justify-center" variant="secondary">
+          <Button className="flex flex-col h-20 justify-center"
+            variant="outline"
+            onClick={() => setIsWithdrawOpen(true)}
+          >
             <ArrowUp className="h-5 w-5 mb-1" /> Withdraw
           </Button>
-          <Button className="flex flex-col h-20 justify-center" variant="outline">
+          <Button className="flex flex-col h-20 justify-center"
+            variant="outline">
             <ArrowLeftRight className="h-5 w-5 mb-1" /> Transfer
           </Button>
-          <Button className="flex flex-col h-20 justify-center" variant="outline">
+          <Button className="flex flex-col h-20 justify-center"
+            variant="outline">
             <Wallet className="h-5 w-5 mb-1" /> Switch Fund
           </Button>
         </div>
@@ -312,10 +319,9 @@ export function IndexPage() {
 
 
       <TopupModal open={isTopupOpen} onOpenChange={setIsTopupOpen} />
-
-
+      <WithdrawModal open={isWithdrawOpen} onOpenChange={setIsWithdrawOpen} />
     </div>
 
-    
+
   )
 }

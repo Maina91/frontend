@@ -60,7 +60,6 @@ export const TopupModal = ({
                 </DialogHeader>
 
                 <div className="space-y-4 py-3">
-                    {/* Account Selection */}
                     <div>
                         <label className="text-sm font-medium">Account</label>
                         <Select
@@ -81,7 +80,6 @@ export const TopupModal = ({
                         </Select>
                     </div>
 
-                    {/* Payment Method */}
                     <div>
                         <label className="text-sm font-medium">Payment Method</label>
                         <Select
@@ -99,7 +97,6 @@ export const TopupModal = ({
                         </Select>
                     </div>
 
-                    {/* Conditional Fields */}
                     {paymentMethod === 'mpesa' && (
                         <div>
                             <label className="text-sm font-medium">Mobile Number</label>
@@ -132,7 +129,6 @@ export const TopupModal = ({
                         </div>
                     )}
 
-                    {/* Amount */}
                     <div>
                         <label className="text-sm font-medium">Amount</label>
                         <Input
