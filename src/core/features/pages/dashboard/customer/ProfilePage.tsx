@@ -331,7 +331,7 @@ export const ProfilePage = () => {
               Are you sure you want to delete this Next of Kin? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
+          <AlertDialogFooter className="flex flex-row-reverse justify-between sm:justify-between">
             <AlertDialogCancel onClick={() => setDeleteKinId(null)}>
               Cancel
             </AlertDialogCancel>
