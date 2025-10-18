@@ -6,6 +6,7 @@ import { clearSession, getSession } from '@/core/actions/auth/session'
 
 const searchSchema = z.object({
   context: z.enum(['login', 'reset']).optional(),
+  redirect: z.string().optional(),
 })
 
 

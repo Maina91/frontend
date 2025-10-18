@@ -17,7 +17,10 @@ export const Route = createFileRoute('/_auth/login')({
     if (session.login_token) {
       throw redirect({
         to: '/verify-otp',
-        search: { redirect: location.href },
+        search: { 
+          redirect: location.href ,
+          context: 'login',
+        },
       })
     }
   },
