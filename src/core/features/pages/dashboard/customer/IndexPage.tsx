@@ -13,6 +13,7 @@ import { useProducts } from "@/core/hooks/customer/use-products"
 import { usePendingWithdrawals, useTransactions } from '@/core/hooks/customer/use-transactions'
 import { TransactionsTable } from '@/core/features/tables/TransactionsTable'
 import { PendingWithdrawalsTable } from "@/core/features/tables/PendingWithdrawalsTable"
+import { TopupModal } from '@/core/features/modals/TopupModal'
 
 
 const INITIAL_COUNT = 5
@@ -23,6 +24,9 @@ export function IndexPage() {
   const [selectedAccount, setSelectedAccount] = useState<string>("")
   const [transactionsCount, setTransactionsCount] = useState<number>(INITIAL_COUNT)
   const [withdrawalCount, setWithdrawalCount] = useState<number>(INITIAL_COUNT)
+
+  const [isTopupOpen, setIsTopupOpen] = useState(false)
+
 
   const { data: productsData, isLoading: productsLoading, error: productsError } = useProducts()
   const { data: transactions, isLoading: transactionsLoading, error: transactionsError } = useTransactions(selectedAccount)
@@ -68,7 +72,9 @@ export function IndexPage() {
       <section>
         <h2 className="text-xl font-semibold mb-3">Quick Actions</h2>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-          <Button className="flex flex-col h-20 justify-center">
+          <Button className="flex flex-col h-20 justify-center"
+            onClick={() => setIsTopupOpen(true)}
+          >
             <ArrowDown className="h-5 w-5 mb-1" /> Top-up
           </Button>
           <Button className="flex flex-col h-20 justify-center" variant="secondary">
@@ -304,6 +310,12 @@ export function IndexPage() {
         )}
       </section>
 
+
+      <TopupModal open={isTopupOpen} onOpenChange={setIsTopupOpen} />
+
+
     </div>
+
+    
   )
 }
