@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState,  } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Bell, ChevronDown, Menu } from 'lucide-react'
 import { useRouter } from '@tanstack/react-router'
 import { useMutation } from '@tanstack/react-query'
@@ -124,7 +124,12 @@ export const Topbar = ({ onSidebarToggle }: TopbarProps) => {
                                 </p>
                             </div>
                             <div className="flex flex-col">
-                                <button className="px-4 py-2 text-left text-sm hover:bg-gray-100 transition">
+                                <button className="px-4 py-2 text-left text-sm hover:bg-gray-100 transition"
+                                    onClick={() => {
+                                        setIsDropdownOpen(false)
+                                        router.navigate({ to: '/dashboard/customer/profile' })
+                                    }}
+                                >
                                     Profile
                                 </button>
                                 <button className="px-4 py-2 text-left text-sm hover:bg-gray-100 transition">
