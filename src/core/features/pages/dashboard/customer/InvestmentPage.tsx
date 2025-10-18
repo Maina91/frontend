@@ -3,20 +3,6 @@ import { format } from 'date-fns'
 import { CalendarDays, FileText, LineChart } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -31,38 +17,6 @@ export const InvestmentPage = () => {
   const [startDate, setStartDate] = useState<Date | undefined>()
   const [endDate, setEndDate] = useState<Date | undefined>()
 
-  // Simulated data – replace with real API data
-  const investments = [
-    {
-      id: 1,
-      fund: 'Etica MMF',
-      account: 'MMF-00123',
-      currency: 'KES',
-      principal: 500000,
-      net_interest: 12500,
-      withdrawal: 0,
-      investment_balance: 512500,
-      cash_balance: 25000,
-      start_date: '2025-10-18',
-    },
-    {
-      id: 2,
-      fund: 'Etica Treasury Fund',
-      account: 'ETF-00456',
-      currency: 'KES',
-      principal: 300000,
-      net_interest: 9800,
-      withdrawal: 10000,
-      investment_balance: 298000,
-      cash_balance: 10000,
-      start_date: '2025-09-10',
-    },
-  ]
-
-  const total = investments.reduce(
-    (acc, inv) => acc + inv.investment_balance + inv.cash_balance,
-    0
-  )
 
   return (
     <div className="space-y-8">
