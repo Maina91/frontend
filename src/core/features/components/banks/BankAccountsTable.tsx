@@ -1,30 +1,23 @@
 import * as React from 'react'
-import { toast } from 'sonner'
-import { Pencil, Plus, Trash2 } from 'lucide-react'
-import {
-    flexRender,
-    getCoreRowModel,
-    getSortedRowModel,
-    useReactTable
-} from '@tanstack/react-table'
+import { Plus, Trash2 } from 'lucide-react'
+import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
 import type { ColumnDef } from '@tanstack/react-table'
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
-import { useBank } from '@/core/hooks/customer/use-bank'
 
 
-export const BankAccountsTable = () => {    
-    const { data, isLoading, isError } = useBank()
+type Props = {
+    data: Array<any>
+    isLoading: boolean
+    isError: boolean
+    onCreate: () => void
+    onDelete: (bank: any) => void
+}
 
+
+export function BankAccountsTable({ data, isLoading, isError, onCreate, onDelete }: Props) {
     const columns = React.useMemo<Array<ColumnDef<any>>>(() => [
         {
             accessorKey: 'account_name',
@@ -53,19 +46,10 @@ export const BankAccountsTable = () => {
             cell: ({ row }) => (
                 <div className="flex gap-2">
                     <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleEdit(row.original)}
-                        title="Edit Bank Account"
-                    >
-                        <Pencil className="h-4 w-4" />
-                    </Button>
-                    <Button
                         variant="destructive"
                         size="sm"
-                        onClick={() => handleDelete(row.original.id)}
                         title="Delete Bank Account"
-
+                        onClick={() => onDelete(row.original)}
                     >
                         <Trash2 className="h-4 w-4" />
                     </Button>
@@ -73,29 +57,24 @@ export const BankAccountsTable = () => {
             ),
         },
     ],
-        []
+        [onDelete]
     )
 
     const table = useReactTable({
-        data: data?.banks || [],
+        data,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
     })
 
-    const handleEdit = (bank: any) => {
-        toast.info(`Editing ${bank.account_name}`)
-    }
-
-    const handleDelete = async (id: string) => {
-        toast.warning(`Deleting account id: ${id}`)
-    }
 
     return (
         <section className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 transition-all">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-lg font-semibold">Bank Accounts</h2>
-                <Button variant="outline" size="sm" onClick={() => toast.info('Add Bank Account')}>
+                <Button
+                    variant="outline" size="sm"
+                    onClick={onCreate}>
                     <Plus className="w-4 h-4 mr-1" /> Add Bank Account
                 </Button>
             </div>
@@ -132,10 +111,10 @@ export const BankAccountsTable = () => {
                             </div>
                         ))}
                     </div>
-                </div>             
+                </div>
             ) : isError ? (
                 <p className="text-red-600 text-sm">Failed to load bank details.</p>
-            ) : !data?.banks.length && !data?.mobile_payments_no ? (
+            ) : !data.length ? (
                 <p className="text-gray-500 text-sm">
                     No bank or mobile money accounts found.
                 </p>

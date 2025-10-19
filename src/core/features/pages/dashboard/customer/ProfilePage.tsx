@@ -20,7 +20,8 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 
-import { BankAccountsTable } from '@/core/features/tables/BankAccountsTable'
+import { BankAccountsTable } from '@/core/features/components/banks/BankAccountsTable'
+import { BankSection } from '@/core/features/components/banks/BankSection'
 
 
 export const ProfilePage = () => {
@@ -95,7 +96,8 @@ export const ProfilePage = () => {
         )}
       </section>
 
-      <BankAccountsTable />
+
+      <BankSection />
 
       {/* NEXT OF KIN */}
       <section className="bg-white shadow rounded-md p-6">
