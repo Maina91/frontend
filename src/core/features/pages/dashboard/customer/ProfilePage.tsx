@@ -6,7 +6,6 @@ import type { NextOfKinData } from '@/core/validators/kin.schema'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useCustomerProfile } from '@/core/hooks/customer/use-profile'
-import { useBank } from '@/core/hooks/customer/use-bank'
 import { useCreateKin, useDeleteKin,useKin,useUpdateKin } from '@/core/hooks/customer/use-kin'
 import { useBeneficiary } from '@/core/hooks/customer/use-beneficiaries'
 import {
