@@ -81,37 +81,9 @@ export function BankAccountsTable({ data, isLoading, isError, onCreate, onDelete
             </div>
 
             {isLoading ? (
-                <div className="rounded-md border border-gray-100 overflow-hidden">
-                    <div className="divide-y divide-gray-100">
-                        {/* Header */}
-                        <div className="grid grid-cols-[1.5fr_1fr_1fr_1fr_0.8fr] bg-gray-50 px-4 py-3">
-                            <Skeleton className="h-4 w-3/4 mx-auto" />
-                            <Skeleton className="h-4 w-2/3 mx-auto" />
-                            <Skeleton className="h-4 w-1/2 mx-auto" />
-                            <Skeleton className="h-4 w-2/3 mx-auto" />
-                            <Skeleton className="h-4 w-1/3 mx-auto" />
-                        </div>
-
-                        {/* Rows */}
-                        {[...Array(4)].map((_, i) => (
-                            <div
-                                key={i}
-                                className={cn(
-                                    "grid grid-cols-[1.5fr_1fr_1fr_1fr_0.8fr] items-center px-4 py-3",
-                                    i % 2 === 0 ? "bg-white" : "bg-gray-50/50"
-                                )}
-                            >
-                                <Skeleton className="h-4 w-3/4 mx-auto" />
-                                <Skeleton className="h-4 w-2/3 mx-auto" />
-                                <Skeleton className="h-4 w-1/2 mx-auto" />
-                                <Skeleton className="h-4 w-2/3 mx-auto" />
-                                <div className="flex justify-center gap-2">
-                                    <Skeleton className="h-6 w-6 rounded-full" />
-                                    <Skeleton className="h-6 w-6 rounded-full" />
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                <div className="space-y-2 animate-pulse">
+                    <div className="h-4 w-40 bg-gray-200 rounded" />
+                    <div className="h-4 w-56 bg-gray-200 rounded" />
                 </div>
             ) : isError ? (
                 <p className="text-red-600 text-sm">Failed to load bank details.</p>

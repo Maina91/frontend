@@ -2,10 +2,18 @@ import { revalidateLogic, useForm } from '@tanstack/react-form'
 import type { BankCreateData } from '@/core/validators/bank.schema'
 import { bankCreateSchema } from '@/core/validators/bank.schema'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
 import { Spinner } from '@/components/ui/spinner'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
+import { useBanks, useBranches } from '@/core/hooks/data/use-banks'
 
 
 function getErrorMessages(errors: Array<any>): Array<string> {
@@ -56,6 +64,11 @@ export function BankDetailsForm({ open, onClose, onSubmit }: BankDetailsFormProp
         },
     })
 
+    const { data: banks, isLoading: banksLoading, error: banksError } = useBanks()
+    const bankCode = form.state.values.bank_code
+    const { data: branches, isLoading: branchesLoading, error: branchesError } = useBranches(bankCode)
+
+
     return (
         <Dialog open={open} onOpenChange={onClose}>
             <DialogContent>
@@ -70,7 +83,6 @@ export function BankDetailsForm({ open, onClose, onSubmit }: BankDetailsFormProp
                     }}
                     className="space-y-4"
                 >
-                    {/* Bank Code */}
                     <form.Field
                         name="bank_code"
                         validators={{
@@ -81,16 +93,35 @@ export function BankDetailsForm({ open, onClose, onSubmit }: BankDetailsFormProp
                         {(field) => (
                             <div className="space-y-1.5">
                                 <Label htmlFor="bank_code">
-                                    Bank Code <span className="text-red-500">*</span>
+                                    Bank Code 
+                                    <span className="text-red-500">*</span>
                                 </Label>
-                                <Input
-                                    id="bank_code"
-                                    name={field.name}
-                                    placeholder="Enter bank code"
-                                    value={field.state.value}
-                                    onChange={(e) => field.handleChange(e.target.value)}
-                                    onBlur={field.handleBlur}
-                                />
+                                {banksLoading ? (
+                                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                                        <Spinner className="h-4 w-4 animate-spin" /> Loading banks...
+                                    </div>
+                                ) : banksError ? (
+                                    <p className="text-sm text-red-500">Failed to load banks</p>
+                                ) : (
+                                    <Select
+                                        value={field.state.value}
+                                        onValueChange={(val) => field.handleChange(val)}
+                                    >
+                                        <SelectTrigger id="bank_code" className='w-full'>
+                                            <SelectValue placeholder="Select a bank" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {banks?.banks
+                                                .filter((bank) => bank.bank_code && bank.bank_code.trim() !== '')
+                                                .map((bank) => (
+                                                    <SelectItem key={bank.bank_code} value={bank.bank_code}>
+                                                        {bank.name}
+                                                    </SelectItem>
+                                                ))}
+
+                                        </SelectContent>
+                                    </Select>
+                                )}
                                 {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
                                     <p className="text-sm text-red-500" aria-live="polite">
                                         {getErrorMessages(field.state.meta.errors)[0]}
@@ -100,7 +131,6 @@ export function BankDetailsForm({ open, onClose, onSubmit }: BankDetailsFormProp
                         )}
                     </form.Field>
 
-                    {/* Branch Code */}
                     <form.Field
                         name="branch_code"
                         validators={{
@@ -110,15 +140,42 @@ export function BankDetailsForm({ open, onClose, onSubmit }: BankDetailsFormProp
                     >
                         {(field) => (
                             <div className="space-y-1.5">
-                                <Label htmlFor="branch_code">Branch Code</Label>
-                                <Input
-                                    id="branch_code"
-                                    name={field.name}
-                                    placeholder="Enter branch code (optional)"
-                                    value={field.state.value}
-                                    onChange={(e) => field.handleChange(e.target.value)}
-                                    onBlur={field.handleBlur}
-                                />
+                                <Label htmlFor="branch_code">
+                                    Branch Code
+                                    <span className="text-red-500">*</span>
+                                    </Label>
+                                {branchesLoading ? (
+                                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                                        <Spinner className="h-4 w-4 animate-spin" /> Loading branches...
+                                    </div>
+                                ) : branchesError ? (
+                                    <p className="text-sm text-red-500">Failed to load branches</p>
+                                ) : (
+                                    <Select
+                                        disabled={!bankCode || !branches?.branches.length}
+                                        value={field.state.value}
+                                        onValueChange={(val) => field.handleChange(val)}
+                                    >
+                                        <SelectTrigger id="branch_code" className='w-full'>
+                                            <SelectValue placeholder="Select a branch" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {branches?.branches.map((branch) => (
+                                                <SelectItem
+                                                    key={branch.branch_code}
+                                                    value={branch.branch_code}
+                                                >
+                                                    {branch.branch_name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                )}
+                                {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
+                                    <p className="text-sm text-red-500" aria-live="polite">
+                                        {getErrorMessages(field.state.meta.errors)[0]}
+                                    </p>
+                                )}
                             </div>
                         )}
                     </form.Field>
