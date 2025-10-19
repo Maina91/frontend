@@ -54,11 +54,9 @@ export const ProfilePage = () => {
 
 
   const { data: beneficiaryDetails, isLoading: beneficiaryLoading, error: beneficiaryError } = useBeneficiary()
-  const { data: bankDetails, isLoading: bankLoading, error: bankError } = useBank()
 
 
   console.log('ProfilePage profile', profileDetails)
-  console.log('ProfilePage bankDetails', bankDetails)
   console.log('ProfilePage kinDetails', kinDetails)
   console.log('ProfilePage beneficiaries', beneficiaryDetails)
 
