@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 export const bankCreateSchema = z.object({
     bank_code: z.string().min(1, 'Bank code is required'),
-    branch_code: z.string().optional(),
+    branch_code: z.string(),
     account_name: z.string().min(1, 'Account name is required'),
     account_no: z.string().min(1, 'Account number is required'),
     account_type: z.string().min(1, 'Account type is required'),

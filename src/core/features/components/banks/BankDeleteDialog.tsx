@@ -1,13 +1,5 @@
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, } from "@/components/ui/alert-dialog"
+
 
 type BankDeleteDialogProps = {
     open: boolean
@@ -17,11 +9,11 @@ type BankDeleteDialogProps = {
     isDeleting?: boolean
 }
 
+
 export function BankDeleteDialog({
     open,
     onClose,
     onConfirm,
-    bankName,
     isDeleting,
 }: BankDeleteDialogProps) {
     return (

@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Plus, Trash2 } from 'lucide-react'
 import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
 import type { ColumnDef } from '@tanstack/react-table'
+import type { BankDetailsResponse } from '@/core/types/banks'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -9,7 +10,7 @@ import { cn } from '@/lib/utils'
 
 
 type Props = {
-    data: Array<any>
+    data: BankDetailsResponse | null
     isLoading: boolean
     isError: boolean
     onCreate: () => void
@@ -61,7 +62,7 @@ export function BankAccountsTable({ data, isLoading, isError, onCreate, onDelete
     )
 
     const table = useReactTable({
-        data,
+        data: data?.banks ?? [],
         columns,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
@@ -114,7 +115,7 @@ export function BankAccountsTable({ data, isLoading, isError, onCreate, onDelete
                 </div>
             ) : isError ? (
                 <p className="text-red-600 text-sm">Failed to load bank details.</p>
-            ) : !data.length ? (
+                ) : !data?.banks.length ? (
                 <p className="text-gray-500 text-sm">
                     No bank or mobile money accounts found.
                 </p>

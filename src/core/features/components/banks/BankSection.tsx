@@ -50,7 +50,7 @@ export function BankSection() {
     return (
         <>
             <BankAccountsTable
-                data={data?.banks || []}
+                data={data ?? null}
                 isLoading={isLoading}
                 isError={isError}
                 onCreate={handleOpenCreate}
