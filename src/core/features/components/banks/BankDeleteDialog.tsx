@@ -30,7 +30,7 @@ export function BankDeleteDialog({
                 <AlertDialogHeader>
                     <AlertDialogTitle>Delete Bank Account</AlertDialogTitle>
                     <AlertDialogDescription>
-                        {`Are you sure you want to delete ${bankName ?? "this account"}? This action cannot be undone.`}
+                        {`Are you sure you want to delete this account? This action cannot be undone.`}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

@@ -20,7 +20,6 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 
-import { BankAccountsTable } from '@/core/features/components/banks/BankAccountsTable'
 import { BankSection } from '@/core/features/components/banks/BankSection'
 
 
