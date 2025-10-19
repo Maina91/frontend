@@ -20,6 +20,8 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 
+import { BankAccountsTable } from '@/core/features/tables/BankAccountsTable'
+
 
 export const ProfilePage = () => {
   const { data: profileDetails, isLoading: profileLoading, error: profileError } = useCustomerProfile()
@@ -93,56 +95,7 @@ export const ProfilePage = () => {
         )}
       </section>
 
-      {/* BANK ACCOUNTS */}
-      <section className="bg-white shadow rounded-md p-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">Bank Accounts</h2>
-          <Button variant="outline" size="sm">
-            <Plus className="w-4 h-4 mr-1" /> Add Bank Account
-          </Button>
-        </div>
-
-        {bankLoading ? (
-          <div className="space-y-2 animate-pulse">
-            <div className="h-5 w-48 bg-gray-200 rounded" />
-            <div className="h-4 w-64 bg-gray-200 rounded" />
-          </div>
-        ) : bankError ? (
-          <p className="text-red-600 text-sm">Failed to load bank details.</p>
-        ) : !bankDetails?.banks.length && !bankDetails?.mobile_payments_no ? (
-          <p className="text-gray-500 text-sm">No bank or mobile money accounts found.</p>
-        ) : (
-          <>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Account Name</TableHead>
-                  <TableHead>Account Number</TableHead>
-                  <TableHead>Bank</TableHead>
-                  <TableHead>Branch</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {bankDetails.banks.map((acc) => (
-                  <TableRow key={acc.id}>
-                    <TableCell>{acc.account_name}</TableCell>
-                    <TableCell>{acc.account_no}</TableCell>
-                    <TableCell>{acc.name}</TableCell>
-                    <TableCell>{acc.branch_name}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-
-            {bankDetails.mobile_payments_no && (
-              <div className="mt-4">
-                <h3 className="text-sm font-medium text-gray-700">Mobile Payment Number</h3>
-                <p className="text-gray-900">{bankDetails.mobile_payments_no}</p>
-              </div>
-            )}
-          </>
-        )}
-      </section>
+      <BankAccountsTable />
 
       {/* NEXT OF KIN */}
       <section className="bg-white shadow rounded-md p-6">
