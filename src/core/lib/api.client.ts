@@ -1,4 +1,6 @@
+import { clearSession } from '@/core/actions/auth/session'
 import { env } from '@/env'
+
 
 const BASE_URL = env.VITE_API_URL
 
@@ -50,6 +52,38 @@ export class ApiClient {
       headers,
       credentials: 'include', // include cookies
     })
+
+    // handle the refresh auth token logic on error 401
+    // if (res.status === 401) {
+    //   const refreshed = await refreshSession()
+    //   if (refreshed?.auth_token) {
+    //     // Retry once with new token
+    //     const retryRes = await fetch(`${this.baseUrl}${path}`, {
+    //       ...options,
+    //       headers: {
+    //         ...headers,
+    //         Authorization: `Bearer ${refreshed.auth_token}`,
+    //       },
+    //     })
+
+    //     if (!retryRes.ok) {
+    //       await clearSession()
+    //       throw new Error('Session expired. Please log in again.')
+    //     }
+
+    //     return this.handleResponse<T>(retryRes)
+    //   }
+
+    //   // Refresh failed → force logout
+    //   await clearSession()
+    //   throw new Error('Session expired. Please log in again.')
+    // }
+
+    // handle 401 errors
+    if (res.status === 401) {
+      await clearSession()
+      throw new Error('Session expired. Please log in again.')
+    }
 
     return this.handleResponse<T>(res)
   }

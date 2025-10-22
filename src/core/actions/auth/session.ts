@@ -48,3 +48,34 @@ export const clearSession = createServerFn({ method: 'POST' })
             }
         }
     })    
+
+
+// export const refreshSession = createServerFn({ method: 'POST' })
+//     .handler(async () => {
+//         const session = await useAppSession()
+
+//         if (!session.data.login_token) return null
+
+//         try {
+//             const res = await fetch(`${env.VITE_API_URL}/auth/refresh`, {
+//                 method: 'POST',
+//                 headers: { 'Content-Type': 'application/json' },
+//                 body: JSON.stringify({ refreshToken: session.data.login_token }),
+//             })
+
+//             if (!res.ok) return null
+
+//             const data = await res.json()
+
+//             // Update the session tokens
+//             session.data.auth_token = data.access_token
+//             session.data.login_token = data.refresh_token ?? session.data.login_token
+//             session.data.is_authed = true
+//             await session.save()
+
+//             return session.data
+//         } catch (err) {
+//             console.error('Token refresh failed:', err)
+//             return null
+//         }
+//     })
