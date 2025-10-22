@@ -5,7 +5,7 @@ import type { ColumnDef } from '@tanstack/react-table'
 import type { BankDetailsResponse } from '@/core/types/banks'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
-import { Skeleton } from '@/components/ui/skeleton'
+import { ListSkeleton } from '@/components/custom/skeleton'
 import { cn } from '@/lib/utils'
 
 
@@ -81,13 +81,10 @@ export function BankAccountsTable({ data, isLoading, isError, onCreate, onDelete
             </div>
 
             {isLoading ? (
-                <div className="space-y-2 animate-pulse">
-                    <div className="h-4 w-40 bg-gray-200 rounded" />
-                    <div className="h-4 w-56 bg-gray-200 rounded" />
-                </div>
+                <ListSkeleton />
             ) : isError ? (
                 <p className="text-red-600 text-sm">Failed to load bank details.</p>
-                ) : !data?.banks.length ? (
+            ) : !data?.banks.length ? (
                 <p className="text-gray-500 text-sm">
                     No bank or mobile money accounts found.
                 </p>

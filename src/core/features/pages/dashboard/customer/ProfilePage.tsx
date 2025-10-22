@@ -21,6 +21,8 @@ import {
 
 import { BankSection } from '@/core/features/components/banks/BankSection'
 
+import { ListSkeleton } from '@/components/custom/skeleton'
+
 
 export const ProfilePage = () => {
   const { data: profileDetails, isLoading: profileLoading, error: profileError } = useCustomerProfile()
@@ -70,10 +72,7 @@ export const ProfilePage = () => {
       {/* PROFILE SUMMARY */}
       <section className="bg-white shadow rounded-md p-6">
         {profileLoading ? (
-          <div className="space-y-2 animate-pulse">
-            <div className="h-6 w-48 bg-gray-200 rounded" />
-            <div className="h-4 w-32 bg-gray-200 rounded" />
-          </div>
+          <ListSkeleton />
         ) : profileError ? (
           <p className="text-red-600 text-sm">Failed to load profile details.</p>
         ): !profileDetails ? (
@@ -112,10 +111,7 @@ export const ProfilePage = () => {
         </div>
 
         {kinLoading && (
-          <div className="space-y-2 animate-pulse">
-            <div className="h-4 w-40 bg-gray-200 rounded" />
-            <div className="h-4 w-56 bg-gray-200 rounded" />
-          </div>
+          <ListSkeleton />
         )}
 
         {kinError && (
@@ -184,10 +180,7 @@ export const ProfilePage = () => {
         </div>
 
         {beneficiaryLoading && (
-          <div className="space-y-2 animate-pulse">
-            <div className="h-4 w-40 bg-gray-200 rounded" />
-            <div className="h-4 w-56 bg-gray-200 rounded" />
-          </div>
+          <ListSkeleton />
         )}
 
         {beneficiaryError && (
