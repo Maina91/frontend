@@ -5,7 +5,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import {
     Select,
     SelectContent,
+    SelectGroup,
     SelectItem,
+    SelectLabel,
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
@@ -111,17 +113,19 @@ export function BankDetailsForm({ open, onClose, onSubmit }: BankDetailsFormProp
                                         onValueChange={(val) => field.handleChange(val)}
                                     >
                                         <SelectTrigger id="bank_code" className='w-full'>
-                                            <SelectValue placeholder="Select a bank" />
+                                            <SelectValue placeholder="Select bank" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            {banks?.banks
-                                                .filter((bank) => bank.bank_code && bank.bank_code.trim() !== '')
-                                                .map((bank) => (
-                                                    <SelectItem key={bank.bank_code} value={bank.bank_code}>
-                                                        {bank.name}
-                                                    </SelectItem>
-                                                ))}
-
+                                            <SelectGroup>
+                                                <SelectLabel>Select Bank</SelectLabel>
+                                                {banks?.banks
+                                                    .filter((bank) => bank.bank_code && bank.bank_code.trim() !== '')
+                                                    .map((bank) => (
+                                                        <SelectItem key={bank.bank_code} value={bank.bank_code}>
+                                                            {bank.name}
+                                                        </SelectItem>
+                                                    ))}
+                                            </SelectGroup>
                                         </SelectContent>
                                     </Select>
                                 )}
@@ -160,17 +164,21 @@ export function BankDetailsForm({ open, onClose, onSubmit }: BankDetailsFormProp
                                         onValueChange={(val) => field.handleChange(val)}
                                     >
                                         <SelectTrigger id="branch_code" className='w-full'>
-                                            <SelectValue placeholder="Select a branch" />
+                                            <SelectValue placeholder="Select branch" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            {branches?.branches.map((branch) => (
-                                                <SelectItem
-                                                    key={branch.branch_code}
-                                                    value={branch.branch_code}
-                                                >
-                                                    {branch.branch_name}
-                                                </SelectItem>
-                                            ))}
+                                            <SelectGroup>
+                                                <SelectLabel>Select Branch</SelectLabel>
+                                                {branches?.branches.map((branch) => (
+                                                    <SelectItem
+                                                        key={branch.branch_code}
+                                                        value={branch.branch_code}
+                                                    >
+                                                        {branch.branch_name}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectGroup>
+
                                         </SelectContent>
                                     </Select>
                                 )}

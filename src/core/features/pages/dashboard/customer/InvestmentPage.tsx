@@ -5,10 +5,12 @@ import { Button } from '@/components/ui/button'
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from "@/components/ui/select"
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Calendar } from '@/components/ui/calendar'
 
@@ -82,11 +84,13 @@ export const InvestmentPage = () => {
               <SelectValue placeholder="Select Account" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all"> --- Select Account ---</SelectItem>
-              <SelectItem value="00040-000414-0002-0">00040-000414-0002-0</SelectItem>
-              <SelectItem value="00040-1-000414-0001-2">00040-1-000414-0001-2</SelectItem>
-              <SelectItem value="00040-1-000414-0002">00040-1-000414-0002</SelectItem>
-              <SelectItem value="00040-001-000414-0001-1">00040-001-000414-0001-1</SelectItem>
+              <SelectGroup>
+                <SelectLabel>Select Account</SelectLabel>
+                <SelectItem value="00040-000414-0002-0">00040-000414-0002-0</SelectItem>
+                <SelectItem value="00040-1-000414-0001-2">00040-1-000414-0001-2</SelectItem>
+                <SelectItem value="00040-1-000414-0002">00040-1-000414-0002</SelectItem>
+                <SelectItem value="00040-001-000414-0001-1">00040-001-000414-0001-1</SelectItem>
+              </SelectGroup>
             </SelectContent>
           </Select>
         </div>

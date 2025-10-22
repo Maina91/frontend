@@ -8,10 +8,13 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '
 import {
     Select,
     SelectContent,
+    SelectGroup,
     SelectItem,
+    SelectLabel,
     SelectTrigger,
     SelectValue,
-} from '@/components/ui/select'
+} from "@/components/ui/select"
+
 
 export const TopupModal = ({
     open,
@@ -71,11 +74,13 @@ export const TopupModal = ({
                                 <SelectValue placeholder="Select Account" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="all">Select Account</SelectItem>
-                                <SelectItem value="00040-000414-0002-0">00040-000414-0002-0</SelectItem>
-                                <SelectItem value="00040-1-000414-0001-2">00040-1-000414-0001-2</SelectItem>
-                                <SelectItem value="00040-1-000414-0002">00040-1-000414-0002</SelectItem>
-                                <SelectItem value="00040-001-000414-0001-1">00040-001-000414-0001-1</SelectItem>
+                                <SelectGroup>
+                                    <SelectLabel>Select Account</SelectLabel>
+                                    <SelectItem value="00040-000414-0002-0">00040-000414-0002-0</SelectItem>
+                                    <SelectItem value="00040-1-000414-0001-2">00040-1-000414-0001-2</SelectItem>
+                                    <SelectItem value="00040-1-000414-0002">00040-1-000414-0002</SelectItem>
+                                    <SelectItem value="00040-001-000414-0001-1">00040-001-000414-0001-1</SelectItem>
+                                </SelectGroup>
                             </SelectContent>
                         </Select>
                     </div>
@@ -91,8 +96,11 @@ export const TopupModal = ({
                                 <SelectValue placeholder="Select Payment Method" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="mpesa">M-Pesa</SelectItem>
-                                <SelectItem value="bank">Bank Transfer</SelectItem>
+                                <SelectGroup>
+                                    <SelectLabel>Select Payment Method</SelectLabel>
+                                    <SelectItem value="mpesa">M-Pesa</SelectItem>
+                                    <SelectItem value="bank">Bank Transfer</SelectItem>
+                                </SelectGroup>
                             </SelectContent>
                         </Select>
                     </div>
@@ -121,9 +129,12 @@ export const TopupModal = ({
                                     <SelectValue placeholder="Select Currency" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="KES">KES</SelectItem>
-                                    <SelectItem value="USD">USD</SelectItem>
-                                    <SelectItem value="EUR">EUR</SelectItem>
+                                    <SelectGroup>
+                                        <SelectLabel>Select Currency</SelectLabel>
+                                        <SelectItem value="KES">KES</SelectItem>
+                                        <SelectItem value="USD">USD</SelectItem>
+                                        <SelectItem value="EUR">EUR</SelectItem>
+                                    </SelectGroup>
                                 </SelectContent>
                             </Select>
                         </div>

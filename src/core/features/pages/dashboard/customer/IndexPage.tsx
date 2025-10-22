@@ -5,10 +5,12 @@ import { Button } from "@/components/ui/button"
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select'
+} from "@/components/ui/select"
 import { useProducts } from "@/core/hooks/customer/use-products"
 import { usePendingWithdrawals, useTransactions } from '@/core/hooks/customer/use-transactions'
 import { TransactionsTable } from '@/core/features/tables/TransactionsTable'
@@ -131,11 +133,13 @@ export function IndexPage() {
               <SelectValue placeholder="Select Account" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Select Account</SelectItem>
-              <SelectItem value="00040-000414-0002-0">00040-000414-0002-0</SelectItem>
-              <SelectItem value="00040-1-000414-0001-2">00040-1-000414-0001-2</SelectItem>
-              <SelectItem value="00040-1-000414-0002">00040-1-000414-0002</SelectItem>
-              <SelectItem value="00040-001-000414-0001-1">00040-001-000414-0001-1</SelectItem>
+              <SelectGroup>
+                <SelectLabel>Select Account</SelectLabel>
+                <SelectItem value="00040-000414-0002-0">00040-000414-0002-0</SelectItem>
+                <SelectItem value="00040-1-000414-0001-2">00040-1-000414-0001-2</SelectItem>
+                <SelectItem value="00040-1-000414-0002">00040-1-000414-0002</SelectItem>
+                <SelectItem value="00040-001-000414-0001-1">00040-001-000414-0001-1</SelectItem>
+              </SelectGroup>
             </SelectContent>
           </Select>
         </div>
@@ -194,11 +198,13 @@ export function IndexPage() {
               <SelectValue placeholder="Select Account" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Select Account</SelectItem>
-              <SelectItem value="00040-000414-0002-0">00040-000414-0002-0</SelectItem>
-              <SelectItem value="00040-1-000414-0001-2">00040-1-000414-0001-2</SelectItem>
-              <SelectItem value="00040-1-000414-0002">00040-1-000414-0002</SelectItem>
-              <SelectItem value="00040-001-000414-0001-1">00040-001-000414-0001-1</SelectItem>
+              <SelectGroup>
+                <SelectLabel>Select Account</SelectLabel>
+                <SelectItem value="00040-000414-0002-0">00040-000414-0002-0</SelectItem>
+                <SelectItem value="00040-1-000414-0001-2">00040-1-000414-0001-2</SelectItem>
+                <SelectItem value="00040-1-000414-0002">00040-1-000414-0002</SelectItem>
+                <SelectItem value="00040-001-000414-0001-1">00040-001-000414-0001-1</SelectItem>
+              </SelectGroup>
             </SelectContent>
           </Select>
         </div>
