@@ -68,6 +68,9 @@ export function BankDetailsForm({ open, onClose, onSubmit }: BankDetailsFormProp
     const bankCode = form.state.values.bank_code
     const { data: branches, isLoading: branchesLoading, error: branchesError } = useBranches(bankCode)
 
+    console.log('Banks', banks)
+    console.log('Branches', branches)
+
 
     return (
         <Dialog open={open} onOpenChange={onClose}>
@@ -93,7 +96,7 @@ export function BankDetailsForm({ open, onClose, onSubmit }: BankDetailsFormProp
                         {(field) => (
                             <div className="space-y-1.5">
                                 <Label htmlFor="bank_code">
-                                    Bank Code 
+                                    Bank Name
                                     <span className="text-red-500">*</span>
                                 </Label>
                                 {banksLoading ? (
@@ -141,9 +144,9 @@ export function BankDetailsForm({ open, onClose, onSubmit }: BankDetailsFormProp
                         {(field) => (
                             <div className="space-y-1.5">
                                 <Label htmlFor="branch_code">
-                                    Branch Code
+                                    Branch Name
                                     <span className="text-red-500">*</span>
-                                    </Label>
+                                </Label>
                                 {branchesLoading ? (
                                     <div className="flex items-center gap-2 text-sm text-gray-500">
                                         <Spinner className="h-4 w-4 animate-spin" /> Loading branches...

@@ -94,8 +94,8 @@ export const Topbar = ({ onSidebarToggle }: TopbarProps) => {
                 <div className="relative" ref={dropdownRef}>
                     <button
                         className={clsx(
-                            'flex items-center gap-2 px-2 py-1 rounded-md hover:bg-gray-50 transition',
-                            isLoading ? 'animate-pulse' : 'shadow-sm'
+                            'flex items-center gap-2 rounded-md transition-colors',
+                            isLoading ? 'opacity-70 cursor-wait' : 'hover:opacity-80'
                         )}
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                         disabled={isLoading || isError}
