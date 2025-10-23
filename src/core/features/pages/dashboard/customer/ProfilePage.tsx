@@ -19,7 +19,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 
-import { BankSection } from '@/core/features/components/banks/BankSection'
+import { BankSection } from '@/core/features/banks/BankSection'
 
 import { ListSkeleton } from '@/components/custom/skeleton'
 
