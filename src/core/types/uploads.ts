@@ -11,6 +11,6 @@ export interface UploadDocumentsResponse {
     status_code: number
     message: string
     member_no: string
-    files: UploadedDocument
+    files: Array<UploadedDocument>
     success?: boolean
 }

@@ -9,27 +9,64 @@ import { uploadClientDocuments } from "@/core/actions/customer/uploads"
 export const DOCUMENTS_QUERY_KEY = ['customer', 'documents']
 
 
-// export const useDocuments = () => {
-//     return useQuery<UploadDocumentsResponse, Error>({
-//         queryKey: DOCUMENTS_QUERY_KEY,
-//         queryFn: async () => {
-//             try {
-//                 const res = await fetchClientDocuments()
-//                 return res
-//             } catch (err: any) {
-//                 console.error(err)
-//                 throw new Error("Failed to load customer documents")
-//             }
-//         },
-//         staleTime: 1000 * 60 * 5, // 5 minutes
-//         retry: (failureCount, error: Error) => {
-//             if (failureCount >= 3) return false
-//             if (error.message.startsWith("4")) return false
-//             return true
-//         },
-//         refetchOnWindowFocus: false,
-//     })
-// }
+export const useDocuments = () => {
+    return useQuery<UploadDocumentsResponse, Error>({
+        queryKey: DOCUMENTS_QUERY_KEY,
+        queryFn: async () => {
+            // try {
+            //     const res = await fetchClientDocuments()
+            //     return res
+            // } catch (err: any) {
+            //     console.error(err)
+            //     throw new Error("Failed to load customer documents")
+            // }
+
+            // Simulate latency
+            await new Promise((resolve) => setTimeout(resolve, 1000))
+
+            // Simulate random success or failure for testing
+            const shouldFail = Math.random() < 0.1 // 10% failure rate
+            if (shouldFail) {
+                throw new Error("Failed to load customer documents")
+            }
+
+            const mockResponse: UploadDocumentsResponse = {
+                documents: [
+                    {
+                        id: "1",
+                        type: "ID Front",
+                        url: "https://via.placeholder.com/300x200.png?text=ID+Front",
+                        status: "Approved",
+                        created_at: new Date().toISOString(),
+                    },
+                    {
+                        id: "2",
+                        type: "ID Back",
+                        url: "https://via.placeholder.com/300x200.png?text=ID+Back",
+                        status: "Pending",
+                        created_at: new Date().toISOString(),
+                    },
+                    {
+                        id: "3",
+                        type: "KRA Document",
+                        url: "https://example.com/dummy.pdf",
+                        status: "Rejected",
+                        created_at: new Date().toISOString(),
+                    },
+                ],
+            }
+
+            return mockResponse
+            },
+        staleTime: 1000 * 60 * 5, // 5 minutes
+        retry: (failureCount, error: Error) => {
+            if (failureCount >= 3) return false
+            if (error.message.startsWith("4")) return false
+            return true
+        },
+        refetchOnWindowFocus: false,
+    })
+}
 
 
 export function useUploadDocuments() {

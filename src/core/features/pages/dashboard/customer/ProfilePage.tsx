@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/alert-dialog'
 
 import { BankSection } from '@/core/features/banks/BankSection'
+import { DocumentsSection } from '@/core/features/uploads/DocumentsSection'
 
 import { ListSkeleton } from '@/components/custom/skeleton'
 
@@ -222,6 +223,8 @@ export const ProfilePage = () => {
       </section>
 
       {/* KYC DOCUMENTS */}
+      <DocumentsSection />
+      
       <section className="bg-white shadow rounded-md p-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold">KYC Documents</h2>
