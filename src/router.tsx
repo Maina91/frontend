@@ -13,6 +13,7 @@ export function getRouter() {
 
   const router = createTanstackRouter({
     routeTree,
+    scrollRestoration: true,
     context: rqContext,
     defaultPreload: 'intent',
     defaultErrorComponent: DefaultCatchBoundary,
