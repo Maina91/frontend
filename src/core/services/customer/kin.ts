@@ -3,7 +3,6 @@ import type { NextOfKinData } from '@/core/validators/kin.schema'
 import { apiClient } from '@/core/lib/api.client'
 
 
-
 export async function fetchNextOfKinService(
     token: string,
 ): Promise<NextOfKinResponse> {
