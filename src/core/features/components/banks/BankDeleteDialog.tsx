@@ -25,7 +25,7 @@ export function BankDeleteDialog({
                         {`Are you sure you want to delete this account? This action cannot be undone.`}
                     </AlertDialogDescription>
                 </AlertDialogHeader>
-                <AlertDialogFooter>
+                <AlertDialogFooter className="flex flex-row-reverse justify-between sm:justify-between">
                     <AlertDialogCancel onClick={onClose}>Cancel</AlertDialogCancel>
                     <AlertDialogAction
                         disabled={isDeleting}

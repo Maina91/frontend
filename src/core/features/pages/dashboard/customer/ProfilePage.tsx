@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus } from 'lucide-react'
+import { Pencil, Plus, Trash2 } from 'lucide-react'
 import { NextOfKinForm } from '../../../forms/dashboard/NextOfKinForm'
 import type { NextOfKin } from '@/core/types/kin'
 import type { NextOfKinData } from '@/core/validators/kin.schema'
@@ -148,19 +148,21 @@ export const ProfilePage = () => {
                     <Button
                       variant="outline"
                       size="sm"
+                      title='Edit Next of Kin'
                       onClick={() => {
                         setEditingKin(kin)
                         setKinFormOpen(true)
                       }}
                     >
-                      Edit
+                      <Pencil className="w-4 h-4" />
                     </Button>
                     <Button
                       variant="destructive"
                       size="sm"
+                      title='Delete Next of Kin'
                       onClick={() => setDeleteKinId(kin.id)}
                     >
-                      Delete
+                      <Trash2 className="w-4 h-4" />
                     </Button>
                   </TableCell>
                 </TableRow>
