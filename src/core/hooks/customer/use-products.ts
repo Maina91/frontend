@@ -2,9 +2,12 @@ import { useQuery } from '@tanstack/react-query'
 import type { ProductResponse } from '@/core/types/product'
 import { fetchProducts } from '@/core/actions/product/product'
 
+
+const PRODUCTS_QUERY_KEY = ['products'];
+
 export const useProducts = () => {
     return useQuery<ProductResponse, Error>({
-        queryKey: ['products'],
+        queryKey: PRODUCTS_QUERY_KEY,
         queryFn: async () => {
             try {
                 const res = await fetchProducts()
@@ -17,16 +20,9 @@ export const useProducts = () => {
                 const error = err?.message ?? ''
                 console.error(error)
 
-                const error_message = 'Failed to load next of products'
+                const error_message = 'Failed to load product details'
                 throw new Error(error_message)
             }
         },
-        staleTime: 1000 * 60 * 5, // cache for 5 minutes
-        retry: (failureCount, error: Error) => {
-            if (failureCount >= 3) return false
-            if (error.message.startsWith('4')) return false
-            return true
-        },
-        refetchOnWindowFocus: false,
     })
 }

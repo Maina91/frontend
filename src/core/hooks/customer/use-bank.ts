@@ -9,10 +9,12 @@ import {
     updateBankDetails
 } from '@/core/actions/customer/bank'
 
+const BANK_QUERY_KEY = ['customer', 'bankDetails'];
+
 
 export const useBank = () => {
     return useQuery <BankDetailsResponse, Error>({
-        queryKey: ['customer', 'bankDetails'],
+        queryKey: BANK_QUERY_KEY,
         queryFn: async () => {
             try {
                 const res = await fetchBankDetails()
@@ -29,13 +31,6 @@ export const useBank = () => {
                 throw new Error(error_message)
             }
         },
-        staleTime: 1000 * 60 * 5,
-        retry: (failureCount, error: any) => {
-            if (failureCount >= 3) return false
-            if (error?.message?.startsWith('4')) return false
-            return true
-        },
-        refetchOnWindowFocus: false,
     })
 }
 
@@ -51,7 +46,7 @@ export function useCreateBank() {
             toast.error(err?.message ?? "Failed to add bank details")
         },
         onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ['customer', 'bankDetails'] })
+            queryClient.invalidateQueries({ queryKey: BANK_QUERY_KEY })
         },
     })
 }
@@ -68,7 +63,7 @@ export function useUpdateBank() {
             toast.error(err?.message ?? "Failed to update bank details")
         },
         onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ['customer', 'bankDetails'] })
+            queryClient.invalidateQueries({ queryKey: BANK_QUERY_KEY })
         },
     })
 }
@@ -85,7 +80,7 @@ export function useDeleteBank() {
             toast.error(err?.message ?? "Failed to delete bank details")
         },
         onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ['customer', 'bankDetails'] })
+            queryClient.invalidateQueries({ queryKey: BANK_QUERY_KEY })
         },
     })
 }

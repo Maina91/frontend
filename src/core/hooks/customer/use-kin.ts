@@ -12,9 +12,11 @@ import {
 } from '@/core/actions/customer/kin'
 
 
+const KIN_QUERY_KEY = ['customer', 'nextOfKin'];
+
 export const useKin = () => {
     return useQuery<NextOfKinResponse, Error>({
-        queryKey: ['customer', 'nextOfKin'],
+        queryKey: KIN_QUERY_KEY,
         queryFn: async () => {
             try {
                 const res = await fetchNextOfKin()
@@ -31,13 +33,6 @@ export const useKin = () => {
                 throw new Error(error_message)
             }
         },
-        staleTime: 1000 * 60 * 5, 
-        retry: (failureCount, error: Error) => {
-            if (failureCount >= 3) return false
-            if (error.message.startsWith('4')) return false
-            return true
-        },
-        refetchOnWindowFocus: false,
     })
 }
 
@@ -53,7 +48,7 @@ export function useCreateKin() {
             toast.error(err?.message ?? "Failed to add next of kin")
         },
         onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ['customer', 'nextOfKin'] })
+            queryClient.invalidateQueries({ queryKey: KIN_QUERY_KEY })
         },
     })
 }
@@ -70,7 +65,7 @@ export function useUpdateKin() {
             toast.error(err?.message ?? "Failed to update next of kin")
         },
         onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ['customer', 'nextOfKin'] })
+            queryClient.invalidateQueries({ queryKey: KIN_QUERY_KEY })
         },
     })
 }
@@ -87,7 +82,7 @@ export function useDeleteKin() {
             toast.error(err?.message ?? "Failed to delete next of kin")
         },
         onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ['customer', 'nextOfKin'] })
+            queryClient.invalidateQueries({ queryKey: KIN_QUERY_KEY })
         },
     })
 }

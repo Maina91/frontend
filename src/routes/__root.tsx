@@ -3,8 +3,10 @@ import {
   Scripts,
   createRootRouteWithContext,
 } from '@tanstack/react-router'
+import { QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import type { QueryClient } from '@tanstack/react-query'
+import { queryClient } from '@/core/lib/query.client'
 import { Toaster } from '@/components/ui/sonner'
 import appCss from '@/styles.css?url'
 import { GlobalLoader } from '@/components/custom/global-loader'
@@ -45,11 +47,13 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        <QueryClientProvider client={queryClient}>
         {/* <Header /> */}
         <GlobalLoader />
         {children}
         <Toaster position={'top-center'} richColors={true} />
         <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
         <Scripts />
       </body>
     </html>

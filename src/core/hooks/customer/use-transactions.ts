@@ -5,10 +5,11 @@ import type { PendingWithdrawalsResponse, TransactionsResponse } from '@/core/ty
 import { cancelPendingWithdrawals, fetchPendingWithdrawals, fetchTransactions } from '@/core/actions/customer/transactions'
 
 
+const TRANSACTIONS_QUERY_KEY = ['transactions'];
+
 export function useTransactions(account_no: string ) {
     return useQuery<TransactionsResponse, Error>({
-        queryKey: ['transactions', account_no],
-
+        queryKey: [...TRANSACTIONS_QUERY_KEY, account_no],
         queryFn: async () => {
             try {
                 const data: TransactionData = { account_no }
@@ -23,21 +24,13 @@ export function useTransactions(account_no: string ) {
                 const error_message = 'Failed to load transactions'
                 throw new Error(error_message)
             }
-        },
-        enabled: !!account_no,
-        staleTime: 1000 * 60 * 5,
-        retry: (failureCount, error: Error) => {
-            if (failureCount >= 3) return false
-            if (error.message.startsWith('4')) return false
-            return true
-        },
-        refetchOnWindowFocus: false,
+        }
     })
 }
 
 export function usePendingWithdrawals(account_no: string) {
     return useQuery<PendingWithdrawalsResponse, Error>({
-        queryKey: ['pending_withdrawals', account_no],
+        queryKey: [...TRANSACTIONS_QUERY_KEY, account_no],
 
         queryFn: async () => {
             try {
@@ -53,15 +46,7 @@ export function usePendingWithdrawals(account_no: string) {
                 const error_message = 'Failed to load pending withdrawals'
                 throw new Error(error_message)
             }
-        },
-        enabled: !!account_no,
-        staleTime: 1000 * 60 * 5,
-        retry: (failureCount, error: Error) => {
-            if (failureCount >= 3) return false
-            if (error.message.startsWith('4')) return false
-            return true
-        },
-        refetchOnWindowFocus: false,
+        }
     })
 }
 
@@ -72,13 +57,13 @@ export function useCancelPendingWithdrawal() {
         mutationFn: (data: cancelPendingWithdrawalData) => cancelPendingWithdrawals({ data }),
         onSuccess: (_res, variables) => {
             toast.success("Next of kin deleted successfully")
-            queryClient.invalidateQueries({ queryKey: ['pending_withdrawals', variables.account_no] })
+            queryClient.invalidateQueries({ queryKey: [...TRANSACTIONS_QUERY_KEY, variables.account_no] })
         },
         onError: (err: any) => {
             toast.error(err?.message ?? "Failed to delete next of kin")
         },
         onSettled: (_res, _error, variables) => {
-            queryClient.invalidateQueries({ queryKey: ['transactions', variables.account_no] })
+            queryClient.invalidateQueries({ queryKey: [...TRANSACTIONS_QUERY_KEY, variables.account_no] })
         },
     })
 }

@@ -57,14 +57,7 @@ export const useDocuments = () => {
             }
 
             return mockResponse
-            },
-        staleTime: 1000 * 60 * 5, // 5 minutes
-        retry: (failureCount, error: Error) => {
-            if (failureCount >= 3) return false
-            if (error.message.startsWith("4")) return false
-            return true
-        },
-        refetchOnWindowFocus: false,
+        }
     })
 }
 
