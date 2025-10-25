@@ -7,6 +7,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import type { QueryClient } from '@tanstack/react-query'
 import { Toaster } from '@/components/ui/sonner'
 import appCss from '@/styles.css?url'
+import { GlobalLoader } from '@/components/custom/global-loader'
 
 
 interface MyRouterContext {
@@ -34,7 +35,6 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       },
     ],
   }),
-
   shellComponent: RootDocument,
 })
 
@@ -46,12 +46,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {/* <Header /> */}
+        <GlobalLoader />
         {children}
         <Toaster position={'top-center'} richColors={true} />
-
-
         <ReactQueryDevtools initialIsOpen={false} />
-
         <Scripts />
       </body>
     </html>
