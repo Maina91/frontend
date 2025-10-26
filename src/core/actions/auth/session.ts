@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import type { SessionData } from "@/core/lib/session"
+import type { SessionData } from "@/core/types/auth";
 import { useAppSession } from "@/core/lib/session";
 
 
