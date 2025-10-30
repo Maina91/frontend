@@ -1,3 +1,5 @@
+import type { UserType } from "@/core/lib/constants";
+
 export interface LoginResponse {
   status: number
   status_code: number
@@ -40,5 +42,16 @@ export interface ResendOtpResponse {
   message: string
 }
 
+export type SessionUser = {
+    member_no?: string
+    email: string
+    role: UserType
+    custom_ref?: string
+}
 
-
+export type SessionData = {
+    is_authed: boolean
+    login_token: string | null
+    auth_token: string | null
+    user: SessionUser | null
+}
